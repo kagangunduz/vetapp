@@ -1,6 +1,5 @@
 package com.kagangunduz.vet.service.impl;
 
-import com.kagangunduz.vet.dto.OwnerDto;
 import com.kagangunduz.vet.dto.PetDto;
 import com.kagangunduz.vet.entity.Pet;
 import com.kagangunduz.vet.repository.PetRepository;
@@ -34,8 +33,7 @@ public class PetServiceImpl implements PetService {
     @Override
     public PetDto getById(Long id) {
         Pet pet = petRepository.getById(id);
-        PetDto petDto = modelMapper.map(pet, PetDto.class);
-        return petDto;
+        return modelMapper.map(pet, PetDto.class);
     }
 
     @Override
