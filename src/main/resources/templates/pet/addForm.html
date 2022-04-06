@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Vet App</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+<h1>Add Pet</h1>
+
+<form action="#" th:action="@{/pet/add}" th:object="${pet}" method="post">
+    <p>Name: <input type="text" th:field="*{name}"/></p>
+    <p>Age: <input type="number" th:field="*{age}"/></p>
+
+    <tr th:each="item : ${map}">
+        <td th:text="${item.key}">keyvalue</td>
+        <td th:text="${item.value}">num</td>
+    </tr>
+
+    <select th:field="*{genus}">
+        <option th:each="item : ${map}" th:value="${item.key}" th:text="${item.value}">
+        </option>
+    </select>
+    <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
+</form>
+
+</body>
+</html>

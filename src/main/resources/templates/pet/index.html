@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Vet App</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+<table>
+    <thead>
+    <tr>
+        <th> Title</th>
+        <th> Author</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${pets.empty}">
+        <td colspan="2"> No Pets Available</td>
+    </tr>
+    <tr th:each="pet : ${pets}">
+        <td><span th:text="${pet.getName()}"> Name </span></td>
+        <td><span th:text="${pet.getAge()}"> Age </span></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
