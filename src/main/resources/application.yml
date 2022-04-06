@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/vet
+    username: postgres
+    password: 5171
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
