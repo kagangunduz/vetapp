@@ -8,11 +8,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,23 +38,38 @@ public class PetController {
     public String getById(Model model, @PathVariable(name = "id") Long id) {
         PetDto petDto = petService.getById(id);
         model.addAttribute("pet", petDto);
+        System.out.println("asd");
         return "pet/show";
     }
 
     @GetMapping("/add")
     public String addForm(Model model) {
-        model.addAttribute("pet", new PetDto());
+        model.addAttribute("petDto", new PetDto());
 
-        Map<Genus, String> map = new HashMap<Genus, String>();
+        Map<Genus, String> genusHashMap = new HashMap<Genus, String>();
         for (Genus genus : Genus.values()) {
-            map.put(genus, genus.getValue());
+            genusHashMap.put(genus, genus.getValue());
         }
-        model.addAttribute("map", map);
+        model.addAttribute("genusHashMap", genusHashMap);
         return "pet/addForm";
     }
 
     @PostMapping("/add")
-    public String addSubmit(Model model) {
-        return null;
+    public String addSubmit(Model model, @Valid PetDto petDto, BindingResult result) {
+
+        if (!result.hasErrors()) {
+            petService.save(petDto);
+            return "redirect:/pets";
+        }
+
+        Map<Genus, String> genusHashMap = new HashMap<Genus, String>();
+        for (Genus genus : Genus.values()) {
+            genusHashMap.put(genus, genus.getValue());
+        }
+        model.addAttribute("genusHashMap", genusHashMap);
+
+        return "pet/addForm";
     }
+
+
 }
