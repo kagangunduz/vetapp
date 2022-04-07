@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Vet App</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+<h1>Add Pet</h1>
+<hr>
+<p><a th:href="@{/pets}">Pet Listesine Geri Gön</a></p>
+<hr>
+<ul>
+    <li th:each="err : ${#fields.errors('petDto.*')}" th:text="${err}"/>
+</ul>
+
+<form th:action="@{/pets/edit/{id}(id=${petDto.id})}" th:object="${petDto}" method="post">
+
+    <p>Name: <input type="text" th:field="*{name}"/></p>
+    <p>Age: <input type="number" th:field="*{age}"/></p>
+    <label for="genus">Cins</label>
+    <select th:field="*{genus}">
+        <option th:each="item : ${genusHashMap}" th:value="${item.key}" th:text="${item.value}"
+                th:selected="${item.key==genus}">
+        </option>
+    </select>
+    <br>
+    <br>
+    <textarea rows="20" cols="80" th:field="*{description}">...</textarea>
+    <input type="reset" value="Formu Temizle"/>
+    <p><input type="submit" value="Kaydet"/></p>
+</form>
+
+</body>
+</html>

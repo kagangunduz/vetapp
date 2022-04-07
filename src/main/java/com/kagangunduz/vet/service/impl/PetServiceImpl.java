@@ -37,6 +37,22 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
+    public PetDto updateById(Long id, PetDto petDto) {
+        Pet petDb = petRepository.getById(id);
+        petDb.setName(petDto.getName());
+        petDb.setAge(petDto.getAge());
+        petDb.setGenus(petDto.getGenus());
+        petDb.setDescription(petDto.getDescription());
+        petRepository.save(petDb);
+        return modelMapper.map(petDb, PetDto.class);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        petRepository.deleteById(id);
+    }
+
+    @Override
     public Page<PetDto> getAllPageable(Pageable pageable) {
         Page<Pet> pets = petRepository.findAll(pageable);
         PetDto[] petDtos = modelMapper.map(pets.getContent(), PetDto[].class);

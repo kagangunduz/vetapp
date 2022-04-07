@@ -6,23 +6,32 @@
 </head>
 <body>
 
+<p><a th:href="@{/pets/add}">Pet Ekle</a></p>
+
+<div th:if="${message}">
+    <p>[[${message}]]</p>
+</div>
+
 <table>
     <thead>
     <tr>
-        <th> Name</th>
-        <th> Age</th>
+        <th>İsim</th>
+        <th>Yaş</th>
+        <th>Tür</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="pet : ${pets}">
-        <td><span th:text="${pet.getName()}"></span></td>
-        <td><span th:text="${pet.getAge()}"></span></td>
+    <tr th:each="pet : ${petDtos}">
+        <td>[[${pet.name}]]</span></td>
+        <td>[[${pet.age}]]</td>
+        <td>[[${pet.genus.value}]]</td>
+        <td><a th:href="@{/pets/edit/{id}(id=${pet.id})}">Düzenle</a></td>
+        <td><a th:href="@{/pets/delete/{id}(id=${pet.id})}">Sil</a></td>
     </tr>
     </tbody>
     <br>
 </table>
 
 
-<p><a th:href="@{/pets/add}">Pet Ekle</a></p>
 </body>
 </html>

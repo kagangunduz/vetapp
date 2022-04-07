@@ -11,6 +11,10 @@ public interface PetService {
 
     PetDto getById(Long id);
 
+    PetDto updateById(Long id, PetDto petDto);
+
+    void deleteById(Long id);
+
     Page<PetDto> getAllPageable(Pageable pageable);
 
 }
