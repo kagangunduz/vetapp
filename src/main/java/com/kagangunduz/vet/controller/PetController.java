@@ -9,7 +9,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -76,11 +79,17 @@ public class PetController {
     }
 
     @PostMapping("/edit/{id}")
-    public String updateById(Model model, @PathVariable(name = "id") Long id, @Valid PetDto petDto, RedirectAttributes redirectAttributes) {
-        petDto = petService.save(petDto);
-        model.addAttribute("petDto", petDto);
+    public String updateById(Model model, @PathVariable(name = "id") Long id, @Valid PetDto petDto, BindingResult result, RedirectAttributes redirectAttributes) {
+
         model.addAttribute("genusHashMap", this.getGenusAsHashMap());
-        System.out.println(petDto);
+
+        if (!result.hasErrors()) {
+            petDto = petService.save(petDto);
+            model.addAttribute("petDto", petDto);
+            redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı");
+            return "redirect:/pets/edit/" + id;
+        }
+        
         return "pet/editForm";
     }
 

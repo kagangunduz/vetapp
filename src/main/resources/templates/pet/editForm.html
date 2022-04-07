@@ -10,6 +10,9 @@
 <hr>
 <p><a th:href="@{/pets}">Pet Listesine Geri Gön</a></p>
 <hr>
+<div th:if="${message}">
+    <p>[[${message}]]</p>
+</div>
 <ul>
     <li th:each="err : ${#fields.errors('petDto.*')}" th:text="${err}"/>
 </ul>
