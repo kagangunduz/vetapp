@@ -36,9 +36,7 @@ public class PetController {
 
     @GetMapping("/{id}")
     public String getById(Model model, @PathVariable(name = "id") Long id) {
-        PetDto petDto = petService.getById(id);
-        model.addAttribute("pet", petDto);
-        System.out.println("asd");
+        model.addAttribute("petDto", petService.findById(id));
         return "pet/show";
     }
 
@@ -71,7 +69,7 @@ public class PetController {
 
     @GetMapping("/edit/{id}")
     public String showEditForm(Model model, @PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
-        PetDto petDto = petService.getById(id);
+        PetDto petDto = petService.findById(id);
         model.addAttribute("petDto", petDto);
         model.addAttribute("genusHashMap", this.getGenusAsHashMap());
         System.out.println(petDto);
@@ -89,7 +87,7 @@ public class PetController {
             redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı");
             return "redirect:/pets/edit/" + id;
         }
-        
+
         return "pet/editForm";
     }
 

@@ -9,7 +9,7 @@ public interface PetService {
 
     PetDto save(PetDto petDto);
 
-    PetDto getById(Long id);
+    PetDto findById(Long id);
 
     PetDto updateById(Long id, PetDto petDto);
 
