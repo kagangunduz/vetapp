@@ -7,21 +7,28 @@
 <body>
 
 <h1>Add Pet</h1>
+<hr>
+<p><a th:href="@{/pets}">Pet Listesine Geri Gön</a></p>
+<hr>
+<ul>
+    <li th:each="err : ${#fields.errors('petDto.*')}" th:text="${err}"/>
+</ul>
 
-<form action="#" th:action="@{/pet/add}" th:object="${pet}" method="post">
+<form th:action="@{/pets/add}" th:object="${petDto}" method="post">
+
     <p>Name: <input type="text" th:field="*{name}"/></p>
     <p>Age: <input type="number" th:field="*{age}"/></p>
-
-    <tr th:each="item : ${map}">
-        <td th:text="${item.key}">keyvalue</td>
-        <td th:text="${item.value}">num</td>
-    </tr>
-
+    <label for="genus">Cins</label>
     <select th:field="*{genus}">
-        <option th:each="item : ${map}" th:value="${item.key}" th:text="${item.value}">
+        <option th:selected value="">Lütfen seçim yapın...</option>
+        <option th:each="item : ${genusHashMap}" th:value="${item.key}" th:text="${item.value}">
         </option>
     </select>
-    <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
+    <br>
+    <br>
+    <textarea rows="20" cols="80" th:field="*{description}">...</textarea>
+    <input type="reset" value="Formu Temizle"/>
+    <p><input type="submit" value="Kaydet"/></p>
 </form>
 
 </body>
