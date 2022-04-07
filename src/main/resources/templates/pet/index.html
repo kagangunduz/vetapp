@@ -25,6 +25,7 @@
         <td>[[${pet.name}]]</span></td>
         <td>[[${pet.age}]]</td>
         <td>[[${pet.genus.value}]]</td>
+        <td><a th:href="@{/pets/{id}(id=${pet.id})}">Göster</a></td>
         <td><a th:href="@{/pets/edit/{id}(id=${pet.id})}">Düzenle</a></td>
         <td><a th:href="@{/pets/delete/{id}(id=${pet.id})}">Sil</a></td>
     </tr>

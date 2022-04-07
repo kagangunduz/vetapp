@@ -6,15 +6,9 @@
 </head>
 <body>
 
-<h1 th:text="${pet.getName()}">Name: </h1>
-<h1 th:text="${pet.getAge()}"></h1>
-<h1 th:text="${pet.getGenus().getValue()}"></h1>
-
-<div>
-    <form>
-
-    </form>
-</div>
+<h1 th:text="${petDto.getName()}">Name: </h1>
+<h1 th:text="${petDto.getAge()}"></h1>
+<h1 th:text="${petDto.getGenus().getValue()}"></h1>
 
 </body>
 </html>
