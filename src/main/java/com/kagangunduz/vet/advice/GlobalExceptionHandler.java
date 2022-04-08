@@ -1,5 +1,6 @@
 package com.kagangunduz.vet.advice;
 
+import com.kagangunduz.vet.exception.OwnerNotFoundException;
 import com.kagangunduz.vet.exception.PetNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    
-    @ExceptionHandler(PetNotFoundException.class)
+
+    @ExceptionHandler({PetNotFoundException.class, OwnerNotFoundException.class})
     public ModelAndView handlePetNotFoundException(PetNotFoundException ex, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView("error");
         modelAndView.addObject("message", ex.getMessage());
