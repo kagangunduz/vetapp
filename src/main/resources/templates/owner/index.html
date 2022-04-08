@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Vet App</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+<p><a th:href="@{/owners/add}">Owner Ekle</a></p>
+
+<div th:if="${message}">
+    <p>[[${message}]]</p>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>Ad Soyad</th>
+        <th>Yaş</th>
+        <th>Tür</th>
+        <th>Oluşturulma Tarihi</th>
+        <th>Güncellenme Tarihi</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="ownerDto : ${ownerDtos}">
+        <td>[[${ownerDto.fullName}]]</span></td>
+        <td>[[${ownerDto.telephoneNumber}]]</td>
+        <td>[[${ownerDto.email}]]</td>
+        <td>[[${ownerDto.address}]]</td>
+        <td th:text="${#dates.format(ownerDto.createdAt, 'dd/MMM/yyyy HH:mm')}"></td>
+        <td th:text="${#dates.format(ownerDto.updatedAt, 'dd/MMM/yyyy HH:mm')}"></td>
+        <td><a th:href="@{/owners/{id}(id=${ownerDto.id})}">Göster</a></td>
+        <td><a th:href="@{/owners/edit/{id}(id=${ownerDto.id})}">Düzenle</a></td>
+        <td><a th:href="@{/owners/delete/{id}(id=${ownerDto.id})}">Sil</a></td>
+    </tr>
+    </tbody>
+</table>
+
+
+</body>
+</html>
