@@ -11,6 +11,8 @@ public interface OwnerService {
 
     OwnerDto findById(Long id);
 
+    Boolean deleteById(Long id);
+
     Page<OwnerDto> getAllPageable(Pageable pageable);
 
 }

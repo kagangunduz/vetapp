@@ -1,6 +1,7 @@
 package com.kagangunduz.vet.controller;
 
 import com.kagangunduz.vet.dto.OwnerDto;
+import com.kagangunduz.vet.exception.OwnerNotFoundException;
 import com.kagangunduz.vet.service.impl.OwnerServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -49,6 +50,18 @@ public class OwnerController {
             return "redirect:/owners";
         }
         return "owner/addForm";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteById(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
+        try {
+            ownerService.deleteById(id);
+            redirectAttributes.addFlashAttribute("message", "Kayıt Silindi");
+            return "redirect:/owners";
+        } catch (OwnerNotFoundException exception) {
+            redirectAttributes.addFlashAttribute("message", "Kayıt bulunamadı.");
+        }
+        return "redirect:/owners";
     }
 
 }

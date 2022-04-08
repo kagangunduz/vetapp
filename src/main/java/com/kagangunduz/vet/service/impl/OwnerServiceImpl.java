@@ -1,11 +1,8 @@
 package com.kagangunduz.vet.service.impl;
 
 import com.kagangunduz.vet.dto.OwnerDto;
-import com.kagangunduz.vet.dto.PetDto;
 import com.kagangunduz.vet.entity.Owner;
-import com.kagangunduz.vet.entity.Pet;
 import com.kagangunduz.vet.exception.OwnerNotFoundException;
-import com.kagangunduz.vet.exception.PetNotFoundException;
 import com.kagangunduz.vet.repository.OwnerRepository;
 import com.kagangunduz.vet.service.OwnerService;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +36,17 @@ public class OwnerServiceImpl implements OwnerService {
         Optional<Owner> owner = ownerRepository.findById(id);
         if (owner.isPresent()) {
             return modelMapper.map(owner.get(), OwnerDto.class);
+        } else {
+            throw new OwnerNotFoundException("Kayıt bulunamadı. id: " + id);
+        }
+    }
+
+    @Override
+    public Boolean deleteById(Long id) {
+        Optional<Owner> owner = ownerRepository.findById(id);
+        if (owner.isPresent()) {
+            ownerRepository.deleteById(id);
+            return Boolean.TRUE;
         } else {
             throw new OwnerNotFoundException("Kayıt bulunamadı. id: " + id);
         }
