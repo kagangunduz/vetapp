@@ -6,9 +6,12 @@
 </head>
 <body>
 
-<h1 th:text="${petDto.getName()}">Name: </h1>
+<h1 th:text="${petDto.getName()}"></h1>
 <h1 th:text="${petDto.getAge()}"></h1>
 <h1 th:text="${petDto.getGenus().getValue()}"></h1>
+<h1 th:text="${#dates.format(petDto.getCreatedAt(), 'dd/MMM/yyyy HH:mm')}"></h1>
+<h1 th:text="${#dates.format(petDto.getUpdatedAt(), 'dd/MMM/yyyy HH:mm')}"></h1>
+
 
 </body>
 </html>

@@ -18,19 +18,22 @@
         <th>İsim</th>
         <th>Yaş</th>
         <th>Tür</th>
+        <th>Oluşturulma Tarihi</th>
+        <th>Güncellenme Tarihi</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="pet : ${petDtos}">
-        <td>[[${pet.name}]]</span></td>
-        <td>[[${pet.age}]]</td>
-        <td>[[${pet.genus.value}]]</td>
-        <td><a th:href="@{/pets/{id}(id=${pet.id})}">Göster</a></td>
-        <td><a th:href="@{/pets/edit/{id}(id=${pet.id})}">Düzenle</a></td>
-        <td><a th:href="@{/pets/delete/{id}(id=${pet.id})}">Sil</a></td>
+    <tr th:each="petDto : ${petDtos}">
+        <td>[[${petDto.name}]]</span></td>
+        <td>[[${petDto.age}]]</td>
+        <td>[[${petDto.genus.value}]]</td>
+        <td th:text="${#dates.format(petDto.createdAt, 'dd/MMM/yyyy HH:mm')}"></td>
+        <td th:text="${#dates.format(petDto.updatedAt, 'dd/MMM/yyyy HH:mm')}"></td>
+        <td><a th:href="@{/pets/{id}(id=${petDto.id})}">Göster</a></td>
+        <td><a th:href="@{/pets/edit/{id}(id=${petDto.id})}">Düzenle</a></td>
+        <td><a th:href="@{/pets/delete/{id}(id=${petDto.id})}">Sil</a></td>
     </tr>
     </tbody>
-    <br>
 </table>
 
 
