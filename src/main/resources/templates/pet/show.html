@@ -6,12 +6,17 @@
 </head>
 <body>
 
-<h1 th:text="${petDto.getName()}"></h1>
-<h1 th:text="${petDto.getAge()}"></h1>
-<h1 th:text="${petDto.getGenus().getValue()}"></h1>
-<h1 th:text="${#dates.format(petDto.getCreatedAt(), 'dd/MMM/yyyy HH:mm')}"></h1>
-<h1 th:text="${#dates.format(petDto.getUpdatedAt(), 'dd/MMM/yyyy HH:mm')}"></h1>
-
+<p><a th:href="@{/}">Ana Sayfaya Dön</a></p>
+<p><a th:href="@{/pets}">Pet Listesine Geri Gön</a></p>
+<hr>
+<h1>Pet</h1>
+<hr>
+<p th:text="${petDto.getName()}"></p>
+<p th:text="${petDto.getAge()}"></p>
+<p th:text="${petDto.getGenus().getValue()}"></p>
+<p th:text="${#dates.format(petDto.getCreatedAt(), 'dd/MMM/yyyy HH:mm')}"></p>
+<p th:text="${#dates.format(petDto.getUpdatedAt(), 'dd/MMM/yyyy HH:mm')}"></p>
+<p th:text="${petDto.getDescription()}"></p>
 
 </body>
 </html>
