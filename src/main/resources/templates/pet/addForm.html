@@ -11,14 +11,14 @@
 <p><a th:href="@{/pets}">Pet Listesine Geri Gön</a></p>
 <hr>
 <ul>
-    <li th:each="err : ${#fields.errors('petDto.*')}" th:text="${err}"/>
+    <li th:each="err : ${#fields.errors('pet.*')}" th:text="${err}"/>
 </ul>
 
-<form th:action="@{/pets/add}" th:object="${petDto}" method="post">
+<form th:action="@{/pets/add}" th:object="${pet}" method="post">
 
     <p>Name: <input type="text" th:field="*{name}"/></p>
     <p>Age: <input type="number" th:field="*{age}"/></p>
-    <label for="genus">Cins</label>
+    <label for="genus" id="genus">Cins</label>
     <select th:field="*{genus}">
         <option th:selected value="">Lütfen seçim yapın...</option>
         <option th:each="item : ${genusHashMap}" th:value="${item.key}" th:text="${item.value}">

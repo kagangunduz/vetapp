@@ -1,10 +1,9 @@
 package com.kagangunduz.vet.controller;
 
-import com.kagangunduz.vet.dto.OwnerDto;
+import com.kagangunduz.vet.entity.Owner;
 import com.kagangunduz.vet.exception.OwnerNotFoundException;
 import com.kagangunduz.vet.service.impl.OwnerServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,29 +25,26 @@ public class OwnerController {
 
     @GetMapping
     public String getAllPageable(Model model, Pageable pageable) {
-        Page<OwnerDto> ownerDtos = ownerService.getAllPageable(pageable);
-        model.addAttribute("ownerDtos", ownerDtos);
+        model.addAttribute("ownerDtos", ownerService.getAllPageable(pageable));
         return "owner/index";
     }
 
     @GetMapping("/{id}")
     public String getById(Model model, @PathVariable(name = "id") Long id) {
-        OwnerDto ownerDto = ownerService.findById(id);
-        model.addAttribute("ownerDto", ownerDto);
-        /*model.addAttribute("petDtos", ownerDto.getPets());*/
+        model.addAttribute("ownerDto", ownerService.findById(id));
         return "owner/show";
     }
 
     @GetMapping("/add")
     public String showNewForm(Model model) {
-        model.addAttribute("ownerDto", new OwnerDto());
+        model.addAttribute("owner", new Owner());
         return "owner/addForm";
     }
 
     @PostMapping("/add")
-    public String save(Model model, OwnerDto ownerDto, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String save(Model model, Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
         if (!result.hasErrors()) {
-            ownerService.save(ownerDto);
+            ownerService.save(owner);
             redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı");
             return "redirect:/owners";
         }
@@ -69,17 +65,16 @@ public class OwnerController {
 
     @GetMapping("/edit/{id}")
     public String showEditForm(Model model, @PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
-        OwnerDto ownerDto = ownerService.findById(id);
-        model.addAttribute("ownerDto", ownerDto);
+        model.addAttribute("owner", ownerService.findById(id));
         return "owner/editForm";
     }
 
     @PostMapping("/edit/{id}")
-    public String updateById(Model model, @PathVariable(name = "id") Long id, @Valid OwnerDto ownerDto, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String updateById(Model model, @PathVariable(name = "id") Long id,
+                             @Valid Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
 
         if (!result.hasErrors()) {
-            ownerDto = ownerService.save(ownerDto);
-            model.addAttribute("ownerDto", ownerDto);
+            model.addAttribute("ownerDto", ownerService.save(owner));
             redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı");
             return "redirect:/owners/edit/" + id;
         }

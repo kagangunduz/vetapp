@@ -32,9 +32,9 @@
     </select>
 
 
-    <select th:field="*{owner}">
-        <option th:each="ownerDto : ${ownerList}" th:value="${ownerDto.id}" th:text="${ownerDto.fullName}"
-        th:selected="${pet.owner.id == ownerDto.id}">
+    <select th:fie>
+        <option th:each="owner: ${owners}" th:value="${owner.id}" th:text="${owner.fullName}"
+                th:selected="${owner.id == pet.owner.id}">
         </option>
     </select>
 
