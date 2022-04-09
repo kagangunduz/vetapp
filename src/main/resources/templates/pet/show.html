@@ -6,8 +6,12 @@
 </head>
 <body>
 
-<p><a th:href="@{/}">Ana Sayfaya Dön</a></p>
-<p><a th:href="@{/pets}">Pet Listesine Geri Gön</a></p>
+<p><a th:href="@{/}">Ana sayfaya dön</a></p>
+<p><a th:href="@{/pets}">Pet Listesine dön</a></p>
+<div th:if="${petDto.getOwner() != null}">
+    <p><a th:href="@{/owners/{id}(id=${petDto.owner.id})}">Owner sayfasına dön</a></p>
+</div>
+
 <hr>
 <h1>Pet</h1>
 <hr>

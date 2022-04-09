@@ -6,27 +6,39 @@
 </head>
 <body>
 
-<h1>Add Pet</h1>
-<hr>
-<p><a th:href="@{/pets}">Pet Listesine Geri Gön</a></p>
+<p><a th:href="@{/}">Ana sayfaya dön</a></p>
+<p><a th:href="@{/pets}">Pet Listesine dön</a></p>
+<div th:if="${pet.owner != null}">
+    <p><a th:href="@{/owners/{id}(id=${pet.owner.id})}">Owner sayfasına dön</a></p>
+</div>
 <hr>
 <div th:if="${message}">
     <p>[[${message}]]</p>
 </div>
 <ul>
-    <li th:each="err : ${#fields.errors('petDto.*')}" th:text="${err}"/>
+    <li th:each="err : ${#fields.errors('pet.*')}" th:text="${err}"/>
 </ul>
 
-<form th:action="@{/pets/edit/{id}(id=${petDto.id})}" th:object="${petDto}" method="post">
+<form th:action="@{/pets/edit/{id}(id=${pet.id})}" th:object="${pet}" method="post">
 
     <p>Name: <input type="text" th:field="*{name}"/></p>
     <p>Age: <input type="number" th:field="*{age}"/></p>
+
     <label for="genus">Cins</label>
-    <select th:field="*{genus}">
-        <option th:each="item : ${genusHashMap}" th:value="${item.key}" th:text="${item.value}"
-                th:selected="${item.key==genus}">
+    <select th:field="*{genus}" id="genus">
+        <option th:each="g : ${genus}" th:value="${g.key}" th:text="${g.value}"
+                th:selected="${g.key==pet.genus}">
         </option>
     </select>
+
+
+    <select th:field="*{owner}">
+        <option th:each="ownerDto : ${ownerList}" th:value="${ownerDto.id}" th:text="${ownerDto.fullName}"
+        th:selected="${pet.owner.id == ownerDto.id}">
+        </option>
+    </select>
+
+
     <br>
     <br>
     <textarea rows="20" cols="80" th:field="*{description}">...</textarea>

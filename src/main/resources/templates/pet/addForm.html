@@ -26,6 +26,14 @@
     </select>
     <br>
     <br>
+    <label for="owner">Owner</label>
+    <select th:field="*{owner}" id="owner">
+        <option th:selected value="">Lütfen seçim yapın...</option>
+        <option th:each="owner : ${owners}" th:value="${owner.id}" th:text="${owner.fullName}">
+    </select>
+
+    <br>
+    <br>
     <textarea rows="20" cols="80" th:field="*{description}">...</textarea>
     <input type="reset" value="Formu Temizle"/>
     <p><input type="submit" value="Kaydet"/></p>

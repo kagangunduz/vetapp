@@ -25,7 +25,7 @@ public class Owner extends BaseEntity {
     private String email;
     private String address;
 
+    @OneToMany
     @JoinColumn(name = "owner_id")
-    @OneToMany(fetch = FetchType.LAZY)
     private List<Pet> pets;
 }

@@ -2,6 +2,7 @@ package com.kagangunduz.vet.controller;
 
 import com.kagangunduz.vet.dto.PetDto;
 import com.kagangunduz.vet.entity.Genus;
+import com.kagangunduz.vet.service.impl.OwnerServiceImpl;
 import com.kagangunduz.vet.service.impl.PetServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,7 @@ import java.util.Map;
 public class PetController {
 
     private final PetServiceImpl petService;
+    private final OwnerServiceImpl ownerService;
 
     @GetMapping
     public String getAllPageable(Model model, Pageable pageable) {
@@ -37,6 +39,10 @@ public class PetController {
     @GetMapping("/{id}")
     public String getById(Model model, @PathVariable(name = "id") Long id) {
         model.addAttribute("petDto", petService.findById(id));
+        PetDto petDto = petService.findById(id);
+        if (petDto.getOwner() == null) {
+            System.out.println("owner id => null");
+        }
         return "pet/show";
     }
 
@@ -44,6 +50,7 @@ public class PetController {
     public String showNewForm(Model model) {
         model.addAttribute("petDto", new PetDto());
         model.addAttribute("genusHashMap", this.getGenusAsHashMap());
+        model.addAttribute("owners", ownerService.findAll());
         return "pet/addForm";
     }
 
@@ -69,10 +76,9 @@ public class PetController {
 
     @GetMapping("/edit/{id}")
     public String showEditForm(Model model, @PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
-        PetDto petDto = petService.findById(id);
-        model.addAttribute("petDto", petDto);
-        model.addAttribute("genusHashMap", this.getGenusAsHashMap());
-        System.out.println(petDto);
+        model.addAttribute("pet", petService.findById(id));
+        model.addAttribute("ownerList", ownerService.findAll());
+        model.addAttribute("genus", this.getGenusAsHashMap());
         return "pet/editForm";
     }
 
@@ -87,7 +93,6 @@ public class PetController {
             redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı");
             return "redirect:/pets/edit/" + id;
         }
-
         return "pet/editForm";
     }
 

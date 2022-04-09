@@ -20,13 +20,13 @@ public class Pet extends BaseEntity {
     private int age;
 
     @Enumerated(EnumType.STRING)
-    private Genus  genus;
+    private Genus genus;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @ManyToOne
     @JoinColumn(name = "owner_id")
-    @ManyToOne(optional = true, fetch = FetchType.LAZY)
     private Owner owner;
 
 }

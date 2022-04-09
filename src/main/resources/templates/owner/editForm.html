@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Vet App</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+<p><a th:href="@{/owners}">Owner Listesine Geri Gön</a></p>
+<hr>
+<div th:if="${message}">
+    <p>[[${message}]]</p>
+    <hr>
+</div>
+<ul>
+    <li th:each="err : ${#fields.errors('ownerDto.*')}" th:text="${err}"/>
+</ul>
+
+<form th:action="@{/owners/edit/{id}(id=${ownerDto.id})}" th:object="${ownerDto}" method="post">
+    <p>Full Name: <input type="text" th:field="*{fullName}"/></p>
+    <p>Telephone Number: <input type="text" th:field="*{telephoneNumber}"/></p>
+    <p>Email: <input type="email" th:field="*{email}"/></p>
+    <p>Address: <input type="text" th:field="*{address}"/></p>
+    <p><input type="submit" value="Kaydet"/></p>
+</form>
+
+</body>
+</html>

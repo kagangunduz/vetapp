@@ -42,6 +42,16 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
+    public OwnerDto updateById(Long id, OwnerDto ownerDto) {
+        Owner ownerDb = ownerRepository.getById(id);
+        ownerDb.setFullName(ownerDb.getFullName());
+        ownerDb.setTelephoneNumber(ownerDb.getTelephoneNumber());
+        ownerDb.setEmail(ownerDb.getEmail());
+        ownerRepository.save(ownerDb);
+        return modelMapper.map(ownerDb, OwnerDto.class);
+    }
+
+    @Override
     public Boolean deleteById(Long id) {
         Optional<Owner> owner = ownerRepository.findById(id);
         if (owner.isPresent()) {
@@ -58,5 +68,12 @@ public class OwnerServiceImpl implements OwnerService {
         OwnerDto[] ownerDtos = modelMapper.map(owners.getContent(), OwnerDto[].class);
         List<OwnerDto> ownerDtoList = Arrays.asList(ownerDtos);
         return new PageImpl<>(ownerDtoList, pageable, owners.getTotalElements());
+    }
+
+    @Override
+    public List<OwnerDto> findAll() {
+        List<Owner> ownerList = ownerRepository.findAll();
+        List<OwnerDto> ownerDtoList = Arrays.asList(modelMapper.map(ownerList, OwnerDto[].class));
+        return ownerDtoList;
     }
 }

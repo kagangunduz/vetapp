@@ -10,10 +10,40 @@
 <hr>
 <h1>Owner</h1>
 <hr>
-<p>[[${ownerDto.fullName}]]</span></p>
-<p>[[${ownerDto.telephoneNumber}]]</p>
-<p>[[${ownerDto.email}]]</p>
-<p>[[${ownerDto.address}]]</p>
+<p>Ad Soyad: [[${ownerDto.fullName}]]</span></p>
+<p>Telefon: [[${ownerDto.telephoneNumber}]]</p>
+<p>Email: [[${ownerDto.email}]]</p>
+<p>Adres: [[${ownerDto.address}]]</p>
+
+<hr>
+<h2>Pets</h2>
+<hr>
+<div th:if="${ownerDto.pets != null}">
+    <table>
+        <thead>
+        <tr>
+        <tr>
+            <th>İsim</th>
+            <th>Yaş</th>
+            <th>Tür</th>
+            <th>Oluşturulma Tarihi</th>
+            <th>Güncellenme Tarihi</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="petDto : ${ownerDto.pets}">
+            <td>[[${petDto.name}]]</span></td>
+            <td>[[${petDto.age}]]</td>
+            <td>[[${petDto.genus.value}]]</td>
+            <td th:text="${#dates.format(petDto.createdAt, 'dd/MMM/yyyy HH:mm')}"></td>
+            <td th:text="${#dates.format(petDto.updatedAt, 'dd/MMM/yyyy HH:mm')}"></td>
+            <td><a th:href="@{/pets/{id}(id=${petDto.id})}">Göster</a></td>
+            <td><a th:href="@{/pets/edit/{id}(id=${petDto.id})}">Düzenle</a></td>
+            <td><a th:href="@{/pets/delete/{id}(id=${petDto.id})}">Sil</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>
