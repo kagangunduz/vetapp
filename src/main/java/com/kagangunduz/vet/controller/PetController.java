@@ -58,6 +58,7 @@ public class PetController {
     public String save(Model model, @Valid PetDto petDto, BindingResult result, RedirectAttributes redirectAttributes) {
 
         if (!result.hasErrors()) {
+            System.out.println(petDto);
             petService.save(petDto);
             redirectAttributes.addFlashAttribute("message", "Kayıt başarılı.");
             return "redirect:/pets";
@@ -79,6 +80,7 @@ public class PetController {
         model.addAttribute("pet", petService.findById(id));
         model.addAttribute("ownerList", ownerService.findAll());
         model.addAttribute("genus", this.getGenusAsHashMap());
+        System.out.println("------------------------------------- => " + petService.findById(id).getOwner());
         return "pet/editForm";
     }
 

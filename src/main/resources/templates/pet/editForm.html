@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org" lang="tr">
 <head>
     <title>Vet App</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -15,14 +15,20 @@
 <div th:if="${message}">
     <p>[[${message}]]</p>
 </div>
-<ul>
-    <li th:each="err : ${#fields.errors('pet.*')}" th:text="${err}"/>
-</ul>
+
 
 <form th:action="@{/pets/edit/{id}(id=${pet.id})}" th:object="${pet}" method="post">
 
-    <p>Name: <input type="text" th:field="*{name}"/></p>
-    <p>Age: <input type="number" th:field="*{age}"/></p>
+    <ul>
+        <li th:each="err : ${#fields.errors('pet.*')}" th:text="${err}"/>
+    </ul>
+
+    <p>Name: <label>
+        <input type="text" th:field="*{name}"/>
+    </label></p>
+    <p>Age: <label>
+        <input type="number" th:field="*{age}"/>
+    </label></p>
 
     <label for="genus">Cins</label>
     <select th:field="*{genus}" id="genus">
@@ -31,17 +37,32 @@
         </option>
     </select>
 
-
-    <select th:field="*{owner}">
-        <option th:each="ownerDto : ${ownerList}" th:value="${ownerDto.id}" th:text="${ownerDto.fullName}"
-        th:selected="${pet.owner.id == ownerDto.id}">
-        </option>
-    </select>
-
+    <label th:if="${ownerList}">
+        <select name="ownerDto">
+            <div th:if="${pet.owner == null}">
+                <option>Lütfen seçim yapınız</option>
+                <option th:each="ownerDto : ${ownerList}" th:value="${ownerDto.id}" th:text="${ownerDto.fullName}">
+                </option>
+            </div>
+            <div th:unless="${pet.owner != null}">
+                <option th:each="ownerDto : ${ownerList}" th:value="${ownerDto.id}" th:text="${ownerDto.fullName}"
+                        th:selected="${pet.owner.id}">
+                    <!--
+                     th:if=" ${pet.owner.id== ownerDto.id ?
+                    'selected' : ''}
+                    th:if="${evaluation &lt; 49 and evaluation &gt; 29}"
+                    th:if="${pet.owner !='null'} and (${lang=='B'}"
+                    ${pet.owner.id ne null and pet.owner.id eq ownerDto.id ? 'selected' : ''}-->
+                </option>
+            </div>
+        </select>
+    </label>
 
     <br>
     <br>
-    <textarea rows="20" cols="80" th:field="*{description}">...</textarea>
+    <label>
+        <textarea rows="20" cols="80" th:field="*{description}">...</textarea>
+    </label>
     <input type="reset" value="Formu Temizle"/>
     <p><input type="submit" value="Kaydet"/></p>
 </form>
