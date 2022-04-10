@@ -24,20 +24,28 @@
     <p>Name: <input type="text" th:field="*{name}"/></p>
     <p>Age: <input type="number" th:field="*{age}"/></p>
 
-    <label for="genus">Cins</label>
+    <label for="genus">Genus</label>
     <select th:field="*{genus}" id="genus">
         <option th:each="g : ${genus}" th:value="${g.key}" th:text="${g.value}"
                 th:selected="${g.key==pet.genus}">
         </option>
     </select>
+    <br><br>
 
+    <label for="owner">Owner</label>
+    <select th:field="*{owner}" id="owner">
+        <div th:if="(${pet.owner} == null)">
+            <option value="" selected>Lütfen seçim yapınız...</option>
+            <option th:each="owner: ${owners}" th:value="${owner.id}" th:text="${owner.fullName}"></option>
+        </div>
+        <div th:if="(not (${pet.owner} == null))">
+            <option value=""> Lütfen seçim yapınız...</option>
+            <option th:each="owner : ${owners}" th:value="${owner.id}" th:text="${owner.fullName}"
+                    th:if="(${owner.id} == ${pet.owner.id} ? 'selected' : '')">
+            </option>
+        </div>
 
-    <select th:fie>
-        <option th:each="owner: ${owners}" th:value="${owner.id}" th:text="${owner.fullName}"
-                th:selected="${owner.id == pet.owner.id}">
-        </option>
     </select>
-
 
     <br>
     <br>

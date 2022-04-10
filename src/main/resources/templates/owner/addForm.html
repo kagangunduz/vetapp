@@ -9,13 +9,11 @@
 <h1>Add Owner</h1>
 <hr>
 
-<form th:action="@{/owners/add}" th:object="${ownerDto}" method="post">
-
+<form th:action="@{/owners/add}" th:object="${owner}" method="post">
     <p>Full Name: <input type="text" th:field="*{fullName}"/></p>
     <p>Telephone Number: <input type="text" th:field="*{telephoneNumber}"/></p>
     <p>Email: <input type="email" th:field="*{email}"/></p>
     <p>Address: <input type="text" th:field="*{address}"/></p>
-
     <input type="reset" value="Formu Temizle"/>
     <p><input type="submit" value="Kaydet"/></p>
 </form>

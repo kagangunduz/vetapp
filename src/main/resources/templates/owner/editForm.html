@@ -7,16 +7,17 @@
 <body>
 
 <p><a th:href="@{/owners}">Owner Listesine Geri Gön</a></p>
+<p><a th:href="@{/owners/{id}(id=${owner.id})}">Owner Sayfasına Geri Gön</a></p>
 <hr>
 <div th:if="${message}">
     <p>[[${message}]]</p>
     <hr>
 </div>
 <ul>
-    <li th:each="err : ${#fields.errors('ownerDto.*')}" th:text="${err}"/>
+    <li th:each="err : ${#fields.errors('owner.*')}" th:text="${err}"/>
 </ul>
 
-<form th:action="@{/owners/edit/{id}(id=${ownerDto.id})}" th:object="${ownerDto}" method="post">
+<form th:action="@{/owners/edit/{id}(id=${owner.id})}" th:object="${owner}" method="post">
     <p>Full Name: <input type="text" th:field="*{fullName}"/></p>
     <p>Telephone Number: <input type="text" th:field="*{telephoneNumber}"/></p>
     <p>Email: <input type="email" th:field="*{email}"/></p>

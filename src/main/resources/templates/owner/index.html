@@ -3,6 +3,12 @@
 <head>
     <title>Vet App</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
 
@@ -21,19 +27,21 @@
         <th>Adres</th>
         <th>Oluşturulma Tarihi</th>
         <th>Güncellenme Tarihi</th>
+        <th>İşlem</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="ownerDto : ${ownerDtos}">
-        <td>[[${ownerDto.fullName}]]</span></td>
-        <td>[[${ownerDto.telephoneNumber}]]</td>
-        <td>[[${ownerDto.email}]]</td>
-        <td>[[${ownerDto.address}]]</td>
-        <td th:text="${#dates.format(ownerDto.createdAt, 'dd/MMM/yyyy HH:mm')}"></td>
-        <td th:text="${#dates.format(ownerDto.updatedAt, 'dd/MMM/yyyy HH:mm')}"></td>
-        <td><a th:href="@{/owners/{id}(id=${ownerDto.id})}">Göster</a></td>
-        <td><a th:href="@{/owners/edit/{id}(id=${ownerDto.id})}">Düzenle</a></td>
-        <td><a th:href="@{/owners/delete/{id}(id=${ownerDto.id})}">Sil</a></td>
+    <tr th:each="owner : ${owners}">
+        <td>[[${owner.fullName}]]</span></td>
+        <td>[[${owner.telephoneNumber}]]</td>
+        <td>[[${owner.email}]]</td>
+        <td>[[${owner.address}]]</td>
+        <td th:text="${#dates.format(owner.createdAt, 'dd/MMM/yyyy HH:mm')}"></td>
+        <td th:text="${#dates.format(owner.updatedAt, 'dd/MMM/yyyy HH:mm')}"></td>
+        <td><a th:href="@{/owners/{id}(id=${owner.id})}">Göster</a>
+            <a th:href="@{/owners/edit/{id}(id=${owner.id})}">Düzenle</a>
+            <a th:href="@{/owners/delete/{id}(id=${owner.id})}">Sil</a>
+        </td>
     </tr>
     </tbody>
 </table>

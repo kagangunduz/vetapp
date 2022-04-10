@@ -3,6 +3,13 @@
 <head>
     <title>Vet App</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+
 </head>
 <body>
 
@@ -20,6 +27,7 @@
         <th>Tür</th>
         <th>Oluşturulma Tarihi</th>
         <th>Güncellenme Tarihi</th>
+        <th>İşlem</th>
     </tr>
     </thead>
     <tbody>
@@ -29,9 +37,11 @@
         <td>[[${pet.genus.value}]]</td>
         <td th:text="${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}"></td>
         <td th:text="${#dates.format(pet.updatedAt, 'dd/MMM/yyyy HH:mm')}"></td>
-        <td><a th:href="@{/pets/{id}(id=${pet.id})}">Göster</a></td>
-        <td><a th:href="@{/pets/edit/{id}(id=${pet.id})}">Düzenle</a></td>
-        <td><a th:href="@{/pets/delete/{id}(id=${pet.id})}">Sil</a></td>
+        <td>
+            <a th:href="@{/pets/{id}(id=${pet.id})}">Göster</a>
+            <a th:href="@{/pets/edit/{id}(id=${pet.id})}">Düzenle</a>
+            <a th:href="@{/pets/delete/{id}(id=${pet.id})}">Sil</a>
+        </td>
     </tr>
     </tbody>
 </table>
