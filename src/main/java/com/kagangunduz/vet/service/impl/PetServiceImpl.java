@@ -1,15 +1,13 @@
 package com.kagangunduz.vet.service.impl;
 
 import com.kagangunduz.vet.entity.Pet;
-import com.kagangunduz.vet.exception.PetNotFoundException;
 import com.kagangunduz.vet.repository.PetRepository;
 import com.kagangunduz.vet.service.PetService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -18,7 +16,11 @@ import java.util.Optional;
 public class PetServiceImpl implements PetService {
 
     private final PetRepository petRepository;
-    private final ModelMapper modelMapper;
+
+    @Override
+    public List<Pet> findAll() {
+        return petRepository.findAll();
+    }
 
     @Override
     public Pet save(Pet pet) {
@@ -31,15 +33,30 @@ public class PetServiceImpl implements PetService {
         if (pet.isPresent()) {
             return pet.get();
         } else {
-            throw new PetNotFoundException("Kayıt bulunamadı. id: " + id);
+            throw new EntityNotFoundException("Kayıt bulunamadı. id: " + id);
         }
     }
 
     @Override
-    public Pet updateById(Long id, Pet pet) {
+    public Pet update(Long id, Pet pet) {
         return petRepository.save(pet);
     }
 
+    /*
+    @Override
+    public Boolean deleteById(Long id) {
+        Optional<Owner> owner = ownerRepository.findById(id);
+        if (owner.isPresent()) {
+            ownerRepository.deleteById(id);
+            return Boolean.TRUE;
+        } else {
+            throw new EntityNotFoundException("Kayıt bulunamadı. id: " + id);
+        }
+    }
+    */
+
+
+   /*
     @Override
     public void deleteById(Long id) {
         petRepository.deleteById(id);
@@ -48,7 +65,7 @@ public class PetServiceImpl implements PetService {
     @Override
     public Page<Pet> getAllPageable(Pageable pageable) {
         return petRepository.findAll(pageable);
-    }
+    }*/
 
 
 }
