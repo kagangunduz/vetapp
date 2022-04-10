@@ -34,17 +34,10 @@
 
     <label for="owner">Owner</label>
     <select th:field="*{owner}" id="owner">
-        <div th:if="(${pet.owner} == null)">
-            <option value="" selected>Lütfen seçim yapınız...</option>
-            <option th:each="owner: ${owners}" th:value="${owner.id}" th:text="${owner.fullName}"></option>
-        </div>
-        <div th:if="(not (${pet.owner} == null))">
-            <option value=""> Lütfen seçim yapınız...</option>
-            <option th:each="owner : ${owners}" th:value="${owner.id}" th:text="${owner.fullName}"
-                    th:if="(${owner.id} == ${pet.owner.id} ? 'selected' : '')">
-            </option>
-        </div>
-
+        <option th:selected="${pet.owner==null}" value="">Lütfen seçim yapınız.</option>
+        <th:block th:each="owner : ${owners}">
+            <option th:value="${owner.id}" th:text="${owner.fullName}"></option>
+        </th:block>
     </select>
 
     <br>
