@@ -1,19 +1,19 @@
 package com.kagangunduz.vet.service;
 
-import com.kagangunduz.vet.entity.Pet;
+import com.kagangunduz.vet.dto.PetDto;
 
 import java.util.List;
 
 
 public interface PetService {
 
-    List<Pet> findAll();
+    List<PetDto> findAll();
 
-    Pet save(Pet pet);
+    PetDto save(PetDto petDto);
 
-    Pet findById(Long id);
+    PetDto findById(Long id);
 
-    Pet update(Long id, Pet pet);
+    PetDto update(Long id, PetDto petDto);
 
     Boolean deleteById(Long id);
 

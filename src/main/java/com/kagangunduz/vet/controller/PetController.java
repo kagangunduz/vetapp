@@ -1,5 +1,6 @@
 package com.kagangunduz.vet.controller;
 
+import com.kagangunduz.vet.dto.PetDto;
 import com.kagangunduz.vet.entity.Genus;
 import com.kagangunduz.vet.entity.Pet;
 import com.kagangunduz.vet.service.impl.OwnerServiceImpl;
@@ -34,18 +35,18 @@ public class PetController {
 
     @GetMapping("/add")
     public String showNewForm(Model model) {
-        model.addAttribute("pet", new Pet());
+        model.addAttribute("pet", new PetDto());
         model.addAttribute("genusHashMap", this.getGenusAsHashMap());
         model.addAttribute("owners", ownerService.findAll());
         return "pet/addForm";
     }
 
     @PostMapping("/add")
-    public String save(Model model, Pet pet, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String save(Model model, PetDto petDto, BindingResult result, RedirectAttributes redirectAttributes) {
 
         if (!result.hasErrors()) {
-            Pet newPet = petService.save(pet);
-            redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı => " + newPet.toString());
+            PetDto newPetDto = petService.save(petDto);
+            redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı => " + newPetDto.toString());
             return "redirect:/pets";
         }
         model.addAttribute("genusHashMap", this.getGenusAsHashMap());
@@ -67,13 +68,13 @@ public class PetController {
     }
 
     @PostMapping("/edit/{id}")
-    public String update(Model model, @PathVariable(name = "id") Long id, Pet pet, BindingResult result,
+    public String update(Model model, @PathVariable(name = "id") Long id, PetDto petDto, BindingResult result,
                          RedirectAttributes redirectAttributes) {
 
         model.addAttribute("genus", this.getGenusAsHashMap());
 
         if (!result.hasErrors()) {
-            model.addAttribute("pet", petService.save(pet));
+            model.addAttribute("pet", petService.save(petDto));
             redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı.");
             return "redirect:/pets/edit/" + id;
         }
@@ -87,6 +88,13 @@ public class PetController {
         return "redirect:/pets";
     }
 
+    private Map<Genus, String> getGenusAsHashMap() {
+        Map<Genus, String> genusHashMap = new HashMap<>();
+        for (Genus genus : Genus.values()) {
+            genusHashMap.put(genus, genus.getValue());
+        }
+        return genusHashMap;
+    }
 
     /*
     @GetMapping
@@ -95,13 +103,5 @@ public class PetController {
         return "pet/index";
     }
     */
-
-    private Map<Genus, String> getGenusAsHashMap() {
-        Map<Genus, String> genusHashMap = new HashMap<>();
-        for (Genus genus : Genus.values()) {
-            genusHashMap.put(genus, genus.getValue());
-        }
-        return genusHashMap;
-    }
 
 }
