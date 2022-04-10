@@ -52,7 +52,6 @@ public class PetController {
         return "pet/addForm";
     }
 
-
     @GetMapping("/{id}")
     public String getById(Model model, @PathVariable(name = "id") Long id) {
         model.addAttribute("pet", petService.findById(id));
@@ -67,27 +66,19 @@ public class PetController {
         return "pet/editForm";
     }
 
-    /*
     @PostMapping("/edit/{id}")
-    public String update(Model model, @PathVariable(name = "id") Long id, Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String update(Model model, @PathVariable(name = "id") Long id, Pet pet, BindingResult result,
+                         RedirectAttributes redirectAttributes) {
+
+        model.addAttribute("genus", this.getGenusAsHashMap());
+
         if (!result.hasErrors()) {
-            model.addAttribute("owner", ownerService.save(owner));
-            redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı");
-            return "redirect:/owners/edit/" + id;
+            model.addAttribute("pet", petService.save(pet));
+            redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı.");
+            return "redirect:/pets/edit/" + id;
         }
-        return "owner/editForm";
+        return "pet/editForm";
     }
-
-    @GetMapping("/delete/{id}")
-    public String deleteById(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
-        ownerService.deleteById(id);
-        redirectAttributes.addFlashAttribute("message", "Kayıt Silindi");
-        return "redirect:/owners";
-    }*/
-
-    /*---------------------------------------------------------------*/
-
-    /*
 
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
@@ -97,27 +88,13 @@ public class PetController {
     }
 
 
-    @PostMapping("/edit/{id}")
-    public String updateById(Model model, @PathVariable(name = "id") Long id, @Valid Pet pet, BindingResult result, RedirectAttributes redirectAttributes) {
-
-        model.addAttribute("genusHashMap", this.getGenusAsHashMap());
-        if (!result.hasErrors()) {
-            Pet petDb = petService.save(pet);
-            model.addAttribute("pet", petDb);
-            redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı");
-            return "redirect:/pets/edit/" + id;
-        }
-        return "pet/editForm";
-    }
-
+    /*
     @GetMapping
     public String getAllPageable(Model model, Pageable pageable) {
         model.addAttribute("pets", petService.getAllPageable(pageable));
         return "pet/index";
     }
-
-
-*/
+    */
 
     private Map<Genus, String> getGenusAsHashMap() {
         Map<Genus, String> genusHashMap = new HashMap<>();

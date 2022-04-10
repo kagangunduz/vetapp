@@ -32,7 +32,7 @@ public class OwnerController {
     }
 
     @PostMapping("/add")
-    public String save(Model model, Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String save(Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
         if (!result.hasErrors()) {
             Owner newOwner = ownerService.save(owner);
             redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı => " + newOwner.toString());
@@ -56,7 +56,12 @@ public class OwnerController {
     @PostMapping("/edit/{id}")
     public String update(Model model, @PathVariable(name = "id") Long id, Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
         if (!result.hasErrors()) {
-            model.addAttribute("owner", ownerService.save(owner));
+            Owner ownerDb = ownerService.findById(id);
+            ownerDb.setFullName(owner.getFullName());
+            ownerDb.setTelephoneNumber(owner.getTelephoneNumber());
+            ownerDb.setEmail(owner.getEmail());
+            ownerDb.setAddress(owner.getAddress());
+            model.addAttribute("owner", ownerService.save(ownerDb));
             redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı");
             return "redirect:/owners/edit/" + id;
         }

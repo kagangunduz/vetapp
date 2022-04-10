@@ -42,26 +42,19 @@ public class PetServiceImpl implements PetService {
         return petRepository.save(pet);
     }
 
-    /*
     @Override
     public Boolean deleteById(Long id) {
-        Optional<Owner> owner = ownerRepository.findById(id);
-        if (owner.isPresent()) {
-            ownerRepository.deleteById(id);
+        Optional<Pet> pet = petRepository.findById(id);
+        if (pet.isPresent()) {
+            petRepository.deleteById(id);
             return Boolean.TRUE;
         } else {
             throw new EntityNotFoundException("Kayıt bulunamadı. id: " + id);
         }
     }
-    */
 
 
-   /*
-    @Override
-    public void deleteById(Long id) {
-        petRepository.deleteById(id);
-    }
-
+    /*
     @Override
     public Page<Pet> getAllPageable(Pageable pageable) {
         return petRepository.findAll(pageable);
