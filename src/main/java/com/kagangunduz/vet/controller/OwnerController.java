@@ -1,10 +1,8 @@
 package com.kagangunduz.vet.controller;
 
 import com.kagangunduz.vet.entity.Owner;
-import com.kagangunduz.vet.exception.OwnerNotFoundException;
 import com.kagangunduz.vet.service.impl.OwnerServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,8 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-
 @Controller
 @RequestMapping("/owners")
 @RequiredArgsConstructor
@@ -24,15 +20,9 @@ public class OwnerController {
     private final OwnerServiceImpl ownerService;
 
     @GetMapping
-    public String getAllPageable(Model model, Pageable pageable) {
-        model.addAttribute("ownerDtos", ownerService.getAllPageable(pageable));
+    public String findAll(Model model) {
+        model.addAttribute("owners", ownerService.findAll());
         return "owner/index";
-    }
-
-    @GetMapping("/{id}")
-    public String getById(Model model, @PathVariable(name = "id") Long id) {
-        model.addAttribute("ownerDto", ownerService.findById(id));
-        return "owner/show";
     }
 
     @GetMapping("/add")
@@ -44,42 +34,48 @@ public class OwnerController {
     @PostMapping("/add")
     public String save(Model model, Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
         if (!result.hasErrors()) {
-            ownerService.save(owner);
-            redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı");
+            Owner newOwner = ownerService.save(owner);
+            redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı => " + newOwner.toString());
             return "redirect:/owners";
         }
         return "owner/addForm";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteById(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
-        try {
-            ownerService.deleteById(id);
-            redirectAttributes.addFlashAttribute("message", "Kayıt Silindi");
-            return "redirect:/owners";
-        } catch (OwnerNotFoundException exception) {
-            redirectAttributes.addFlashAttribute("message", "Kayıt bulunamadı.");
-        }
-        return "redirect:/owners";
+    @GetMapping("/{id}")
+    public String getById(Model model, @PathVariable(name = "id") Long id) {
+        model.addAttribute("owner", ownerService.findById(id));
+        return "owner/show";
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditForm(Model model, @PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
+    public String showEditForm(Model model, @PathVariable(name = "id") Long id) {
         model.addAttribute("owner", ownerService.findById(id));
         return "owner/editForm";
     }
 
     @PostMapping("/edit/{id}")
-    public String updateById(Model model, @PathVariable(name = "id") Long id,
-                             @Valid Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
-
+    public String update(Model model, @PathVariable(name = "id") Long id, Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
         if (!result.hasErrors()) {
-            model.addAttribute("ownerDto", ownerService.save(owner));
+            model.addAttribute("owner", ownerService.save(owner));
             redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı");
             return "redirect:/owners/edit/" + id;
         }
-
         return "owner/editForm";
     }
+
+    @GetMapping("/delete/{id}")
+    public String deleteById(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
+        ownerService.deleteById(id);
+        redirectAttributes.addFlashAttribute("message", "Kayıt Silindi");
+        return "redirect:/owners";
+    }
+
+
+   /* @GetMapping
+    public String getAllPageable(Model model, Pageable pageable) {
+        model.addAttribute("ownerDtos", ownerService.getAllPageable(pageable));
+        return "owner/index";
+    }
+   */
 
 }
