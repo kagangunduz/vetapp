@@ -1,6 +1,6 @@
 package com.kagangunduz.vet.controller;
 
-import com.kagangunduz.vet.entity.Owner;
+import com.kagangunduz.vet.dto.OwnerDto;
 import com.kagangunduz.vet.service.impl.OwnerServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -27,15 +27,15 @@ public class OwnerController {
 
     @GetMapping("/add")
     public String showNewForm(Model model) {
-        model.addAttribute("owner", new Owner());
+        model.addAttribute("owner", new OwnerDto());
         return "owner/addForm";
     }
 
     @PostMapping("/add")
-    public String save(Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String save(OwnerDto ownerDto, BindingResult result, RedirectAttributes redirectAttributes) {
         if (!result.hasErrors()) {
-            Owner newOwner = ownerService.save(owner);
-            redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı => " + newOwner.toString());
+            OwnerDto newOrderDto = ownerService.save(ownerDto);
+            redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı => " + newOrderDto.toString());
             return "redirect:/owners";
         }
         return "owner/addForm";
@@ -54,14 +54,15 @@ public class OwnerController {
     }
 
     @PostMapping("/edit/{id}")
-    public String update(Model model, @PathVariable(name = "id") Long id, Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String update(Model model, @PathVariable(name = "id") Long id, OwnerDto ownerDto,
+                         BindingResult result, RedirectAttributes redirectAttributes) {
         if (!result.hasErrors()) {
-            Owner ownerDb = ownerService.findById(id);
-            ownerDb.setFullName(owner.getFullName());
-            ownerDb.setTelephoneNumber(owner.getTelephoneNumber());
-            ownerDb.setEmail(owner.getEmail());
-            ownerDb.setAddress(owner.getAddress());
-            model.addAttribute("owner", ownerService.save(ownerDb));
+            OwnerDto ownerDto1 = ownerService.findById(id);
+            ownerDto1.setFullName(ownerDto.getFullName());
+            ownerDto1.setTelephoneNumber(ownerDto.getTelephoneNumber());
+            ownerDto1.setEmail(ownerDto.getEmail());
+            ownerDto1.setAddress(ownerDto.getAddress());
+            model.addAttribute("owner", ownerService.save(ownerDto1));
             redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı");
             return "redirect:/owners/edit/" + id;
         }

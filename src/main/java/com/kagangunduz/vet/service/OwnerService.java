@@ -1,18 +1,18 @@
 package com.kagangunduz.vet.service;
 
-import com.kagangunduz.vet.entity.Owner;
+import com.kagangunduz.vet.dto.OwnerDto;
 
 import java.util.List;
 
 public interface OwnerService {
 
-    List<Owner> findAll();
+    List<OwnerDto> findAll();
 
-    Owner save(Owner owner);
+    OwnerDto save(OwnerDto ownerDto);
 
-    Owner findById(Long id);
+    OwnerDto findById(Long id);
 
-    Owner update(Long id, Owner owner);
+    OwnerDto update(Long id, OwnerDto ownerDto);
 
     Boolean deleteById(Long id);
 

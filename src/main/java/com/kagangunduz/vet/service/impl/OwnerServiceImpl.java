@@ -1,12 +1,15 @@
 package com.kagangunduz.vet.service.impl;
 
+import com.kagangunduz.vet.dto.OwnerDto;
 import com.kagangunduz.vet.entity.Owner;
 import com.kagangunduz.vet.repository.OwnerRepository;
 import com.kagangunduz.vet.service.OwnerService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,36 +18,45 @@ import java.util.Optional;
 public class OwnerServiceImpl implements OwnerService {
 
     private final OwnerRepository ownerRepository;
+    private final ModelMapper modelMapper;
 
     @Override
-    public List<Owner> findAll() {
-        return ownerRepository.findAll();
+
+    public List<OwnerDto> findAll() {
+        List<OwnerDto> ownerDtoList = Arrays.asList(modelMapper.map(ownerRepository.findAll(), OwnerDto[].class));
+        return ownerDtoList;
     }
 
     @Override
-    public Owner save(Owner owner) {
-        return ownerRepository.save(owner);
+    public OwnerDto save(OwnerDto ownerDto) {
+        Owner owner = modelMapper.map(ownerDto, Owner.class);
+        owner = ownerRepository.save(owner);
+        ownerDto = modelMapper.map(owner, OwnerDto.class);
+        return ownerDto;
     }
 
     @Override
-    public Owner findById(Long id) {
-        Optional<Owner> owner = ownerRepository.findById(id);
-        if (owner.isPresent()) {
-            return owner.get();
+    public OwnerDto findById(Long id) {
+        Optional<Owner> optionalOwner = ownerRepository.findById(id);
+        if (optionalOwner.isPresent()) {
+            OwnerDto ownerDto = modelMapper.map(optionalOwner.get(), OwnerDto.class);
+            return ownerDto;
         } else {
             throw new EntityNotFoundException("Kayıt bulunamadı. id: " + id);
         }
     }
 
     @Override
-    public Owner update(Long id, Owner owner) {
-        return ownerRepository.save(owner);
+    public OwnerDto update(Long id, OwnerDto ownerDto) {
+        Owner owner = modelMapper.map(ownerDto, Owner.class);
+        owner = ownerRepository.save(owner);
+        return modelMapper.map(owner, OwnerDto.class);
     }
 
     @Override
     public Boolean deleteById(Long id) {
-        Optional<Owner> owner = ownerRepository.findById(id);
-        if (owner.isPresent()) {
+        Optional<Owner> optionalOwner = ownerRepository.findById(id);
+        if (optionalOwner.isPresent()) {
             ownerRepository.deleteById(id);
             return Boolean.TRUE;
         } else {
