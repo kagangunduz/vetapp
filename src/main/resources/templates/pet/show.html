@@ -8,7 +8,9 @@
 
 <p><a th:href="@{/}">Ana sayfaya dön</a></p>
 <p><a th:href="@{/pets}">Pet Listesine dön</a></p>
-<p><a th:href="@{/owners/{id}(id=${pet.owner.id})}">Owner sayfasına dön</a></p>
+<div th:if="${pet.owner}">
+    <p><a th:href="@{/owners/{id}(id=${pet.owner.id})}">Owner sayfasına dön</a></p>
+</div>
 <hr>
 <h1>Pet</h1>
 <hr>

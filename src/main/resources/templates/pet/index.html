@@ -37,7 +37,8 @@
         <td>[[${pet.name}]]</span></td>
         <td>[[${pet.age}]]</td>
         <td>[[${pet.genus.value}]]</td>
-        <td>[[${pet.owner.fullName}]]</td>
+        <td th:if="${pet.owner != null}">[[${pet.owner.fullName}]]</td>
+        <td th:unless="${pet.owner != null}"></td>
         <td th:text="${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}"></td>
         <td th:text="${#dates.format(pet.updatedAt, 'dd/MMM/yyyy HH:mm')}"></td>
         <td>
