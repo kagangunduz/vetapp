@@ -8,8 +8,16 @@
 
 <h1>Add Owner</h1>
 <hr>
-
+<p><a th:href="@{/owners}">Owner Listesine Geri Gön</a></p>
+<hr>
 <form th:action="@{/owners/add}" th:object="${owner}" method="post">
+
+    <div th:if="${#fields.hasAnyErrors()}">
+        <ul>
+            <li th:each="err : ${#fields.errors('owner.*')}" th:text="${err}"/>
+        </ul>
+    </div>
+
     <p>Full Name: <input type="text" th:field="*{fullName}"/></p>
     <p>Telephone Number: <input type="text" th:field="*{telephoneNumber}"/></p>
     <p>Email: <input type="email" th:field="*{email}"/></p>

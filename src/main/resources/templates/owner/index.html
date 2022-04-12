@@ -12,6 +12,7 @@
 </head>
 <body>
 
+<p><a th:href="@{/}">Ana Sayfa</a></p>
 <p><a th:href="@{/owners/add}">Owner Ekle</a></p>
 
 <div th:if="${message}">
@@ -46,6 +47,19 @@
     </tbody>
 </table>
 
+<footer>
+    Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
+    &nbsp; &nbsp; - &nbsp;
+    <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+        <span th:if="${currentPage == i}">
+            <span>[[${i}]]</span>
+        </span>
+        <span th:unless="${currentPage == i}">
+            <a th:href="@{/owners(page=${i})}">[[${i}]]</a>
+        </span>
+        &nbsp; &nbsp;
+    </span>
+</footer>
 
 </body>
 </html>

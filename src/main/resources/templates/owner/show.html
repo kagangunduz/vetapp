@@ -12,9 +12,9 @@
 
 </head>
 <body>
+
 <p><a th:href="@{/}">Ana Sayfaya Dön</a></p>
 <p><a th:href="@{/owners}">Owner Listesine Geri Gön</a></p>
-
 <hr>
 <h1>Owner</h1>
 <hr>
@@ -24,9 +24,7 @@
 <p><b>Adres:</b> [[${owner.address}]]</p>
 <p><a th:href="@{/owners/edit/{id}(id=${owner.id})}">Düzenle</a></p>
 <p><a th:href="@{/owners/delete/{id}(id=${owner.id})}">Sil</a></p>
-
 <hr>
-
 <div th:if="(not ${owner.pets.isEmpty()})">
     <h3>Pets</h3>
     <table>
