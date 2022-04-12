@@ -19,6 +19,16 @@
     <p>[[${message}]]</p>
 </div>
 
+<hr>
+<form th:action="@{/owners/search}" method="get">
+    <label for="fullName">Search: </label>
+    <input type="text" name="fullName" id="fullName" th:value="${fullName}">
+    <button type="submit">Search</button>
+</form>
+
+<br>
+<br>
+
 <table>
     <thead>
     <tr>

@@ -26,6 +26,11 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
+    public List<Owner> findAllByFullName(String fullName) {
+        return ownerRepository.findAllByFullNameContainsIgnoreCase(fullName);
+    }
+
+    @Override
     public Page<Owner> getAllPageable(int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber - 1, 5, Sort.by("id").descending());
         return ownerRepository.findAll(pageable);

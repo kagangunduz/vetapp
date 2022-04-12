@@ -11,7 +11,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/owners")
@@ -22,8 +24,7 @@ public class OwnerController {
     private final OwnerServiceImpl ownerService;
 
     @GetMapping
-    public String getAllByPagination(Model model,
-                                     @RequestParam(name = "page", defaultValue = "1", required = false) int pageNumber) {
+    public String getAllByPagination(Model model, @RequestParam(name = "page", defaultValue = "1", required = false) int pageNumber) {
 
         Page<Owner> page = ownerService.getAllPageable(pageNumber);
         int totalPages = page.getTotalPages();
@@ -35,6 +36,21 @@ public class OwnerController {
         model.addAttribute("totalItems", totalItems);
         model.addAttribute("owners", ownerList);
         return "owner/index";
+    }
+
+    @GetMapping("/search")
+    public String findAllByFullName(Model model, @RequestParam(name = "fullName", required = true) String fullName) {
+        fullName = fullName.toLowerCase(Locale.ROOT);
+        System.out.println("--------------- => " + fullName);
+        List<Owner> ownerList = ownerService.findAllByFullName(fullName);
+        if (ownerList == null) {
+            model.addAttribute("message", "Sonuç bulunamadı.");
+        } else {
+            model.addAttribute("message", "Bulunan kayıt => " + ownerList.size());
+            model.addAttribute("owners", ownerList);
+            System.out.println(Arrays.toString(ownerList.toArray()));
+        }
+        return "owner/search";
     }
 
     @GetMapping("/add")
@@ -67,8 +83,7 @@ public class OwnerController {
     }
 
     @PostMapping("/edit/{id}")
-    public String update(Model model, @PathVariable(name = "id") Long id, Owner owner,
-                         BindingResult result, RedirectAttributes redirectAttributes) {
+    public String update(Model model, @PathVariable(name = "id") Long id, Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return "owner/editForm";
         }
