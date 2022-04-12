@@ -1,56 +1,67 @@
 package com.kagangunduz.vet.controller;
 
-import com.kagangunduz.vet.dto.PetDto;
 import com.kagangunduz.vet.entity.Genus;
 import com.kagangunduz.vet.entity.Pet;
 import com.kagangunduz.vet.service.impl.OwnerServiceImpl;
 import com.kagangunduz.vet.service.impl.PetServiceImpl;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 @Controller
 @RequestMapping("/pets")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class PetController {
 
     private final PetServiceImpl petService;
     private final OwnerServiceImpl ownerService;
 
+
     @GetMapping
-    public String findAll(Model model) {
-        model.addAttribute("pets", petService.findAll());
+    public String getAllByPagination(Model model,
+                                     @RequestParam(value = "page", defaultValue = "1", required = false) int pageNumber) {
+
+        Page<Pet> page = petService.getAllPageable(pageNumber);
+        int totalPages = page.getTotalPages();
+        long totalItems = page.getTotalElements();
+        List<Pet> petList = page.getContent();
+
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("pets", petList);
+
         return "pet/index";
     }
 
     @GetMapping("/add")
     public String showNewForm(Model model) {
-        model.addAttribute("pet", new PetDto());
+        model.addAttribute("pet", new Pet());
         model.addAttribute("genusHashMap", this.getGenusAsHashMap());
         model.addAttribute("owners", ownerService.findAll());
         return "pet/addForm";
     }
 
     @PostMapping("/add")
-    public String save(Model model, PetDto petDto, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String save(Model model, Pet pet, BindingResult result, RedirectAttributes redirectAttributes) {
 
-        if (!result.hasErrors()) {
-            PetDto newPetDto = petService.save(petDto);
-            redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı => " + newPetDto.toString());
-            return "redirect:/pets";
+        if (result.hasErrors()) {
+            model.addAttribute("genusHashMap", this.getGenusAsHashMap());
+            return "pet/addForm";
         }
-        model.addAttribute("genusHashMap", this.getGenusAsHashMap());
-        return "pet/addForm";
+
+        Pet newPet = petService.save(pet);
+        redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı.");
+        return "redirect:/pets";
     }
 
     @GetMapping("/{id}")
@@ -62,29 +73,31 @@ public class PetController {
     @GetMapping("/edit/{id}")
     public String showEditForm(Model model, @PathVariable(name = "id") Long id) {
         model.addAttribute("pet", petService.findById(id));
-        model.addAttribute("owners", ownerService.findAll());
         model.addAttribute("genus", this.getGenusAsHashMap());
+        model.addAttribute("owners", ownerService.findAll());
         return "pet/editForm";
     }
 
     @PostMapping("/edit/{id}")
-    public String update(Model model, @PathVariable(name = "id") Long id, PetDto petDto, BindingResult result,
-                         RedirectAttributes redirectAttributes) {
+    public String update(Model model, @PathVariable(name = "id") Long id, Pet pet, BindingResult result, RedirectAttributes redirectAttributes) {
 
         model.addAttribute("genus", this.getGenusAsHashMap());
 
-        if (!result.hasErrors()) {
-            model.addAttribute("pet", petService.save(petDto));
-            redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı.");
-            return "redirect:/pets/edit/" + id;
+        if (result.hasErrors()) {
+            return "pet/editForm";
         }
-        return "pet/editForm";
+        model.addAttribute("pet", petService.update(id, pet));
+        redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı.");
+        return "redirect:/pets/edit/" + id;
     }
 
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
-        petService.deleteById(id);
-        redirectAttributes.addFlashAttribute("message", "Kayıt Silindi");
+        if (petService.deleteById(id)) {
+            redirectAttributes.addFlashAttribute("message", "Kayıt Silindi");
+        } else {
+            redirectAttributes.addFlashAttribute("message", "Kayıt Silinemedi.");
+        }
         return "redirect:/pets";
     }
 
@@ -95,13 +108,5 @@ public class PetController {
         }
         return genusHashMap;
     }
-
-    /*
-    @GetMapping
-    public String getAllPageable(Model model, Pageable pageable) {
-        model.addAttribute("pets", petService.getAllPageable(pageable));
-        return "pet/index";
-    }
-    */
 
 }

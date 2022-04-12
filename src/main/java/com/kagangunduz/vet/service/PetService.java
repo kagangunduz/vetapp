@@ -1,24 +1,23 @@
 package com.kagangunduz.vet.service;
 
-import com.kagangunduz.vet.dto.PetDto;
+import com.kagangunduz.vet.entity.Pet;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 
 public interface PetService {
 
-    List<PetDto> findAll();
+    List<Pet> findAll();
 
-    PetDto save(PetDto petDto);
+    Page<Pet> getAllPageable(int pageNumber);
 
-    PetDto findById(Long id);
+    Pet save(Pet pet);
 
-    PetDto update(Long id, PetDto petDto);
+    Pet findById(Long id);
+
+    Pet update(Long id, Pet pet);
 
     Boolean deleteById(Long id);
-
-    /*
-    Page<Pet> getAllPageable(Pageable pageable);
-    */
 
 }

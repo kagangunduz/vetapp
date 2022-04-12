@@ -1,54 +1,67 @@
 package com.kagangunduz.vet.service.impl;
 
-import com.kagangunduz.vet.dto.PetDto;
 import com.kagangunduz.vet.entity.Pet;
 import com.kagangunduz.vet.repository.PetRepository;
 import com.kagangunduz.vet.service.PetService;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
+import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class PetServiceImpl implements PetService {
 
+
     private final PetRepository petRepository;
-    private final ModelMapper modelMapper;
 
     @Override
-    public List<PetDto> findAll() {
-        List<PetDto> petDtoList = Arrays.asList(modelMapper.map(petRepository.findAll(), PetDto[].class));
-        return petDtoList;
+    public List<Pet> findAll() {
+        return petRepository.findAll(Sort.by("id").descending());
     }
 
     @Override
-    public PetDto save(PetDto petDto) {
-        Pet pet = modelMapper.map(petDto, Pet.class);
-        pet = petRepository.save(pet);
-        return modelMapper.map(pet, PetDto.class);
+    public Page<Pet> getAllPageable(int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber - 1, 5, Sort.by("id").descending());
+        return petRepository.findAll(pageable);
     }
 
     @Override
-    public PetDto findById(Long id) {
+    public Pet save(Pet pet) {
+        return petRepository.save(pet);
+    }
+
+    @Override
+    public Pet findById(Long id) {
         Optional<Pet> optionalPet = petRepository.findById(id);
         if (optionalPet.isPresent()) {
-            return modelMapper.map(optionalPet.get(), PetDto.class);
+            return optionalPet.get();
         } else {
             throw new EntityNotFoundException("Kayıt bulunamadı. id: " + id);
         }
     }
 
     @Override
-    public PetDto update(Long id, PetDto petDto) {
-        Pet pet = modelMapper.map(petDto, Pet.class);
-        pet = petRepository.save(pet);
-        return modelMapper.map(pet, PetDto.class);
+    public Pet update(Long id, Pet pet) {
+        Optional<Pet> optionalPet = petRepository.findById(id);
+        if (optionalPet.isPresent()) {
+            Pet petDb = optionalPet.get();
+            petDb.setName(pet.getName());
+            petDb.setAge(pet.getAge());
+            petDb.setGenus(pet.getGenus());
+            petDb.setDescription(pet.getDescription());
+            petDb.setOwner(pet.getOwner());
+            return petRepository.save(petDb);
+        } else {
+            throw new EntityNotFoundException("Kayıt bulunamadı. id: " + id);
+        }
     }
 
     @Override
@@ -61,13 +74,5 @@ public class PetServiceImpl implements PetService {
             throw new EntityNotFoundException("Kayıt bulunamadı. id: " + id);
         }
     }
-
-
-    /*
-    @Override
-    public Page<Pet> getAllPageable(Pageable pageable) {
-        return petRepository.findAll(pageable);
-    }*/
-
 
 }
