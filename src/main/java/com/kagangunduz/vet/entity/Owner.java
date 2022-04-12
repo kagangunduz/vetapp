@@ -1,18 +1,18 @@
 package com.kagangunduz.vet.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = {"pets"})
+@EqualsAndHashCode(callSuper = true)
 public class Owner extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,5 +29,5 @@ public class Owner extends BaseEntity {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
-    private List<Pet> pets;
+    private List<Pet> pets = new ArrayList<>();
 }

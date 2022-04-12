@@ -1,21 +1,24 @@
 package com.kagangunduz.vet.service;
 
-import com.kagangunduz.vet.dto.OwnerDto;
+import com.kagangunduz.vet.entity.Owner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface OwnerService {
 
-    List<OwnerDto> findAll();
+    List<Owner> findAll();
 
-    OwnerDto save(OwnerDto ownerDto);
+    Page<Owner> getAllPageable(int pageNumber);
 
-    OwnerDto findById(Long id);
+    Owner save(Owner owner);
 
-    OwnerDto update(Long id, OwnerDto ownerDto);
+    Owner findById(Long id);
+
+    Owner update(Long id, Owner owner);
 
     Boolean deleteById(Long id);
 
-    /*Page<Owner> getAllPageable(Pageable pageable);*/
 
 }
