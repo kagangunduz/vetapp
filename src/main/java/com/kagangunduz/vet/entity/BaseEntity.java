@@ -22,12 +22,10 @@ public class BaseEntity implements Serializable {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
     @Column(name = "updated_at")
     @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
     private Boolean status;

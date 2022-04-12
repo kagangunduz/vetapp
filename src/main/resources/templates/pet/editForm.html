@@ -1,14 +1,13 @@
 <!DOCTYPE HTML>
-<html xmlns:th="https://www.thymeleaf.org" lang="tr">
+<html xmlns:th="https://www.thymeleaf.org">
 <head>
     <title>Vet App</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
 
-<p><a th:href="@{/}">Ana sayfaya dön</a></p>
 <p><a th:href="@{/pets}">Pet Listesine dön</a></p>
-<div th:if="${pet.owner != null}">
+<div th:if="${pet.owner}">
     <p><a th:href="@{/owners/{id}(id=${pet.owner.id})}">Owner sayfasına dön</a></p>
 </div>
 <hr>
@@ -16,53 +15,36 @@
     <p>[[${message}]]</p>
 </div>
 
-
 <form th:action="@{/pets/edit/{id}(id=${pet.id})}" th:object="${pet}" method="post">
 
-    <ul>
-        <li th:each="err : ${#fields.errors('pet.*')}" th:text="${err}"/>
-    </ul>
+    <div th:if="${#fields.hasAnyErrors()}">
+        <ul>
+            <li th:each="err : ${#fields.errors('pet.*')}" th:text="${err}"/>
+        </ul>
+    </div>
 
-    <p>Name: <label>
-        <input type="text" th:field="*{name}"/>
-    </label></p>
-    <p>Age: <label>
-        <input type="number" th:field="*{age}"/>
-    </label></p>
+    <p>Name: <input type="text" th:field="*{name}"/></p>
+    <p>Age: <input type="number" th:field="*{age}"/></p>
 
-    <label for="genus">Cins</label>
+    <label for="genus">Genus</label>
     <select th:field="*{genus}" id="genus">
         <option th:each="g : ${genus}" th:value="${g.key}" th:text="${g.value}"
                 th:selected="${g.key==pet.genus}">
         </option>
     </select>
+    <br><br>
 
-    <label th:if="${ownerList}">
-        <select name="ownerDto">
-            <div th:if="${pet.owner == null}">
-                <option>Lütfen seçim yapınız</option>
-                <option th:each="ownerDto : ${ownerList}" th:value="${ownerDto.id}" th:text="${ownerDto.fullName}">
-                </option>
-            </div>
-            <div th:unless="${pet.owner != null}">
-                <option th:each="ownerDto : ${ownerList}" th:value="${ownerDto.id}" th:text="${ownerDto.fullName}"
-                        th:selected="${pet.owner.id}">
-                    <!--
-                     th:if=" ${pet.owner.id== ownerDto.id ?
-                    'selected' : ''}
-                    th:if="${evaluation &lt; 49 and evaluation &gt; 29}"
-                    th:if="${pet.owner !='null'} and (${lang=='B'}"
-                    ${pet.owner.id ne null and pet.owner.id eq ownerDto.id ? 'selected' : ''}-->
-                </option>
-            </div>
-        </select>
-    </label>
+    <label for="owner">Owner</label>
+    <select th:field="*{owner}" id="owner">
+        <option th:selected="${pet.owner==null}" value="">Lütfen seçim yapınız.</option>
+        <th:block th:each="owner : ${owners}">
+            <option th:value="${owner.id}" th:text="${owner.fullName}"></option>
+        </th:block>
+    </select>
 
     <br>
     <br>
-    <label>
-        <textarea rows="20" cols="80" th:field="*{description}">...</textarea>
-    </label>
+    <textarea rows="20" cols="80" th:field="*{description}">...</textarea>
     <input type="reset" value="Formu Temizle"/>
     <p><input type="submit" value="Kaydet"/></p>
 </form>

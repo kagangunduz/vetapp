@@ -8,19 +8,31 @@
 
 <p><a th:href="@{/}">Ana sayfaya dön</a></p>
 <p><a th:href="@{/pets}">Pet Listesine dön</a></p>
-<div th:if="${petDto.getOwner() != null}">
-    <p><a th:href="@{/owners/{id}(id=${petDto.owner.id})}">Owner sayfasına dön</a></p>
+<div th:if="${pet.owner}">
+    <p><a th:href="@{/owners/{id}(id=${pet.owner.id})}">Owner sayfasına dön</a></p>
 </div>
-
 <hr>
 <h1>Pet</h1>
 <hr>
-<p th:text="${petDto.getName()}"></p>
-<p th:text="${petDto.getAge()}"></p>
-<p th:text="${petDto.getGenus().getValue()}"></p>
-<p th:text="${#dates.format(petDto.getCreatedAt(), 'dd/MMM/yyyy HH:mm')}"></p>
-<p th:text="${#dates.format(petDto.getUpdatedAt(), 'dd/MMM/yyyy HH:mm')}"></p>
-<p th:text="${petDto.getDescription()}"></p>
+<p><b>Name:</b> [[${pet.name}]]</p>
+<p><b>Age:</b> [[${pet.age}]]</p>
+<p><b>Genus:</b> [[${pet.genus.value}]]</p>
+<p><b>Description:</b> [[${pet.description}]]</p>
+<p><b>Created At:</b> [[${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}]]</p>
+<p><b>Updated At:</b> [[${#dates.format(pet.updatedAt, 'dd/MMM/yyyy HH:mm')}]]</p>
+<a th:href="@{/pets/edit/{id}(id=${pet.id})}">Düzenle</a>
+<a th:href="@{/pets/delete/{id}(id=${pet.id})}">Sil</a>
+<hr>
+<div th:if="${pet.owner}">
+    <h3>Owner</h3>
+    <hr>
+    <p><b>Ad Soyad:</b> [[${pet.owner.fullName}]]</span></p>
+    <p><b>Telefon:</b> [[${pet.owner.telephoneNumber}]]</p>
+    <p><b>Email:</b> [[${pet.owner.email}]]</p>
+    <p><b>Adres:</b> [[${pet.owner.address}]]</p>
+    <a th:href="@{/owners/edit/{id}(id=${pet.owner.id})}">Düzenle</a>
+    <a th:href="@{/owners/delete/{id}(id=${pet.owner.id})}">Sil</a>
+</div>
 
 </body>
 </html>

@@ -5,7 +5,7 @@ public enum Genus {
     CAT("Kedi"),
     DOG("Köpek");
 
-    private String value;
+    private final String value;
 
     Genus(String value) {
         this.value = value;

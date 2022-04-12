@@ -3,14 +3,31 @@
 <head>
     <title>Vet App</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
 
+<p><a th:href="@{/}">Ana Sayfa</a></p>
 <p><a th:href="@{/owners/add}">Owner Ekle</a></p>
 
 <div th:if="${message}">
     <p>[[${message}]]</p>
 </div>
+
+<hr>
+<form th:action="@{/owners/search}" method="get">
+    <label for="fullName">Search: </label>
+    <input type="text" name="fullName" id="fullName" th:value="${fullName}">
+    <button type="submit">Search</button>
+</form>
+
+<br>
+<br>
 
 <table>
     <thead>
@@ -21,23 +38,38 @@
         <th>Adres</th>
         <th>Oluşturulma Tarihi</th>
         <th>Güncellenme Tarihi</th>
+        <th>İşlem</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="ownerDto : ${ownerDtos}">
-        <td>[[${ownerDto.fullName}]]</span></td>
-        <td>[[${ownerDto.telephoneNumber}]]</td>
-        <td>[[${ownerDto.email}]]</td>
-        <td>[[${ownerDto.address}]]</td>
-        <td th:text="${#dates.format(ownerDto.createdAt, 'dd/MMM/yyyy HH:mm')}"></td>
-        <td th:text="${#dates.format(ownerDto.updatedAt, 'dd/MMM/yyyy HH:mm')}"></td>
-        <td><a th:href="@{/owners/{id}(id=${ownerDto.id})}">Göster</a></td>
-        <td><a th:href="@{/owners/edit/{id}(id=${ownerDto.id})}">Düzenle</a></td>
-        <td><a th:href="@{/owners/delete/{id}(id=${ownerDto.id})}">Sil</a></td>
+    <tr th:each="owner : ${owners}">
+        <td>[[${owner.fullName}]]</span></td>
+        <td>[[${owner.telephoneNumber}]]</td>
+        <td>[[${owner.email}]]</td>
+        <td>[[${owner.address}]]</td>
+        <td th:text="${#dates.format(owner.createdAt, 'dd/MMM/yyyy HH:mm')}"></td>
+        <td th:text="${#dates.format(owner.updatedAt, 'dd/MMM/yyyy HH:mm')}"></td>
+        <td><a th:href="@{/owners/{id}(id=${owner.id})}">Göster</a>
+            <a th:href="@{/owners/edit/{id}(id=${owner.id})}">Düzenle</a>
+            <a th:href="@{/owners/delete/{id}(id=${owner.id})}">Sil</a>
+        </td>
     </tr>
     </tbody>
 </table>
 
+<footer>
+    Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
+    &nbsp; &nbsp; - &nbsp;
+    <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+        <span th:if="${currentPage == i}">
+            <span>[[${i}]]</span>
+        </span>
+        <span th:unless="${currentPage == i}">
+            <a th:href="@{/owners(page=${i})}">[[${i}]]</a>
+        </span>
+        &nbsp; &nbsp;
+    </span>
+</footer>
 
 </body>
 </html>

@@ -1,9 +1,9 @@
 package com.kagangunduz.vet.dto;
 
-import com.kagangunduz.vet.entity.Pet;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -13,6 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"pets"})
 public class OwnerDto {
 
     private Long id;

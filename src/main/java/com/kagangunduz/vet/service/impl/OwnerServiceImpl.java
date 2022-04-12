@@ -1,18 +1,16 @@
 package com.kagangunduz.vet.service.impl;
 
-import com.kagangunduz.vet.dto.OwnerDto;
 import com.kagangunduz.vet.entity.Owner;
-import com.kagangunduz.vet.exception.OwnerNotFoundException;
 import com.kagangunduz.vet.repository.OwnerRepository;
 import com.kagangunduz.vet.service.OwnerService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,59 +19,62 @@ import java.util.Optional;
 public class OwnerServiceImpl implements OwnerService {
 
     private final OwnerRepository ownerRepository;
-    private final ModelMapper modelMapper;
 
     @Override
-    public OwnerDto save(OwnerDto ownerDto) {
-        Owner owner = modelMapper.map(ownerDto, Owner.class);
-        owner = ownerRepository.save(owner);
-        ownerDto = modelMapper.map(owner, OwnerDto.class);
-        return ownerDto;
+    public List<Owner> findAll() {
+        return ownerRepository.findAll(Sort.by("id").descending());
     }
 
     @Override
-    public OwnerDto findById(Long id) {
-        Optional<Owner> owner = ownerRepository.findById(id);
-        if (owner.isPresent()) {
-            return modelMapper.map(owner.get(), OwnerDto.class);
+    public List<Owner> findAllByFullName(String fullName) {
+        return ownerRepository.findAllByFullNameContainsIgnoreCase(fullName);
+    }
+
+    @Override
+    public Page<Owner> getAllPageable(int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber - 1, 5, Sort.by("id").descending());
+        return ownerRepository.findAll(pageable);
+    }
+
+    @Override
+    public Owner save(Owner owner) {
+        return ownerRepository.save(owner);
+    }
+
+    @Override
+    public Owner findById(Long id) {
+        Optional<Owner> optionalOwner = ownerRepository.findById(id);
+        if (optionalOwner.isPresent()) {
+            return optionalOwner.get();
         } else {
-            throw new OwnerNotFoundException("Kayıt bulunamadı. id: " + id);
+            throw new EntityNotFoundException("Kayıt bulunamadı. id: " + id);
         }
     }
 
     @Override
-    public OwnerDto updateById(Long id, OwnerDto ownerDto) {
-        Owner ownerDb = ownerRepository.getById(id);
-        ownerDb.setFullName(ownerDb.getFullName());
-        ownerDb.setTelephoneNumber(ownerDb.getTelephoneNumber());
-        ownerDb.setEmail(ownerDb.getEmail());
-        ownerRepository.save(ownerDb);
-        return modelMapper.map(ownerDb, OwnerDto.class);
+    public Owner update(Long id, Owner owner) {
+        Optional<Owner> optionalOwner = ownerRepository.findById(id);
+        if (optionalOwner.isPresent()) {
+            Owner ownerDb = optionalOwner.get();
+            ownerDb.setFullName(owner.getFullName());
+            ownerDb.setTelephoneNumber(owner.getTelephoneNumber());
+            ownerDb.setEmail(owner.getEmail());
+            ownerDb.setAddress(owner.getAddress());
+            return ownerRepository.save(ownerDb);
+        } else {
+            throw new EntityNotFoundException("Kayıt bulunamadı. id: " + id);
+        }
     }
 
     @Override
     public Boolean deleteById(Long id) {
-        Optional<Owner> owner = ownerRepository.findById(id);
-        if (owner.isPresent()) {
+        Optional<Owner> optionalOwner = ownerRepository.findById(id);
+        if (optionalOwner.isPresent()) {
             ownerRepository.deleteById(id);
             return Boolean.TRUE;
         } else {
-            throw new OwnerNotFoundException("Kayıt bulunamadı. id: " + id);
+            throw new EntityNotFoundException("Kayıt bulunamadı. id: " + id);
         }
     }
 
-    @Override
-    public Page<OwnerDto> getAllPageable(Pageable pageable) {
-        Page<Owner> owners = ownerRepository.findAll(pageable);
-        OwnerDto[] ownerDtos = modelMapper.map(owners.getContent(), OwnerDto[].class);
-        List<OwnerDto> ownerDtoList = Arrays.asList(ownerDtos);
-        return new PageImpl<>(ownerDtoList, pageable, owners.getTotalElements());
-    }
-
-    @Override
-    public List<OwnerDto> findAll() {
-        List<Owner> ownerList = ownerRepository.findAll();
-        List<OwnerDto> ownerDtoList = Arrays.asList(modelMapper.map(ownerList, OwnerDto[].class));
-        return ownerDtoList;
-    }
 }

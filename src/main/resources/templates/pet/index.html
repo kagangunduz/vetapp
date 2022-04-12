@@ -3,9 +3,17 @@
 <head>
     <title>Vet App</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+
 </head>
 <body>
 
+<p><a th:href="@{/}">Ana Sayfa</a></p>
 <p><a th:href="@{/pets/add}">Pet Ekle</a></p>
 
 <div th:if="${message}">
@@ -18,23 +26,44 @@
         <th>İsim</th>
         <th>Yaş</th>
         <th>Tür</th>
+        <th>Sahibi</th>
         <th>Oluşturulma Tarihi</th>
         <th>Güncellenme Tarihi</th>
+        <th>İşlem</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="petDto : ${petDtos}">
-        <td>[[${petDto.name}]]</span></td>
-        <td>[[${petDto.age}]]</td>
-        <td>[[${petDto.genus.value}]]</td>
-        <td th:text="${#dates.format(petDto.createdAt, 'dd/MMM/yyyy HH:mm')}"></td>
-        <td th:text="${#dates.format(petDto.updatedAt, 'dd/MMM/yyyy HH:mm')}"></td>
-        <td><a th:href="@{/pets/{id}(id=${petDto.id})}">Göster</a></td>
-        <td><a th:href="@{/pets/edit/{id}(id=${petDto.id})}">Düzenle</a></td>
-        <td><a th:href="@{/pets/delete/{id}(id=${petDto.id})}">Sil</a></td>
+    <tr th:each="pet : ${pets}">
+        <td>[[${pet.name}]]</span></td>
+        <td>[[${pet.age}]]</td>
+        <td>[[${pet.genus.value}]]</td>
+        <td th:if="${pet.owner != null}">[[${pet.owner.fullName}]]</td>
+        <td th:unless="${pet.owner != null}"></td>
+        <td th:text="${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}"></td>
+        <td th:text="${#dates.format(pet.updatedAt, 'dd/MMM/yyyy HH:mm')}"></td>
+        <td>
+            <a th:href="@{/pets/{id}(id=${pet.id})}">Göster</a>
+            <a th:href="@{/pets/edit/{id}(id=${pet.id})}">Düzenle</a>
+            <a th:href="@{/pets/delete/{id}(id=${pet.id})}">Sil</a>
+        </td>
     </tr>
     </tbody>
 </table>
+
+
+<footer>
+    Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
+    &nbsp; &nbsp; - &nbsp;
+    <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+        <span th:if="${currentPage == i}">
+            <span>[[${i}]]</span>
+        </span>
+        <span th:unless="${currentPage == i}">
+            <a th:href="@{/pets(page=${i})}">[[${i}]]</a>
+        </span>
+        &nbsp; &nbsp;
+    </span>
+</footer>
 
 
 </body>
