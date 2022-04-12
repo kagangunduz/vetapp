@@ -13,6 +13,7 @@
 </head>
 <body>
 
+<p><a th:href="@{/}">Ana Sayfa</a></p>
 <p><a th:href="@{/pets/add}">Pet Ekle</a></p>
 
 <div th:if="${message}">
@@ -25,6 +26,7 @@
         <th>İsim</th>
         <th>Yaş</th>
         <th>Tür</th>
+        <th>Sahibi</th>
         <th>Oluşturulma Tarihi</th>
         <th>Güncellenme Tarihi</th>
         <th>İşlem</th>
@@ -35,6 +37,7 @@
         <td>[[${pet.name}]]</span></td>
         <td>[[${pet.age}]]</td>
         <td>[[${pet.genus.value}]]</td>
+        <td>[[${pet.owner.fullName}]]</td>
         <td th:text="${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}"></td>
         <td th:text="${#dates.format(pet.updatedAt, 'dd/MMM/yyyy HH:mm')}"></td>
         <td>
@@ -45,6 +48,21 @@
     </tr>
     </tbody>
 </table>
+
+
+<footer>
+    Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
+    &nbsp; &nbsp; - &nbsp;
+    <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+        <span th:if="${currentPage == i}">
+            <span>[[${i}]]</span>
+        </span>
+        <span th:unless="${currentPage == i}">
+            <a th:href="@{/pets(page=${i})}">[[${i}]]</a>
+        </span>
+        &nbsp; &nbsp;
+    </span>
+</footer>
 
 
 </body>

@@ -6,20 +6,22 @@
 </head>
 <body>
 
-<p><a th:href="@{/}">Ana sayfaya dön</a></p>
 <p><a th:href="@{/pets}">Pet Listesine dön</a></p>
-<div th:if="${pet.owner != null}">
+<div th:if="${pet.owner}">
     <p><a th:href="@{/owners/{id}(id=${pet.owner.id})}">Owner sayfasına dön</a></p>
 </div>
 <hr>
 <div th:if="${message}">
     <p>[[${message}]]</p>
 </div>
-<ul>
-    <li th:each="err : ${#fields.errors('pet.*')}" th:text="${err}"/>
-</ul>
 
 <form th:action="@{/pets/edit/{id}(id=${pet.id})}" th:object="${pet}" method="post">
+
+    <div th:if="${#fields.hasAnyErrors()}">
+        <ul>
+            <li th:each="err : ${#fields.errors('pet.*')}" th:text="${err}"/>
+        </ul>
+    </div>
 
     <p>Name: <input type="text" th:field="*{name}"/></p>
     <p>Age: <input type="number" th:field="*{age}"/></p>

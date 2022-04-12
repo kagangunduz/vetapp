@@ -10,11 +10,15 @@
 <hr>
 <p><a th:href="@{/pets}">Pet Listesine Geri Gön</a></p>
 <hr>
-<ul>
-    <li th:each="err : ${#fields.errors('pet.*')}" th:text="${err}"/>
-</ul>
+
 
 <form th:action="@{/pets/add}" th:object="${pet}" method="post">
+
+    <div th:if="${#fields.hasAnyErrors()}">
+        <ul>
+            <li th:each="err : ${#fields.errors('pet.*')}" th:text="${err}"/>
+        </ul>
+    </div>
 
     <p>Name: <input type="text" th:field="*{name}"/></p>
     <p>Age: <input type="number" th:field="*{age}"/></p>

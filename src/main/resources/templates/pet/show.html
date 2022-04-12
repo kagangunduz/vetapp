@@ -8,10 +8,7 @@
 
 <p><a th:href="@{/}">Ana sayfaya dön</a></p>
 <p><a th:href="@{/pets}">Pet Listesine dön</a></p>
-<div th:if="${pet.owner != null}">
-
-</div>
-
+<p><a th:href="@{/owners/{id}(id=${pet.owner.id})}">Owner sayfasına dön</a></p>
 <hr>
 <h1>Pet</h1>
 <hr>
@@ -21,7 +18,8 @@
 <p><b>Description:</b> [[${pet.description}]]</p>
 <p><b>Created At:</b> [[${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}]]</p>
 <p><b>Updated At:</b> [[${#dates.format(pet.updatedAt, 'dd/MMM/yyyy HH:mm')}]]</p>
-
+<a th:href="@{/pets/edit/{id}(id=${pet.id})}">Düzenle</a>
+<a th:href="@{/pets/delete/{id}(id=${pet.id})}">Sil</a>
 <hr>
 <div th:if="${pet.owner}">
     <h3>Owner</h3>
@@ -30,7 +28,8 @@
     <p><b>Telefon:</b> [[${pet.owner.telephoneNumber}]]</p>
     <p><b>Email:</b> [[${pet.owner.email}]]</p>
     <p><b>Adres:</b> [[${pet.owner.address}]]</p>
-    <p><a th:href="@{/owners/{id}(id=${pet.owner.id})}">Owner sayfasına dön</a></p>
+    <a th:href="@{/owners/edit/{id}(id=${pet.owner.id})}">Düzenle</a>
+    <a th:href="@{/owners/delete/{id}(id=${pet.owner.id})}">Sil</a>
 </div>
 
 </body>
