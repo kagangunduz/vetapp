@@ -16,6 +16,12 @@
 <p><a th:href="@{/}">Ana Sayfa</a></p>
 <p><a th:href="@{/pets/add}">Pet Ekle</a></p>
 
+<form th:action="@{/pets/search}" method="get">
+    <label for="name">Search: </label>
+    <input type="text" name="name" id="name" th:value="${name}">
+    <button type="submit">Search</button>
+</form>
+<br>
 <div th:if="${message}">
     <p>[[${message}]]</p>
 </div>

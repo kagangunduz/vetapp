@@ -27,8 +27,7 @@ public class PetController {
 
 
     @GetMapping
-    public String getAllByPagination(Model model,
-                                     @RequestParam(value = "page", defaultValue = "1", required = false) int pageNumber) {
+    public String getAllByPagination(Model model, @RequestParam(name = "page", defaultValue = "1", required = false) int pageNumber) {
 
         Page<Pet> page = petService.getAllPageable(pageNumber);
         int totalPages = page.getTotalPages();
@@ -41,6 +40,19 @@ public class PetController {
         model.addAttribute("pets", petList);
 
         return "pet/index";
+    }
+
+    @GetMapping("/search")
+    public String findAllWithPartOfNameOrOwnerFullName(Model model, @RequestParam(name = "name") String name) {
+        name = name.toLowerCase();
+        List<Pet> petList = petService.findAllWithPartOfNameOrOwnerFullName(name);
+        if (petList == null || petList.isEmpty()) {
+            model.addAttribute("message", "Sonuç bulunamadı.");
+        } else {
+            model.addAttribute("message", "Bulunan kayıt => " + petList.size());
+            model.addAttribute("pets", petList);
+        }
+        return "pet/search";
     }
 
     @GetMapping("/add")

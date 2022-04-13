@@ -10,6 +10,8 @@ public interface PetService {
 
     List<Pet> findAll();
 
+    List<Pet> findAllWithPartOfNameOrOwnerFullName(String name);
+
     Page<Pet> getAllPageable(int pageNumber);
 
     Pet save(Pet pet);

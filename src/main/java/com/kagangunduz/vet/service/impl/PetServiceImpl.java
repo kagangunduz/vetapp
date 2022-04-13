@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,11 @@ public class PetServiceImpl implements PetService {
     @Override
     public List<Pet> findAll() {
         return petRepository.findAll(Sort.by("id").descending());
+    }
+
+    @Override
+    public List<Pet> findAllWithPartOfNameOrOwnerFullName(String name) {
+        return petRepository.findAllWithPartOfNameOrOwnerFullName(name);
     }
 
     @Override

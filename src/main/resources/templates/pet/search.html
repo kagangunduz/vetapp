@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Vet App</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+
+<p><a th:href="@{/}">Ana Sayfa</a></p>
+<p><a th:href="@{/pets/add}">Pet Ekle</a></p>
+<p><a th:href="@{/pets}">Geri Dön</a></p>
+
+<div th:if="${message}">
+    <p>[[${message}]]</p>
+</div>
+
+<hr>
+
+
+<div th:if="${pets}">
+    <table>
+        <thead>
+        <tr>
+            <th>İsim</th>
+            <th>Yaş</th>
+            <th>Tür</th>
+            <th>Sahibi</th>
+            <th>Oluşturulma Tarihi</th>
+            <th>Güncellenme Tarihi</th>
+            <th>İşlem</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pet : ${pets}">
+            <td>[[${pet.name}]]</span></td>
+            <td>[[${pet.age}]]</td>
+            <td>[[${pet.genus.value}]]</td>
+            <td th:if="${pet.owner != null}">[[${pet.owner.fullName}]]</td>
+            <td th:unless="${pet.owner != null}"></td>
+            <td th:text="${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}"></td>
+            <td th:text="${#dates.format(pet.updatedAt, 'dd/MMM/yyyy HH:mm')}"></td>
+            <td>
+                <a th:href="@{/pets/{id}(id=${pet.id})}">Göster</a>
+                <a th:href="@{/pets/edit/{id}(id=${pet.id})}">Düzenle</a>
+                <a th:href="@{/pets/delete/{id}(id=${pet.id})}">Sil</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
