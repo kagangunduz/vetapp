@@ -26,8 +26,8 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public List<Owner> findAllByFullName(String fullName) {
-        return ownerRepository.findAllByFullNameContainsIgnoreCase(fullName);
+    public List<Owner> findAllWithPartOfFullName(String fullName) {
+        return ownerRepository.findAllWithPartOfFullName(fullName);
     }
 
     @Override

@@ -11,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,14 +40,12 @@ public class OwnerController {
     @GetMapping("/search")
     public String findAllByFullName(Model model, @RequestParam(name = "fullName", required = true) String fullName) {
         fullName = fullName.toLowerCase(Locale.ROOT);
-        System.out.println("--------------- => " + fullName);
-        List<Owner> ownerList = ownerService.findAllByFullName(fullName);
-        if (ownerList == null) {
+        List<Owner> ownerList = ownerService.findAllWithPartOfFullName(fullName);
+        if (ownerList == null || ownerList.isEmpty()) {
             model.addAttribute("message", "Sonuç bulunamadı.");
         } else {
             model.addAttribute("message", "Bulunan kayıt => " + ownerList.size());
             model.addAttribute("owners", ownerList);
-            System.out.println(Arrays.toString(ownerList.toArray()));
         }
         return "owner/search";
     }
