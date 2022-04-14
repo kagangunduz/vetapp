@@ -29,10 +29,11 @@ public class Owner extends BaseEntity {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
+    @OrderBy("id DESC")
     private List<Pet> pets = new ArrayList<>();
 
     public void setFullName(String fullName) {
         this.fullName = fullName.trim().toLowerCase();
     }
-    
+
 }

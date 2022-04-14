@@ -14,4 +14,5 @@ public interface OwnerRepository extends JpaRepository<Owner, Long> {
     /*Alternatif*/
     /*List<Owner> findAllByFullNameContainsIgnoreCase(String fullName);*/
 
+
 }

@@ -19,7 +19,9 @@ public interface OwnerService {
 
     Owner update(Long id, Owner owner);
 
-    Boolean deleteById(Long id);
+    Owner deleteById(Long id);
+
+    Long getOwnerCount();
 
 
 }

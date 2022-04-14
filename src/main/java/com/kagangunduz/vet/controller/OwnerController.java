@@ -27,6 +27,11 @@ public class OwnerController {
 
         Page<Owner> page = ownerService.getAllPageable(pageNumber);
         int totalPages = page.getTotalPages();
+
+        if (pageNumber > totalPages) {
+            throw new IllegalArgumentException(pageNumber + " numaralı sayfa bulunamadı.");
+        }
+
         long totalItems = page.getTotalElements();
         List<Owner> ownerList = page.getContent();
 
@@ -43,9 +48,10 @@ public class OwnerController {
         List<Owner> ownerList = ownerService.findAllWithPartOfFullName(fullName);
         if (ownerList == null || ownerList.isEmpty()) {
             model.addAttribute("message", "Sonuç bulunamadı.");
+            model.addAttribute("ownerListSize", 0);
         } else {
-            model.addAttribute("message", "Bulunan kayıt => " + ownerList.size());
             model.addAttribute("owners", ownerList);
+            model.addAttribute("ownerListSize", ownerList.size());
         }
         return "owner/search";
     }
@@ -61,7 +67,7 @@ public class OwnerController {
         if (result.hasErrors()) {
             return "owner/addForm";
         }
-        Owner newOwner = ownerService.save(owner);
+        ownerService.save(owner);
         redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı.");
         return "redirect:/owners";
 
@@ -91,11 +97,9 @@ public class OwnerController {
 
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
-        if (ownerService.deleteById(id)) {
-            redirectAttributes.addFlashAttribute("message", "Kayıt Silindi");
-        } else {
-            redirectAttributes.addFlashAttribute("message", "Kayıt Silinemedi");
-        }
+        Owner deletedOwner = ownerService.deleteById(id);
+        redirectAttributes.addFlashAttribute("message", "Kayıt Silindi => " + deletedOwner.getFullName() +
+                " | " + deletedOwner.getTelephoneNumber() + " | " + deletedOwner.getEmail());
         return "redirect:/owners";
     }
 
