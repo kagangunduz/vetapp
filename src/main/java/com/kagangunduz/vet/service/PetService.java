@@ -20,6 +20,8 @@ public interface PetService {
 
     Pet update(Long id, Pet pet);
 
-    Boolean deleteById(Long id);
+    Pet deleteById(Long id);
+
+    Long getPetCount();
 
 }

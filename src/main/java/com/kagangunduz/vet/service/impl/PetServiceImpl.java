@@ -1,6 +1,7 @@
 package com.kagangunduz.vet.service.impl;
 
 import com.kagangunduz.vet.entity.Pet;
+import com.kagangunduz.vet.exception.PetNotFoundException;
 import com.kagangunduz.vet.repository.PetRepository;
 import com.kagangunduz.vet.service.PetService;
 import lombok.AllArgsConstructor;
@@ -11,15 +12,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 
 @Service
 @AllArgsConstructor
 public class PetServiceImpl implements PetService {
-
 
     private final PetRepository petRepository;
 
@@ -46,12 +44,9 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public Pet findById(Long id) {
-        Optional<Pet> optionalPet = petRepository.findById(id);
-        if (optionalPet.isPresent()) {
-            return optionalPet.get();
-        } else {
-            throw new EntityNotFoundException("Kayıt bulunamadı. id: " + id);
-        }
+        return petRepository.findById(id).orElseThrow(
+                () -> new PetNotFoundException("Kayıt bulunumadı. Hayvan Sahibi Id: " + id)
+        );
     }
 
     @Override
@@ -71,14 +66,19 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public Boolean deleteById(Long id) {
+    public Pet deleteById(Long id) {
         Optional<Pet> optionalPet = petRepository.findById(id);
         if (optionalPet.isPresent()) {
             petRepository.deleteById(id);
-            return Boolean.TRUE;
+            return optionalPet.get();
         } else {
-            throw new EntityNotFoundException("Kayıt bulunamadı. id: " + id);
+            throw new PetNotFoundException("Kayıt bulunumadı. Hayvan Id: " + id);
         }
+    }
+
+    @Override
+    public Long getPetCount() {
+        return petRepository.count();
     }
 
 }

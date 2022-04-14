@@ -48,31 +48,38 @@ public class PetController {
         List<Pet> petList = petService.findAllWithPartOfNameOrOwnerFullName(name);
         if (petList == null || petList.isEmpty()) {
             model.addAttribute("message", "Sonuç bulunamadı.");
+            model.addAttribute("petListSize", 0);
         } else {
-            model.addAttribute("message", "Bulunan kayıt => " + petList.size());
             model.addAttribute("pets", petList);
+            model.addAttribute("petListSize", petList.size());
         }
         return "pet/search";
     }
 
     @GetMapping("/add")
-    public String showNewForm(Model model) {
+    public String showNewForm(Model model, @RequestParam(name = "ownerId", required = false) Long ownerId) {
         model.addAttribute("pet", new Pet());
-        model.addAttribute("genusHashMap", this.getGenusAsHashMap());
+        model.addAttribute("genus", this.getGenusAsHashMap());
         model.addAttribute("owners", ownerService.findAll());
+        System.out.println("-----------Owner Id: " + ownerId);
+        if (ownerId != null) {
+            model.addAttribute("ownerId", ownerId);
+        }
         return "pet/addForm";
     }
 
     @PostMapping("/add")
-    public String save(Model model, Pet pet, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String save(Model model, Pet pet, BindingResult result, RedirectAttributes redirectAttributes, @RequestParam(name = "ownerId", required = false) Long ownerId) {
 
         if (result.hasErrors()) {
             model.addAttribute("genusHashMap", this.getGenusAsHashMap());
             return "pet/addForm";
         }
-
-        Pet newPet = petService.save(pet);
+        petService.save(pet);
         redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı.");
+        if (ownerId != null && ownerId.equals(pet.getOwner().getId())) {
+            return "redirect:/owners/" + ownerId;
+        }
         return "redirect:/pets";
     }
 
@@ -105,11 +112,8 @@ public class PetController {
 
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
-        if (petService.deleteById(id)) {
-            redirectAttributes.addFlashAttribute("message", "Kayıt Silindi");
-        } else {
-            redirectAttributes.addFlashAttribute("message", "Kayıt Silinemedi.");
-        }
+        Pet deletedPet = petService.deleteById(id);
+        redirectAttributes.addFlashAttribute("message", "Kayıt Silindi => " + deletedPet.getName() + " | " + deletedPet.getAge() + " | " + deletedPet.getGenus());
         return "redirect:/pets";
     }
 
