@@ -57,9 +57,6 @@ public class OwnerController {
         }
 
         long totalItems = page.getTotalElements();
-        if (totalItems == 0) {
-            return "redirect:/owners";
-        }
 
         List<Owner> ownerList = page.getContent();
 

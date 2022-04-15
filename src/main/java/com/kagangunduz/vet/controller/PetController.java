@@ -61,10 +61,7 @@ public class PetController {
         }
 
         long totalItems = page.getTotalElements();
-        if (totalItems == 0) {
-            return "redirect:/pets";
-        }
-
+        
         List<Pet> petList = page.getContent();
 
         model.addAttribute("currentPage", pageNumber);
