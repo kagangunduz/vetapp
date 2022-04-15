@@ -16,7 +16,6 @@ public class HomepageController {
     private final OwnerServiceImpl ownerService;
     private final PetServiceImpl petService;
 
-
     @GetMapping
     public String showHomepage(Model model) {
         model.addAttribute("ownerCount", ownerService.getOwnerCount());
