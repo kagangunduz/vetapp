@@ -29,7 +29,7 @@
     <h1>Bilgileri Düzenle</h1>
     <hr>
 
-    <div class="d-flex justify-content-start mb-5">
+    <div class="d-flex justify-content-start mb-5" th:if="${pet.owner}">
         <div>
             <a class="btn btn-primary" th:href="@{/owners/{id}(id=${pet.owner.id})}">Hayvan Sahibi Sayfasına Dön</a>
         </div>
@@ -40,8 +40,10 @@
     </div>
 
     <form th:action="@{/pets/edit/{id}(id=${pet.id})}" th:object="${pet}" method="post">
-        <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger" role="alert">
-            <p th:each="err : ${#fields.errors('pet.*')}" th:text="${err}"></p>
+        <div th:if="${#fields.hasErrors()}" class="alert alert-danger" role="alert">
+            <ul>
+                <li th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
+            </ul>
         </div>
         <div class="mb-3">
             <label for="name" class="form-label">İsim</label>

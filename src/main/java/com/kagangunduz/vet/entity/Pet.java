@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -24,10 +25,11 @@ public class Pet extends BaseEntity {
     @NotEmpty(message = "İsim alanı boş olamaz.")
     private String name;
     @NotNull(message = "Yaş alanı boş olamaz.")
+    @Min(value = 0)
     private int age;
 
     @Enumerated(EnumType.STRING)
-    @NotEmpty(message = "Cins alanı boş olamaz.")
+    @NotNull(message = "Cins alanı boş olamaz.")
     private Genus genus;
 
     @Column(columnDefinition = "TEXT")

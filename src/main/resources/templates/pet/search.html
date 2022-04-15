@@ -29,9 +29,9 @@
         <div>
             <form th:action="@{/pets/search}" method="get" class="row g-3">
                 <div class="col-auto">
-                    <label for="name" class="visually-hidden">İsim </label>
-                    <input type="text" class="form-control" name="name" id="name"
-                           th:value="${param.name}">
+                    <label for="keyword" class="visually-hidden">İsim </label>
+                    <input type="text" class="form-control" name="keyword" id="keyword"
+                           th:value="${param.keyword}">
                 </div>
                 <div class="col-auto">
                     <button type="submit" class="btn btn-primary mb-3">Ara</button>
@@ -39,18 +39,18 @@
             </form>
         </div>
         <div>
-            <a class="btn btn-primary" th:href="@{/pets/add/}"><i class="bi bi-plus-lg"></i> Yeni Kayıt</a>
+            <a class="btn btn-primary" th:href="@{/pets/add/}"><i class="bi bi-plus-lg"></i>&nbsp;&nbsp;Yeni Kayıt</a>
         </div>
     </div>
 
     <div class="justify-content-start">
-        <span class="badge bg-secondary">Toplam Kayıt: [[${petListSize}]]</span>
+        <span class="badge bg-secondary">Toplam Kayıt: [[${totalItems}]]</span>
     </div>
 
-    <div th:if="${petListSize == 0}">
+    <div th:if="${totalItems == 0}">
         <h4>Arama sonucunda kayıt bulunamadı.</h4>
     </div>
-    <div th:unless="${petListSize == 0}">
+    <div th:unless="${totalItems == 0}">
         <table class="table table-light table-bordered table-hover mt-3">
             <thead>
             <tr>
@@ -79,7 +79,32 @@
             </tr>
             </tbody>
         </table>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+                <li class="page-item" th:classappend="${currentPage == 1 } ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{/pets/search(keyword=${keyword},page=${currentPage - 1})}">Önceki
+                        Sayfa</a>
+                </li>
+                <li class="page-item" th:each="i: ${#numbers.sequence(1, totalPages)}"
+                    th:classappend="${currentPage == i} ? 'active' : ''" aria-current="page">
+                <span th:if="${currentPage == i}">
+                    <span class="page-link">[[${i}]]</span>
+                </span>
+                    <span th:unless="${currentPage == i}">
+                    <a class="page-link" th:href="@{/pets/search(keyword=${keyword},page=${i})}">[[${i}]]</a>
+                </span>
+                </li>
+                <li class="page-item"
+                    th:classappend="(${totalPages == 1 || totalPages == currentPage }) ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{/pets/search(keyword=${keyword},page=${currentPage + 1})}">Sonraki
+                        Sayfa</a>
+                </li>
+            </ul>
+        </nav>
     </div>
+
+
 </div>
 </body>
 </html>

@@ -31,9 +31,8 @@
         <div>
             <form th:action="@{/pets/search}" method="get" class="row g-3">
                 <div class="col-auto">
-                    <label for="name" class="visually-hidden">İsim: </label>
-                    <input type="text" class="form-control" name="name" id="name"
-                           placeholder="aranacak isim...">
+                    <label for="keyword" class="visually-hidden">İsim: </label>
+                    <input type="text" class="form-control" name="keyword" id="keyword">
                 </div>
                 <div class="col-auto">
                     <button type="submit" class="btn btn-primary mb-3">Ara</button>
@@ -41,7 +40,7 @@
             </form>
         </div>
         <div>
-            <a class="btn btn-primary" th:href="@{/pets/add/}"><i class="bi bi-plus-lg"></i> Yeni Kayıt</a>
+            <a class="btn btn-primary" th:href="@{/pets/add/}"><i class="bi bi-plus-lg"></i>&nbsp;&nbsp;Yeni Kayıt</a>
         </div>
     </div>
 
@@ -49,7 +48,7 @@
         <span class="badge bg-secondary">Toplam Kayıt: [[${totalItems}]]</span>
     </div>
 
-    <div th:if="${message}" class="alert alert-success" role="alert">
+    <div th:if="${message}" class="alert alert-success mt-2" role="alert">
         [[${message}]]
     </div>
     <div th:if="(not ${pets.isEmpty()})">

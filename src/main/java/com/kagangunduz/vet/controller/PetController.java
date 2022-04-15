@@ -44,17 +44,36 @@ public class PetController {
     }
 
     @GetMapping("/search")
-    public String findAllWithPartOfNameOrOwnerFullName(Model model, @RequestParam(name = "name") String name) {
-        name = name.toLowerCase();
-        List<Pet> petList = petService.findAllWithPartOfNameOrOwnerFullName(name);
-        if (petList == null || petList.isEmpty()) {
-            model.addAttribute("message", "Sonuç bulunamadı.");
-            model.addAttribute("petListSize", 0);
-        } else {
-            model.addAttribute("pets", petList);
-            model.addAttribute("petListSize", petList.size());
+    public String findAllWithPartOfNameOrOwnerFullName(Model model,
+                                                       @RequestParam(name = "keyword") String keyword,
+                                                       @RequestParam(name = "pageNumber", defaultValue = "1", required = false) int pageNumber) {
+
+        if (keyword.equals("")) {
+            return "redirect:/pets";
         }
+
+        keyword = keyword.toLowerCase();
+        Page<Pet> page = petService.findAllWithPartOfNameOrOwnerFullName(keyword, pageNumber);
+
+        int totalPages = page.getTotalPages();
+        if (totalPages > 1 && pageNumber > totalPages) {
+            throw new IllegalArgumentException(pageNumber + " numaralı sayfa bulunamadı....");
+        }
+
+        long totalItems = page.getTotalElements();
+        if (totalItems == 0) {
+            return "redirect:/pets";
+        }
+
+        List<Pet> petList = page.getContent();
+
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("pets", petList);
         return "pet/search";
+
     }
 
     @GetMapping("/add")
@@ -62,7 +81,6 @@ public class PetController {
         model.addAttribute("pet", new Pet());
         model.addAttribute("genus", this.getGenusAsHashMap());
         model.addAttribute("owners", ownerService.findAll());
-        System.out.println("-----------Owner Id: " + ownerId);
         if (ownerId != null) {
             model.addAttribute("ownerId", ownerId);
         }
@@ -74,7 +92,8 @@ public class PetController {
                        @RequestParam(name = "ownerId", required = false) Long ownerId) {
 
         if (result.hasErrors()) {
-            model.addAttribute("genusHashMap", this.getGenusAsHashMap());
+            model.addAttribute("genus", this.getGenusAsHashMap());
+            model.addAttribute("owners", ownerService.findAll());
             return "pet/addForm";
         }
         petService.save(pet);
@@ -100,16 +119,17 @@ public class PetController {
     }
 
     @PostMapping("/edit/{id}")
-    public String update(Model model, @PathVariable(name = "id") Long id, Pet pet, BindingResult result, RedirectAttributes redirectAttributes) {
-
-        model.addAttribute("genus", this.getGenusAsHashMap());
+    public String update(Model model, @PathVariable(name = "id") Long id, @Valid Pet pet, BindingResult result,
+                         RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
+            model.addAttribute("genus", this.getGenusAsHashMap());
+            model.addAttribute("owners", ownerService.findAll());
             return "pet/editForm";
         }
         model.addAttribute("pet", petService.update(id, pet));
         redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı.");
-        return "redirect:/pets/edit/" + id;
+        return "redirect:/pets/" + id;
     }
 
     @GetMapping("/delete/{id}")

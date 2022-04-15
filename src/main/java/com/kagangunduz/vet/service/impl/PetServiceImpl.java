@@ -27,8 +27,9 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public List<Pet> findAllWithPartOfNameOrOwnerFullName(String name) {
-        return petRepository.findAllWithPartOfNameOrOwnerFullName(name);
+    public Page<Pet> findAllWithPartOfNameOrOwnerFullName(String keyword, int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber - 1, 5, Sort.by("id").descending());
+        return petRepository.findAllWithPartOfNameOrOwnerFullName(keyword, pageable);
     }
 
     @Override
