@@ -30,9 +30,8 @@
         <div>
             <form th:action="@{/owners/search}" method="get" class="row g-3">
                 <div class="col-auto">
-                    <label for="fullName" class="visually-hidden">Ad Soyad: </label>
-                    <input type="text" class="form-control" name="fullName" id="fullName"
-                           placeholder="aranacak isim...">
+                    <label for="keyword" class="visually-hidden">Ad Soyad: </label>
+                    <input type="text" class="form-control" name="keyword" id="keyword">
                 </div>
                 <div class="col-auto">
                     <button type="submit" class="btn btn-primary mb-3">Ara</button>
@@ -40,7 +39,7 @@
             </form>
         </div>
         <div>
-            <a class="btn btn-primary" th:href="@{/owners/add/}"><i class="bi bi-plus-lg"></i> Yeni Kayıt</a>
+            <a class="btn btn-primary" th:href="@{/owners/add/}"><i class="bi bi-plus-lg"></i>&nbsp;&nbsp;Yeni Kayıt</a>
         </div>
     </div>
 
@@ -52,7 +51,7 @@
         [[${message}]]
     </div>
 
-    <div th:if="(not ${owners.isEmpty()})">
+    <div th:if="${totalItems != 0}">
         <table class="table table-light table-bordered table-hover mt-3">
             <thead>
             <tr>
@@ -93,7 +92,8 @@
                     <a class="page-link" th:href="@{/owners(page=${i})}">[[${i}]]</a>
                 </span>
                 </li>
-                <li class="page-item" th:classappend="(${totalPages == 1 || totalPages == currentPage }) ? 'disabled' : ''">
+                <li class="page-item"
+                    th:classappend="(${totalPages == 1 || totalPages == currentPage }) ? 'disabled' : ''">
                     <a class="page-link" th:href="@{/owners(page=${currentPage + 1})}">Sonraki Sayfa</a>
                 </li>
             </ul>

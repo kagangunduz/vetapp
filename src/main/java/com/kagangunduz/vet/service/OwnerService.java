@@ -9,7 +9,7 @@ public interface OwnerService {
 
     List<Owner> findAll();
 
-    List<Owner> findAllWithPartOfFullName(String fullName);
+    Page<Owner> findAllWithPartOfFullName(String keyword, int pageNumber);
 
     Page<Owner> getAllPageable(int pageNumber);
 

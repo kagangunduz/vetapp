@@ -12,7 +12,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,18 +27,14 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public List<Owner> findAllWithPartOfFullName(String fullName) {
-        if (fullName.isEmpty()) {
-            return new ArrayList<Owner>();
-        }
-        return ownerRepository.findAllWithPartOfFullName(fullName);
+    public Page<Owner> findAllWithPartOfFullName(String keyword, int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber - 1, 5, Sort.by("id").descending());
+        return ownerRepository.findAllWithPartOfFullName(keyword, pageable);
     }
 
     @Override
     public Page<Owner> getAllPageable(int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber - 1, 5, Sort.by("id").descending());
-
-
         return ownerRepository.findAll(pageable);
     }
 

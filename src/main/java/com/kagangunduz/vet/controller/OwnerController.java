@@ -12,7 +12,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Locale;
 
 @Controller
 @RequestMapping("/owners")
@@ -42,17 +41,35 @@ public class OwnerController {
     }
 
     @GetMapping("/search")
-    public String findAllByFullName(Model model, @RequestParam(name = "fullName", required = true) String fullName) {
-        fullName = fullName.toLowerCase(Locale.ROOT);
-        List<Owner> ownerList = ownerService.findAllWithPartOfFullName(fullName);
-        if (ownerList == null || ownerList.isEmpty()) {
-            model.addAttribute("message", "Sonuç bulunamadı.");
-            model.addAttribute("ownerListSize", 0);
-        } else {
-            model.addAttribute("owners", ownerList);
-            model.addAttribute("ownerListSize", ownerList.size());
+    public String findAllWithPartOfFullName(Model model,
+                                            @RequestParam(name = "keyword", required = true) String keyword,
+                                            @RequestParam(name = "page", defaultValue = "1", required = false) int pageNumber) {
+        if (keyword.equals("")) {
+            return "redirect:/owners";
         }
+
+        keyword = keyword.toLowerCase();
+        Page<Owner> page = ownerService.findAllWithPartOfFullName(keyword, pageNumber);
+        int totalPages = page.getTotalPages();
+
+        if (totalPages > 1 && pageNumber > totalPages) {
+            throw new IllegalArgumentException(pageNumber + " numaralı sayfa bulunamadı....");
+        }
+
+        long totalItems = page.getTotalElements();
+        if (totalItems == 0) {
+            return "redirect:/owners";
+        }
+
+        List<Owner> ownerList = page.getContent();
+
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("owners", ownerList);
         return "owner/search";
+
     }
 
     @GetMapping("/add")
@@ -74,8 +91,12 @@ public class OwnerController {
 
     @GetMapping("/{id}")
     public String getById(Model model, @PathVariable(name = "id") Long id) {
-        model.addAttribute("owner", ownerService.findById(id));
-        return "owner/show";
+        try {
+            model.addAttribute("owner", ownerService.findById(id));
+            return "owner/show";
+        } catch (NumberFormatException exception) {
+            throw new NumberFormatException("Lütfen rakam giriniz.");
+        }
     }
 
     @GetMapping("/edit/{id}")
@@ -85,20 +106,23 @@ public class OwnerController {
     }
 
     @PostMapping("/edit/{id}")
-    public String update(Model model, @PathVariable(name = "id") Long id, Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String update(Model model, @PathVariable(name = "id") Long id, @Valid Owner owner,
+                         BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return "owner/editForm";
         }
         model.addAttribute("owner", ownerService.update(id, owner));
         redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı");
-        return "redirect:/owners/edit/" + id;
+        return "redirect:/owners/" + id;
     }
 
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
         Owner deletedOwner = ownerService.deleteById(id);
-        redirectAttributes.addFlashAttribute("message", "Kayıt Silindi => " + deletedOwner.getFullName() +
-                " | " + deletedOwner.getTelephoneNumber() + " | " + deletedOwner.getEmail());
+        redirectAttributes.addFlashAttribute("message", "Kayıt Silindi => "
+                + deletedOwner.getFullName() + " | "
+                + deletedOwner.getTelephoneNumber() + " | "
+                + deletedOwner.getEmail());
         return "redirect:/owners";
     }
 
