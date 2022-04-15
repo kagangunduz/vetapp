@@ -1,46 +1,28 @@
-<!DOCTYPE HTML>
-<html xmlns:th="https://www.thymeleaf.org" lang="tr">
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout(~{::title}, ~{::section})">
 <head>
-    <title>Vet App</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-
+    <title>VetApp | Ana Sayfa</title>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-        <a class="navbar-brand" href="#">
-            <img src="/img/logo.png" alt="" width="30" height="30" class="d-inline-block align-text-top">
-            VetApp
-        </a>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link" th:href="@{/}">Ana Sayfa</a>
-                <a class="nav-link" th:href="@{/owners}">Hayvan Sahipleri</a>
-                <a class="nav-link" th:href="@{/pets}">Hayvanlar</a>
-            </div>
-        </div>
-    </div>
-</nav>
-
-<div class="container mt-5">
+<section>
 
     <div class="row">
         <div class="col-sm-6">
-            <div class="card">
+            <div class="card bg-light">
                 <div class="card-body">
                     <h5 class="card-title">Hayvan Sahipleri</h5>
+                    <hr>
                     <p class="card-text">Toplam Kayıt: [[${ownerCount}]]</p>
                     <a th:href="@{/owners}" class="btn btn-primary">Kayıtları Göster</a>
                 </div>
             </div>
         </div>
         <div class="col-sm-6">
-            <div class="card">
+            <div class="card bg-light">
                 <div class="card-body">
                     <h5 class="card-title">Hayvanlar</h5>
+                    <hr>
                     <p class="card-text">Toplam Kayıt: [[${petCount}]]</p>
                     <a th:href="@{/pets}" class="btn btn-primary">Kayıtları Göster</a>
                 </div>
@@ -48,8 +30,7 @@
         </div>
     </div>
 
-</div>
-
+</section>
 
 </body>
 </html>
