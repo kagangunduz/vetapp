@@ -48,56 +48,58 @@
         <span class="badge bg-secondary">Toplam Kayıt: [[${totalItems}]]</span>
     </div>
 
-    <div th:if="${message}" class="alert alert-success" role="alert">
+    <div th:if="${message}" class="alert alert-success mt-2" role="alert">
         [[${message}]]
     </div>
 
-    <table class="table table-light table-bordered table-hover mt-3">
-        <thead>
-        <tr>
-            <th scope="col">Ad Soyad</th>
-            <th scope="col">Telefon</th>
-            <th scope="col">Email</th>
-            <th scope="col">Adres</th>
-            <th scope="col">Kayıt Tarihi</th>
-            <th scope="col">İşlem</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="owner : ${owners}">
-            <td class="text-capitalize">[[${owner.fullName}]]</span></td>
-            <td>[[${owner.telephoneNumber}]]</td>
-            <td>[[${owner.email}]]</td>
-            <td>[[${owner.address}]]</td>
-            <td>[[${#dates.format(owner.createdAt, 'dd/MMM/yyyy HH:mm')}]]</td>
-            <td><a class="btn btn-outline-success" th:href="@{/owners/{id}(id=${owner.id})}">Göster</a>
-                <a class="btn btn-outline-warning" th:href="@{/owners/edit/{id}(id=${owner.id})}">Düzenle</a>
-                <a class="btn btn-outline-danger" th:href="@{/owners/delete/{id}(id=${owner.id})}">Sil</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div th:if="(not ${owners.isEmpty()})">
+        <table class="table table-light table-bordered table-hover mt-3">
+            <thead>
+            <tr>
+                <th scope="col">Ad Soyad</th>
+                <th scope="col">Telefon</th>
+                <th scope="col">Email</th>
+                <th scope="col">Adres</th>
+                <th scope="col">Kayıt Tarihi</th>
+                <th scope="col">İşlem</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="owner : ${owners}">
+                <td class="text-capitalize">[[${owner.fullName}]]</span></td>
+                <td>[[${owner.telephoneNumber}]]</td>
+                <td>[[${owner.email}]]</td>
+                <td>[[${owner.address}]]</td>
+                <td>[[${#dates.format(owner.createdAt, 'dd/MMM/yyyy HH:mm')}]]</td>
+                <td><a class="btn btn-outline-success" th:href="@{/owners/{id}(id=${owner.id})}">Göster</a>
+                    <a class="btn btn-outline-warning" th:href="@{/owners/edit/{id}(id=${owner.id})}">Düzenle</a>
+                    <a class="btn btn-outline-danger" th:href="@{/owners/delete/{id}(id=${owner.id})}">Sil</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-end">
-            <li class="page-item" th:classappend="${currentPage == 1 } ? 'disabled' : ''">
-                <a class="page-link" th:href="@{/owners(page=${currentPage - 1})}">Önceki Sayfa</a>
-            </li>
-            <li class="page-item" th:each="i: ${#numbers.sequence(1, totalPages)}"
-                th:classappend="${currentPage == i} ? 'active' : ''" aria-current="page">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+                <li class="page-item" th:classappend="${currentPage == 1 } ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{/owners(page=${currentPage - 1})}">Önceki Sayfa</a>
+                </li>
+                <li class="page-item" th:each="i: ${#numbers.sequence(1, totalPages)}"
+                    th:classappend="${currentPage == i} ? 'active' : ''" aria-current="page">
                 <span th:if="${currentPage == i}">
                     <span class="page-link">[[${i}]]</span>
                 </span>
-                <span th:unless="${currentPage == i}">
+                    <span th:unless="${currentPage == i}">
                     <a class="page-link" th:href="@{/owners(page=${i})}">[[${i}]]</a>
                 </span>
-            </li>
-            <li class="page-item" th:classappend="(${totalPages == 1 || totalPages == currentPage }) ? 'disabled' : ''">
-                <a class="page-link" th:href="@{/owners(page=${currentPage + 1})}">Sonraki Sayfa</a>
-            </li>
-        </ul>
-    </nav>
-
+                </li>
+                <li class="page-item" th:classappend="(${totalPages == 1 || totalPages == currentPage }) ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{/owners(page=${currentPage + 1})}">Sonraki Sayfa</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
+
 </body>
 </html>

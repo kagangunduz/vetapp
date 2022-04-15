@@ -30,8 +30,10 @@
     <hr>
 
     <form th:action="@{/pets/add}" th:object="${pet}" method="post">
-        <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger" role="alert">
-            <p th:each="err : ${#fields.errors('pet.*')}" th:text="${err}"></p>
+        <div th:if="${#fields.hasErrors()}" class="alert alert-danger" role="alert">
+            <ul>
+                <li th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
+            </ul>
         </div>
         <div class="mb-3">
             <label for="name" class="form-label">İsim</label>

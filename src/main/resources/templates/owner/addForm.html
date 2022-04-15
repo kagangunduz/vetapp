@@ -29,8 +29,10 @@
     <h4>Yeni Hayvan Sahibi</h4>
     <hr>
     <form th:action="@{/owners/add}" th:object="${owner}" method="post">
-        <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger" role="alert">
-            <p th:each="err : ${#fields.errors('owner.*')}" th:text="${err}"></p>
+        <div th:if="${#fields.hasErrors()}" class="alert alert-danger" role="alert">
+            <ul>
+                <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+            </ul>
         </div>
         <div class="mb-3">
             <label for="fullName" class="form-label">Ad Soyad</label>
