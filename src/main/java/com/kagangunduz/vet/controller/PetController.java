@@ -4,7 +4,7 @@ import com.kagangunduz.vet.entity.Genus;
 import com.kagangunduz.vet.entity.Pet;
 import com.kagangunduz.vet.service.impl.OwnerServiceImpl;
 import com.kagangunduz.vet.service.impl.PetServiceImpl;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/pets")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PetController {
 
     private final PetServiceImpl petService;
@@ -69,7 +70,8 @@ public class PetController {
     }
 
     @PostMapping("/add")
-    public String save(Model model, Pet pet, BindingResult result, RedirectAttributes redirectAttributes, @RequestParam(name = "ownerId", required = false) Long ownerId) {
+    public String save(Model model, @Valid Pet pet, BindingResult result, RedirectAttributes redirectAttributes,
+                       @RequestParam(name = "ownerId", required = false) Long ownerId) {
 
         if (result.hasErrors()) {
             model.addAttribute("genusHashMap", this.getGenusAsHashMap());

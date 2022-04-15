@@ -2,8 +2,7 @@ package com.kagangunduz.vet.controller;
 
 import com.kagangunduz.vet.entity.Owner;
 import com.kagangunduz.vet.service.impl.OwnerServiceImpl;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,13 +10,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Locale;
 
 @Controller
 @RequestMapping("/owners")
-@AllArgsConstructor
-@Slf4j
+@RequiredArgsConstructor
 public class OwnerController {
 
     private final OwnerServiceImpl ownerService;
@@ -28,8 +27,8 @@ public class OwnerController {
         Page<Owner> page = ownerService.getAllPageable(pageNumber);
         int totalPages = page.getTotalPages();
 
-        if (pageNumber > totalPages) {
-            throw new IllegalArgumentException(pageNumber + " numaralı sayfa bulunamadı.");
+        if (totalPages > 1 && pageNumber > totalPages) {
+            throw new IllegalArgumentException(pageNumber + " numaralı sayfa bulunamadı....");
         }
 
         long totalItems = page.getTotalElements();
@@ -63,7 +62,7 @@ public class OwnerController {
     }
 
     @PostMapping("/add")
-    public String save(Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String save(@Valid Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return "owner/addForm";
         }
