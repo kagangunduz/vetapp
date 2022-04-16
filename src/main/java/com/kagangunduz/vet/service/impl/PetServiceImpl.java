@@ -28,13 +28,13 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public Page<Pet> findAllWithPartOfNameOrOwnerFullName(String keyword, int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, 5, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(pageNumber - 1, 10, Sort.by("id").descending());
         return petRepository.findAllWithPartOfNameOrOwnerFullName(keyword, pageable);
     }
 
     @Override
     public Page<Pet> getAllPageable(int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, 5, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(pageNumber - 1, 10, Sort.by("id").descending());
         return petRepository.findAll(pageable);
     }
 

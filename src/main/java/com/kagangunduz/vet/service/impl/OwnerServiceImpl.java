@@ -28,13 +28,13 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     public Page<Owner> findAllWithPartOfFullName(String keyword, int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, 5, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(pageNumber - 1, 10, Sort.by("id").descending());
         return ownerRepository.findAllWithPartOfFullName(keyword, pageable);
     }
 
     @Override
     public Page<Owner> getAllPageable(int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, 5, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(pageNumber - 1, 10, Sort.by("id").descending());
         return ownerRepository.findAll(pageable);
     }
 
