@@ -76,7 +76,9 @@
                             <a class="btn btn-outline-warning" th:href="@{/pets/edit/{id}(id=${pet.id})}">Düzenle</a>
                         </div>
                         <div class="col-md-3 d-grid">
-                            <a class="btn btn-outline-danger" th:href="@{/pets/delete/{id}(id=${pet.id})}">Sil</a>
+                            <a class="btn btn-outline-danger"
+                               th:href="@{'/pets/delete/' + ${pet.id} + '?ownerId=' + ${owner.id}}">Sil</a>
+
                         </div>
                     </div>
                 </td>

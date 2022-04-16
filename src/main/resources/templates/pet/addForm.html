@@ -11,7 +11,7 @@
         <hr>
         <div class="card bg-light">
             <div class="card-body">
-                <form th:action="@{/pets/add}" th:object="${pet}" method="post">
+                <form th:action="@{/pets/add(ownerId=${ownerId})}" th:object="${pet}" method="post">
                     <div th:if="${#fields.hasErrors()}" class="alert alert-danger" role="alert">
                         <ul>
                             <li th:each="err : ${#fields.allErrors()}" th:text="${err}"/>

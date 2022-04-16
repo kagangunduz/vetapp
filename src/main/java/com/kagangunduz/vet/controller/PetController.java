@@ -61,7 +61,7 @@ public class PetController {
         }
 
         long totalItems = page.getTotalElements();
-        
+
         List<Pet> petList = page.getContent();
 
         model.addAttribute("currentPage", pageNumber);
@@ -95,6 +95,7 @@ public class PetController {
         }
         petService.save(pet);
         redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı.");
+
         if (ownerId != null && ownerId.equals(pet.getOwner().getId())) {
             return "redirect:/owners/" + ownerId;
         }
@@ -130,9 +131,14 @@ public class PetController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteById(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
+    public String deleteById(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes,
+                             @RequestParam(name = "ownerId", required = false) Long ownerId) {
         Pet deletedPet = petService.deleteById(id);
         redirectAttributes.addFlashAttribute("message", "Kayıt Silindi => " + deletedPet.getName() + " | " + deletedPet.getAge() + " | " + deletedPet.getGenus());
+
+        if (ownerId != null) {
+            return "redirect:/owners/" + ownerId;
+        }
         return "redirect:/pets";
     }
 
