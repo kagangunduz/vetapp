@@ -24,4 +24,6 @@ public interface PetService {
 
     Long getPetCount();
 
+    String getAgeInfo(Long id);
+
 }

@@ -4,11 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 
 @Entity
@@ -24,9 +25,10 @@ public class Pet extends BaseEntity {
 
     @NotEmpty(message = "İsim alanı boş olamaz.")
     private String name;
-    @NotNull(message = "Yaş alanı boş olamaz.")
-    @Min(value = 0)
-    private int age;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date birthDate;
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Cins alanı boş olamaz.")

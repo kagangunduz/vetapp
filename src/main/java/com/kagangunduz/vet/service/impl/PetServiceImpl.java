@@ -12,6 +12,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,7 +60,7 @@ public class PetServiceImpl implements PetService {
         if (optionalPet.isPresent()) {
             Pet petDb = optionalPet.get();
             petDb.setName(pet.getName());
-            petDb.setAge(pet.getAge());
+            petDb.setBirthDate(pet.getBirthDate());
             petDb.setGenus(pet.getGenus());
             petDb.setDescription(pet.getDescription());
             petDb.setOwner(pet.getOwner());
@@ -80,6 +84,18 @@ public class PetServiceImpl implements PetService {
     @Override
     public Long getPetCount() {
         return petRepository.count();
+    }
+
+    @Override
+    public String getAgeInfo(Long id) {
+        Pet pet = this.findById(id);
+        if (pet.getBirthDate() != null) {
+            LocalDate birthDate = Instant.ofEpochMilli(pet.getBirthDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate now = LocalDate.now();
+            Period lifePeriod = Period.between(birthDate, now);
+            return lifePeriod.getYears() + " yıl, " + lifePeriod.getMonths() + " ay, " + lifePeriod.getDays() + " gün";
+        }
+        return "";
     }
 
 }

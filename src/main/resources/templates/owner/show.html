@@ -64,7 +64,7 @@
             <tbody>
             <tr th:each="pet : ${owner.pets}">
                 <td class="text-capitalize">[[${pet.name}]]</span></td>
-                <td>[[${pet.age}]]</td>
+                <td>[[${pet.birthDate}]]</td>
                 <td>[[${pet.genus.value}]]</td>
                 <td>[[${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}]]</td>
                 <td>[[${#dates.format(pet.updatedAt, 'dd/MMM/yyyy HH:mm')}]]</td>

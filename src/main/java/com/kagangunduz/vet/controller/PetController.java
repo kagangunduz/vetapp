@@ -12,7 +12,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +30,8 @@ public class PetController {
 
 
     @GetMapping
-    public String getAllByPagination(Model model, @RequestParam(name = "page", defaultValue = "1", required = false) int pageNumber) {
+    public String getAllByPagination(Model model,
+                                     @RequestParam(name = "page", defaultValue = "1", required = false) int pageNumber) {
 
         Page<Pet> page = petService.getAllPageable(pageNumber);
         int totalPages = page.getTotalPages();
@@ -74,10 +77,12 @@ public class PetController {
     }
 
     @GetMapping("/add")
-    public String showNewForm(Model model, @RequestParam(name = "ownerId", required = false) Long ownerId) {
+    public String showNewForm(Model model,
+                              @RequestParam(name = "ownerId", required = false) Long ownerId) {
         model.addAttribute("pet", new Pet());
         model.addAttribute("genus", this.getGenusAsHashMap());
         model.addAttribute("owners", ownerService.findAll());
+        model.addAttribute("maxDate", LocalDate.now());
         if (ownerId != null) {
             model.addAttribute("ownerId", ownerId);
         }
@@ -85,8 +90,11 @@ public class PetController {
     }
 
     @PostMapping("/add")
-    public String save(Model model, @Valid Pet pet, BindingResult result, RedirectAttributes redirectAttributes,
-                       @RequestParam(name = "ownerId", required = false) Long ownerId) {
+    public String save(Model model,
+                       @Valid Pet pet,
+                       BindingResult result,
+                       HttpServletRequest request,
+                       RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             model.addAttribute("genus", this.getGenusAsHashMap());
@@ -96,7 +104,8 @@ public class PetController {
         petService.save(pet);
         redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı.");
 
-        if (ownerId != null && ownerId.equals(pet.getOwner().getId())) {
+        Long ownerId = Long.parseLong(request.getParameter("ownerId"));
+        if (ownerId.equals(pet.getOwner().getId())) {
             return "redirect:/owners/" + ownerId;
         }
         return "redirect:/pets";
@@ -104,6 +113,9 @@ public class PetController {
 
     @GetMapping("/{id}")
     public String getById(Model model, @PathVariable(name = "id") Long id) {
+        if (!petService.getAgeInfo(id).isEmpty()) {
+            model.addAttribute("ageInfo", petService.getAgeInfo(id));
+        }
         model.addAttribute("pet", petService.findById(id));
         return "pet/show";
     }
@@ -117,7 +129,10 @@ public class PetController {
     }
 
     @PostMapping("/edit/{id}")
-    public String update(Model model, @PathVariable(name = "id") Long id, @Valid Pet pet, BindingResult result,
+    public String update(Model model,
+                         @Valid Pet pet,
+                         @PathVariable(name = "id") Long id,
+                         BindingResult result,
                          RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
@@ -131,10 +146,11 @@ public class PetController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteById(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes,
-                             @RequestParam(name = "ownerId", required = false) Long ownerId) {
+    public String deleteById(@PathVariable(name = "id") Long id,
+                             @RequestParam(name = "ownerId", required = false) Long ownerId,
+                             RedirectAttributes redirectAttributes) {
         Pet deletedPet = petService.deleteById(id);
-        redirectAttributes.addFlashAttribute("message", "Kayıt Silindi => " + deletedPet.getName() + " | " + deletedPet.getAge() + " | " + deletedPet.getGenus());
+        redirectAttributes.addFlashAttribute("message", "Kayıt Silindi => İsim: " + deletedPet.getName() + " | Cins: " + deletedPet.getGenus().getValue());
 
         if (ownerId != null) {
             return "redirect:/owners/" + ownerId;

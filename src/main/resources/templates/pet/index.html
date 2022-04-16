@@ -13,10 +13,11 @@
             <form th:action="@{/pets/search}" method="get" class="row g-3">
                 <div class="col-auto">
                     <label for="keyword" class="visually-hidden">İsim: </label>
-                    <input type="text" class="form-control" name="keyword" id="keyword">
+                    <input type="text" class="form-control" name="keyword" id="keyword"
+                           th:disabled="${pets.isEmpty()}">
                 </div>
                 <div class="col-auto">
-                    <button type="submit" class="btn btn-primary mb-3">Ara</button>
+                    <button type="submit" class="btn btn-primary mb-3" th:disabled="${pets.isEmpty()}">Ara</button>
                 </div>
             </form>
         </div>
@@ -37,9 +38,10 @@
             <thead>
             <tr>
                 <th scope="col">İsim</th>
-                <th scope="col">Yaş</th>
                 <th scope="col">Tür</th>
                 <th scope="col">Sahibi</th>
+                <th scope="col">Yaş Bilgisi</th>
+                <th scope="col">Doğum Tarihi</th>
                 <th scope="col">Kayıt Tarihi</th>
                 <th scope="col">Güncellenme Tarihi</th>
                 <th scope="col">İşlem</th>
@@ -48,10 +50,11 @@
             <tbody>
             <tr th:each="pet : ${pets}">
                 <td class="text-capitalize">[[${pet.name}]]</span></td>
-                <td>[[${pet.age}]]</td>
                 <td>[[${pet.genus.value}]]</td>
                 <td th:if="${pet.owner != null}">[[${pet.owner.fullName}]]</td>
                 <td th:unless="${pet.owner != null}"></td>
+                <td th:text="${@petServiceImpl.getAgeInfo(pet.id)}"></td>
+                <td>[[${#dates.format(pet.birthDate, 'dd/MMM/yyyy')}]]</td>
                 <td>[[${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}]]</td>
                 <td>[[${#dates.format(pet.updatedAt, 'dd/MMM/yyyy HH:mm')}]]</td>
                 <td>
