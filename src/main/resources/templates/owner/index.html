@@ -13,10 +13,12 @@
             <form th:action="@{/owners/search}" method="get" class="row g-3">
                 <div class="col-auto">
                     <label for="keyword" class="visually-hidden">Ad Soyad: </label>
-                    <input type="text" class="form-control" name="keyword" id="keyword">
+                    <input type="text" class="form-control" name="keyword" id="keyword"
+                           th:disabled="${owners.isEmpty()}">
                 </div>
                 <div class="col-auto">
-                    <button type="submit" class="btn btn-primary mb-3">Ara</button>
+                    <button type="submit" class="btn btn-primary mb-3" th:disabled="${owners.isEmpty()}">Ara
+                    </button>
                 </div>
             </form>
         </div>
@@ -26,7 +28,7 @@
     </div>
 
     <div class="justify-content-start">
-        <span class="badge bg-secondary">Toplam Kayıt: [[${totalItems}]]</span>
+        <span class="badge bg-warning">Toplam Kayıt: [[${totalItems}]]</span>
     </div>
 
     <div th:if="${message}" class="alert alert-success mt-2" role="alert">
@@ -34,7 +36,7 @@
     </div>
 
     <div th:if="${totalItems != 0}">
-        <table class="table table-light table-bordered table-hover mt-3">
+        <table class="table table-light table-bordered table-hover mt-3 table-responsive">
             <thead>
             <tr>
                 <th scope="col">Ad Soyad</th>
@@ -52,9 +54,19 @@
                 <td>[[${owner.email}]]</td>
                 <td>[[${owner.address}]]</td>
                 <td>[[${#dates.format(owner.createdAt, 'dd/MMM/yyyy HH:mm')}]]</td>
-                <td><a class="btn btn-outline-success" th:href="@{/owners/{id}(id=${owner.id})}">Göster</a>
-                    <a class="btn btn-outline-warning" th:href="@{/owners/edit/{id}(id=${owner.id})}">Düzenle</a>
-                    <a class="btn btn-outline-danger" th:href="@{/owners/delete/{id}(id=${owner.id})}">Sil</a>
+                <td>
+                    <div class="row g-2">
+                        <div class="col-lg-4 d-grid">
+                            <a class="btn btn-outline-success" th:href="@{/owners/{id}(id=${owner.id})}">Göster</a>
+                        </div>
+                        <div class="col-lg-4 d-grid">
+                            <a class="btn btn-outline-warning"
+                               th:href="@{/owners/edit/{id}(id=${owner.id})}">Düzenle</a>
+                        </div>
+                        <div class="col-lg-4 d-grid">
+                            <a class="btn btn-outline-danger" th:href="@{/owners/delete/{id}(id=${owner.id})}">Sil</a>
+                        </div>
+                    </div>
                 </td>
             </tr>
             </tbody>

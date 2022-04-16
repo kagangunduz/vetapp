@@ -8,7 +8,7 @@
 <section>
 
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-md-6">
             <div class="card text-dark bg-light" style="min-height: 400px;">
                 <div class="card-body">
                     <h5 class="card-title">[[${pet.name}]]</h5>
@@ -25,7 +25,7 @@
 
                 </div>
                 <div class="card-footer text-muted">
-                    <div class="row">
+                    <div class="row g-2">
                         <div class="col-md-6 d-grid">
                             <a class="btn  btn-danger" th:href="@{/pets/delete/{id}(id=${pet.id})}">
                                 <i class="bi bi-trash3"></i>&nbsp;&nbsp;Sil</a>
@@ -38,7 +38,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6" th:if="${pet.owner}">
+        <div class="col-md-6" th:if="${pet.owner}">
             <div class="card text-dark bg-light" style="min-height: 400px;">
                 <div class="card-body">
                     <h5 class="card-title">[[${pet.owner.fullName}]]</h5>
@@ -52,16 +52,16 @@
                         HH:mm')}]]</p>
                 </div>
                 <div class="card-footer text-muted">
-                    <div class="row">
-                        <div class="col-md-4 d-grid">
+                    <div class="row g-2">
+                        <div class="col-lg-4 d-grid">
                             <a class="btn  btn-danger" th:href="@{/owners/delete/{id}(id=${pet.owner.id})}">
                                 <i class="bi bi-trash3"></i>&nbsp;&nbsp;Sil</a>
                         </div>
-                        <div class="col-md-4 d-grid">
+                        <div class="col-lg-4 d-grid">
                             <a class="btn btn-warning" th:href="@{/owners/edit/{id}(id=${pet.owner.id})}">
                                 <i class="bi bi-pencil"></i>&nbsp;&nbsp;Düzenle</a>
                         </div>
-                        <div class="col-md-4 d-grid">
+                        <div class="col-lg-4 d-grid">
                             <a class="btn btn-primary" th:href="@{/owners/{id}(id=${pet.owner.id})}">
                                 <i class="bi bi-person-square"></i>&nbsp;&nbsp;Göster</a>
                         </div>

@@ -27,10 +27,10 @@
     </div>
 
     <div class="justify-content-start">
-        <span class="badge bg-secondary">Toplam Kayıt: [[${totalItems}]]</span>
+        <span class="badge bg-warning">Toplam Kayıt: [[${totalItems}]]</span>
     </div>
 
-    <div th:if="${totalItems == 0}">
+    <div th:if="${totalItems == 0}" class="mt-2">
         <h4>Arama sonucunda kayıt bulunamadı.</h4>
     </div>
     <div th:unless="${totalItems == 0}">
@@ -55,9 +55,18 @@
                 <td th:unless="${pet.owner != null}"></td>
                 <td>[[${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}]]</td>
                 <td>[[${#dates.format(pet.updatedAt, 'dd/MMM/yyyy HH:mm')}]]</td>
-                <td><a class="btn btn-outline-success" th:href="@{/pets/{id}(id=${pet.id})}">Göster</a>
-                    <a class="btn btn-outline-warning" th:href="@{/pets/edit/{id}(id=${pet.id})}">Düzenle</a>
-                    <a class="btn btn-outline-danger" th:href="@{/pets/delete/{id}(id=${pet.id})}">Sil</a>
+                <td>
+                    <div class="row g-2">
+                        <div class="col-lg-4 d-grid">
+                            <a class="btn btn-outline-success" th:href="@{/pets/{id}(id=${pet.id})}">Göster</a>
+                        </div>
+                        <div class="col-lg-4 d-grid">
+                            <a class="btn btn-outline-warning" th:href="@{/pets/edit/{id}(id=${pet.id})}">Düzenle</a>
+                        </div>
+                        <div class="col-lg-4 d-grid">
+                            <a class="btn btn-outline-danger" th:href="@{/pets/delete/{id}(id=${pet.id})}">Sil</a>
+                        </div>
+                    </div>
                 </td>
             </tr>
             </tbody>

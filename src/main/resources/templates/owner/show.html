@@ -10,6 +10,7 @@
         [[${message}]]
     </div>
 
+    <div class="col-md-6 mx-auto">
     <div class="card text-dark bg-light mt-2">
         <div class="card-body">
             <h5 class="card-title">[[${owner.fullName}]]</h5>
@@ -23,7 +24,7 @@
                 HH:mm')}]]</p>
         </div>
         <div class="card-footer text-muted">
-            <div class="row">
+            <div class="row g-2">
                 <div class="col-md-6 d-grid">
                     <a class="btn  btn-danger" th:href="@{/owners/delete/{id}(id=${owner.id})}">
                         <i class="bi bi-trash3"></i>&nbsp;&nbsp;Sil</a>
@@ -35,12 +36,12 @@
             </div>
         </div>
     </div>
-
+    </div>
     <h4 class="mt-5">Kayıtlı Hayvanlar</h4>
     <hr>
     <div class="d-flex justify-content-between">
         <div>
-            <span class="badge bg-secondary">Toplam Kayıt: [[${owner.pets.size()}]]</span>
+            <span class="badge bg-warning">Toplam Kayıt: [[${owner.pets.size()}]]</span>
         </div>
         <div>
             <a class="btn btn-primary" th:href="@{/pets/add(ownerId=${owner.id})}">
@@ -68,14 +69,14 @@
                 <td>[[${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}]]</td>
                 <td>[[${#dates.format(pet.updatedAt, 'dd/MMM/yyyy HH:mm')}]]</td>
                 <td>
-                    <div class="row">
-                        <div class="col-md-3 d-grid">
+                    <div class="row g-2">
+                        <div class="col-lg-4 d-grid">
                             <a class="btn btn-outline-success" th:href="@{/pets/{id}(id=${pet.id})}">Göster</a>
                         </div>
-                        <div class="col-md-3 d-grid">
+                        <div class="col-lg-4 d-grid">
                             <a class="btn btn-outline-warning" th:href="@{/pets/edit/{id}(id=${pet.id})}">Düzenle</a>
                         </div>
-                        <div class="col-md-3 d-grid">
+                        <div class="col-lg-4 d-grid">
                             <a class="btn btn-outline-danger"
                                th:href="@{'/pets/delete/' + ${pet.id} + '?ownerId=' + ${owner.id}}">Sil</a>
 
