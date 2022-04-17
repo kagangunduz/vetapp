@@ -1,9 +1,11 @@
 package com.kagangunduz.vet.service;
 
+import com.kagangunduz.vet.entity.Genus;
 import com.kagangunduz.vet.entity.Pet;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface PetService {
@@ -25,5 +27,7 @@ public interface PetService {
     Long getPetCount();
 
     String getAgeInfo(Long id);
+
+    Map<Genus, String> getGenusAsHashMap();
 
 }

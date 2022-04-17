@@ -1,5 +1,6 @@
 package com.kagangunduz.vet.service.impl;
 
+import com.kagangunduz.vet.entity.Genus;
 import com.kagangunduz.vet.entity.Pet;
 import com.kagangunduz.vet.exception.PetNotFoundException;
 import com.kagangunduz.vet.repository.PetRepository;
@@ -16,7 +17,9 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -50,7 +53,7 @@ public class PetServiceImpl implements PetService {
     @Override
     public Pet findById(Long id) {
         return petRepository.findById(id).orElseThrow(
-                () -> new PetNotFoundException("Kayıt bulunumadı. Hayvan Sahibi Id: " + id)
+                () -> new PetNotFoundException("Kayıt bulunumadı. Id: " + id)
         );
     }
 
@@ -66,7 +69,7 @@ public class PetServiceImpl implements PetService {
             petDb.setOwner(pet.getOwner());
             return petRepository.save(petDb);
         } else {
-            throw new EntityNotFoundException("Kayıt bulunamadı. id: " + id);
+            throw new EntityNotFoundException("Kayıt bulunamadı. Id: " + id);
         }
     }
 
@@ -77,7 +80,7 @@ public class PetServiceImpl implements PetService {
             petRepository.deleteById(id);
             return optionalPet.get();
         } else {
-            throw new PetNotFoundException("Kayıt bulunumadı. Hayvan Id: " + id);
+            throw new PetNotFoundException("Kayıt bulunumadı. Id: " + id);
         }
     }
 
@@ -96,6 +99,15 @@ public class PetServiceImpl implements PetService {
             return lifePeriod.getYears() + " yıl, " + lifePeriod.getMonths() + " ay, " + lifePeriod.getDays() + " gün";
         }
         return "";
+    }
+
+    @Override
+    public Map<Genus, String> getGenusAsHashMap() {
+        Map<Genus, String> genusHashMap = new HashMap<>();
+        for (Genus genus : Genus.values()) {
+            genusHashMap.put(genus, genus.getValue());
+        }
+        return genusHashMap;
     }
 
 }

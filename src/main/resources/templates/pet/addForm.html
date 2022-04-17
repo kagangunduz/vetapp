@@ -17,7 +17,6 @@
                             <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
                         </ul>
                     </div>
-                    <input type="hidden" name="ownerId" th:value="${#request.getParameter('ownerId')}">
                     <div class="mb-3">
                         <label for="name" class="form-label">İsim</label>
                         <input type="text" class="form-control" th:field="*{name}" id="name">
@@ -25,8 +24,7 @@
                     <div class="mb-3">
                         <label for="birthDate" class="form-label">Doğum Tarihi</label>
                         <input type="date" class="form-control" th:field="*{birthDate}" id="birthDate"
-                               th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
-                        >
+                               th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
                     </div>
                     <div class="mb-3">
                         <label for="genus" class="form-label">Cinsi</label>
