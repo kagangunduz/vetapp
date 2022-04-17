@@ -11,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
@@ -90,7 +89,6 @@ public class PetController {
     public String save(Model model,
                        @Valid Pet pet,
                        BindingResult result,
-                       HttpServletRequest request,
                        RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
@@ -101,12 +99,8 @@ public class PetController {
         petService.save(pet);
         redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı.");
 
-        String ownerId = request.getParameter("ownerId");
-        if (ownerId != null && !ownerId.isEmpty()) {
-            /*Long ownerId = Long.parseLong(request.getParameter("ownerId"));
-            if (ownerId.equals(pet.getOwner().getId())) {*/
-            return "redirect:/owners/" + ownerId;
-            /*}*/
+        if (pet.getOwner() != null) {
+            return "redirect:/owners/" + pet.getOwner().getId();
         }
         return "redirect:/pets";
     }
