@@ -46,7 +46,7 @@ public class OwnerServiceImpl implements OwnerService {
     @Override
     public Owner findById(Long id) {
         return ownerRepository.findById(id).orElseThrow(
-                () -> new OwnerNotFoundException("Kayıt bulunumadı. Hayvan Sahibi Id: " + id)
+                () -> new OwnerNotFoundException("Kayıt bulunumadı. Id: " + id)
         );
     }
 
@@ -61,7 +61,7 @@ public class OwnerServiceImpl implements OwnerService {
             ownerDb.setAddress(owner.getAddress());
             return ownerRepository.save(ownerDb);
         } else {
-            throw new EntityNotFoundException("Kayıt bulunamadı. id: " + id);
+            throw new EntityNotFoundException("Kayıt bulunamadı. Id: " + id);
         }
     }
 
@@ -72,7 +72,7 @@ public class OwnerServiceImpl implements OwnerService {
             ownerRepository.deleteById(id);
             return optionalOwner.get();
         } else {
-            throw new OwnerNotFoundException("Kayıt bulunumadı. Hayvan Sahibi Id: " + id);
+            throw new OwnerNotFoundException("Kayıt bulunumadı. Id: " + id);
         }
     }
 

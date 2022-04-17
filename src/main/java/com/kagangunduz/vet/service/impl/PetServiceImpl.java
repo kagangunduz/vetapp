@@ -53,7 +53,7 @@ public class PetServiceImpl implements PetService {
     @Override
     public Pet findById(Long id) {
         return petRepository.findById(id).orElseThrow(
-                () -> new PetNotFoundException("Kayıt bulunumadı. Hayvan Sahibi Id: " + id)
+                () -> new PetNotFoundException("Kayıt bulunumadı. Id: " + id)
         );
     }
 
@@ -69,7 +69,7 @@ public class PetServiceImpl implements PetService {
             petDb.setOwner(pet.getOwner());
             return petRepository.save(petDb);
         } else {
-            throw new EntityNotFoundException("Kayıt bulunamadı. id: " + id);
+            throw new EntityNotFoundException("Kayıt bulunamadı. Id: " + id);
         }
     }
 
@@ -80,7 +80,7 @@ public class PetServiceImpl implements PetService {
             petRepository.deleteById(id);
             return optionalPet.get();
         } else {
-            throw new PetNotFoundException("Kayıt bulunumadı. Hayvan Id: " + id);
+            throw new PetNotFoundException("Kayıt bulunumadı. Id: " + id);
         }
     }
 
