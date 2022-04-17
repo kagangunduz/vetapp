@@ -1,5 +1,6 @@
 package com.kagangunduz.vet.service.impl;
 
+import com.kagangunduz.vet.entity.Genus;
 import com.kagangunduz.vet.entity.Pet;
 import com.kagangunduz.vet.exception.PetNotFoundException;
 import com.kagangunduz.vet.repository.PetRepository;
@@ -16,7 +17,9 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -96,6 +99,15 @@ public class PetServiceImpl implements PetService {
             return lifePeriod.getYears() + " yıl, " + lifePeriod.getMonths() + " ay, " + lifePeriod.getDays() + " gün";
         }
         return "";
+    }
+
+    @Override
+    public Map<Genus, String> getGenusAsHashMap() {
+        Map<Genus, String> genusHashMap = new HashMap<>();
+        for (Genus genus : Genus.values()) {
+            genusHashMap.put(genus, genus.getValue());
+        }
+        return genusHashMap;
     }
 
 }

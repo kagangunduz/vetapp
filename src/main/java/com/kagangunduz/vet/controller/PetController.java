@@ -1,6 +1,5 @@
 package com.kagangunduz.vet.controller;
 
-import com.kagangunduz.vet.entity.Genus;
 import com.kagangunduz.vet.entity.Pet;
 import com.kagangunduz.vet.service.impl.OwnerServiceImpl;
 import com.kagangunduz.vet.service.impl.PetServiceImpl;
@@ -15,9 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @Controller
@@ -80,7 +77,7 @@ public class PetController {
     public String showNewForm(Model model,
                               @RequestParam(name = "ownerId", required = false) Long ownerId) {
         model.addAttribute("pet", new Pet());
-        model.addAttribute("genus", this.getGenusAsHashMap());
+        model.addAttribute("genus", petService.getGenusAsHashMap());
         model.addAttribute("owners", ownerService.findAll());
         model.addAttribute("maxDate", LocalDate.now());
         if (ownerId != null) {
@@ -97,16 +94,19 @@ public class PetController {
                        RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            model.addAttribute("genus", this.getGenusAsHashMap());
+            model.addAttribute("genus", petService.getGenusAsHashMap());
             model.addAttribute("owners", ownerService.findAll());
             return "pet/addForm";
         }
         petService.save(pet);
         redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı.");
 
-        Long ownerId = Long.parseLong(request.getParameter("ownerId"));
-        if (ownerId.equals(pet.getOwner().getId())) {
+        String ownerId = request.getParameter("ownerId");
+        if (ownerId != null && !ownerId.isEmpty()) {
+            /*Long ownerId = Long.parseLong(request.getParameter("ownerId"));
+            if (ownerId.equals(pet.getOwner().getId())) {*/
             return "redirect:/owners/" + ownerId;
+            /*}*/
         }
         return "redirect:/pets";
     }
@@ -123,7 +123,7 @@ public class PetController {
     @GetMapping("/edit/{id}")
     public String showEditForm(Model model, @PathVariable(name = "id") Long id) {
         model.addAttribute("pet", petService.findById(id));
-        model.addAttribute("genus", this.getGenusAsHashMap());
+        model.addAttribute("genus", petService.getGenusAsHashMap());
         model.addAttribute("owners", ownerService.findAll());
         return "pet/editForm";
     }
@@ -136,7 +136,7 @@ public class PetController {
                          RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            model.addAttribute("genus", this.getGenusAsHashMap());
+            model.addAttribute("genus", petService.getGenusAsHashMap());
             model.addAttribute("owners", ownerService.findAll());
             return "pet/editForm";
         }
@@ -158,12 +158,5 @@ public class PetController {
         return "redirect:/pets";
     }
 
-    private Map<Genus, String> getGenusAsHashMap() {
-        Map<Genus, String> genusHashMap = new HashMap<>();
-        for (Genus genus : Genus.values()) {
-            genusHashMap.put(genus, genus.getValue());
-        }
-        return genusHashMap;
-    }
 
 }
