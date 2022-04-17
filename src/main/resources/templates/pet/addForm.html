@@ -17,7 +17,9 @@
                             <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
                         </ul>
                     </div>
-                    <input type="hidden" name="ownerId" th:value="${#request.getParameter('ownerId')}">
+                    <div th:if="${#request.getParameter('ownerId')}">
+                        <input type="hidden" name="ownerId" th:value="${#request.getParameter('ownerId')}">
+                    </div>
                     <div class="mb-3">
                         <label for="name" class="form-label">İsim</label>
                         <input type="text" class="form-control" th:field="*{name}" id="name">
