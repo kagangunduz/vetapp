@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({NumberFormatException.class, IllegalArgumentException.class})
     public final String handleMethodArgumentTypeMismatchException(Model model, Exception exception) {
-        model.addAttribute("message", "Sayfa bulunamadı.");
+        model.addAttribute("message", "Sorun oluştu.");
         return "error";
     }
 
