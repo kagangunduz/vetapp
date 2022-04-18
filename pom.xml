@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.kagangunduz</groupId>
-    <artifactId>vet</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>vetapp</artifactId>
+    <version>1.0</version>
     <name>vet</name>
-    <description>vet</description>
+    <description>Veterinary Clinic Application</description>
     <properties>
         <java.version>11</java.version>
         <hibernate.version>5.6.5.Final</hibernate.version>
