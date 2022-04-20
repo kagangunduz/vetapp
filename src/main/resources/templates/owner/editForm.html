@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="tr" xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout(~{::title}, ~{::section})">
 <head>
-    <title>VetApp | [[${owner.fullName}]] | Bilgileri Düzenle</title>
+    <title>VetApp |  | Bilgileri Düzenle</title>
 </head>
 <body>
 
@@ -25,9 +25,9 @@
         <div class="card bg-light">
             <div class="card-body">
                 <form th:action="@{/owners/edit/{id}(id=${owner.id})}" th:object="${owner}" method="post">
-                    <div th:if="${#fields.hasAnyErrors()}">
+                    <div th:if="${#fields.hasErrors()}" class="alert alert-danger" role="alert">
                         <ul>
-                            <li th:each="err : ${#fields.errors('owner.*')}" th:text="${err}"/>
+                            <li th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
                         </ul>
                     </div>
 

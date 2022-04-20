@@ -24,57 +24,9 @@ public class PetController {
     private final PetServiceImpl petService;
     private final OwnerServiceImpl ownerService;
 
-
-    @GetMapping
-    public String getAllByPagination(Model model,
-                                     @RequestParam(name = "page", defaultValue = "1", required = false) int pageNumber) {
-
-        Page<Pet> page = petService.getAllPageable(pageNumber);
-        int totalPages = page.getTotalPages();
-        long totalItems = page.getTotalElements();
-        List<Pet> petList = page.getContent();
-
-        model.addAttribute("currentPage", pageNumber);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("totalItems", totalItems);
-        model.addAttribute("pets", petList);
-
-        return "pet/index";
-    }
-
-    @GetMapping("/search")
-    public String findAllWithPartOfNameOrOwnerFullName(Model model,
-                                                       @RequestParam(name = "keyword") String keyword,
-                                                       @RequestParam(name = "pageNumber", defaultValue = "1", required = false) int pageNumber) {
-
-        if (keyword.equals("")) {
-            return "redirect:/pets";
-        }
-
-        keyword = keyword.toLowerCase();
-        Page<Pet> page = petService.findAllWithPartOfNameOrOwnerFullName(keyword, pageNumber);
-
-        int totalPages = page.getTotalPages();
-        if (totalPages > 1 && pageNumber > totalPages) {
-            throw new IllegalArgumentException(pageNumber + " numaralı sayfa bulunamadı....");
-        }
-
-        long totalItems = page.getTotalElements();
-
-        List<Pet> petList = page.getContent();
-
-        model.addAttribute("currentPage", pageNumber);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("totalItems", totalItems);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("pets", petList);
-        return "pet/search";
-
-    }
-
     @GetMapping("/add")
-    public String showNewForm(Model model,
-                              @RequestParam(name = "ownerId", required = false) Long ownerId) {
+    public String showNewForm(Model model, @RequestParam(name = "ownerId", required = false) Long ownerId) {
+        /*model.addAttribute("pet", new PetDto());*/
         model.addAttribute("pet", new Pet());
         model.addAttribute("genus", petService.getGenusAsHashMap());
         model.addAttribute("owners", ownerService.findAll());
@@ -86,16 +38,15 @@ public class PetController {
     }
 
     @PostMapping("/add")
-    public String save(Model model,
-                       @Valid Pet pet,
-                       BindingResult result,
+    public String save(Model model, @ModelAttribute(value = "pet") @Valid Pet pet, BindingResult result,
                        RedirectAttributes redirectAttributes) {
-
         if (result.hasErrors()) {
             model.addAttribute("genus", petService.getGenusAsHashMap());
             model.addAttribute("owners", ownerService.findAll());
+            model.addAttribute("maxDate", LocalDate.now());
             return "pet/addForm";
         }
+
         petService.save(pet);
         redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı.");
 
@@ -123,11 +74,8 @@ public class PetController {
     }
 
     @PostMapping("/edit/{id}")
-    public String update(Model model,
-                         @Valid Pet pet,
-                         @PathVariable(name = "id") Long id,
-                         BindingResult result,
-                         RedirectAttributes redirectAttributes) {
+    public String update(Model model, @Valid @ModelAttribute(value = "pet") Pet pet, @PathVariable(name = "id") Long id,
+                         BindingResult result, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             model.addAttribute("genus", petService.getGenusAsHashMap());
@@ -140,11 +88,12 @@ public class PetController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteById(@PathVariable(name = "id") Long id,
-                             @RequestParam(name = "ownerId", required = false) Long ownerId,
-                             RedirectAttributes redirectAttributes) {
-        Pet deletedPet = petService.deleteById(id);
-        redirectAttributes.addFlashAttribute("message", "Kayıt Silindi => İsim: " + deletedPet.getName() + " | Cins: " + deletedPet.getGenus().getValue());
+    public String deleteById(@PathVariable(name = "id") Long id, @RequestParam(name = "ownerId", required = false) Long ownerId, RedirectAttributes redirectAttributes) {
+        //PetDto deletedPetDto = petService.deleteById(id);
+        Pet pet = petService.deleteById(id);
+        redirectAttributes.addFlashAttribute("message", "Kayıt Silindi => İsim: " +
+                pet.getName() + " | Cins: " +
+                pet.getGenus().getValue());
 
         if (ownerId != null) {
             return "redirect:/owners/" + ownerId;
@@ -152,5 +101,52 @@ public class PetController {
         return "redirect:/pets";
     }
 
+    @GetMapping
+    public String getAllByPagination(Model model, @RequestParam(name = "page", defaultValue = "1", required = false) int pageNumber) {
+
+        //Page<PetDto> page = petService.getAllPageable(pageNumber);
+        Page<Pet> page = petService.getAllPageable(pageNumber);
+        int totalPages = page.getTotalPages();
+        long totalItems = page.getTotalElements();
+        //List<PetDto> petList = page.getContent();
+        List<Pet> petList = page.getContent();
+
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("pets", petList);
+
+        return "pet/index";
+    }
+
+    @GetMapping("/search")
+    public String findAllWithPartOfNameOrOwnerFullName(Model model, @RequestParam(name = "keyword") String keyword, @RequestParam(name = "pageNumber", defaultValue = "1", required = false) int pageNumber) {
+
+        if (keyword.equals("")) {
+            return "redirect:/pets";
+        }
+
+        keyword = keyword.toLowerCase();
+
+        //Page<PetDto> page = petService.findAllWithPartOfNameOrOwnerFullName(keyword, pageNumber);
+        Page<Pet> page = petService.findAllWithPartOfNameOrOwnerFullName(keyword, pageNumber);
+
+        int totalPages = page.getTotalPages();
+        if (totalPages > 1 && pageNumber > totalPages) {
+            throw new IllegalArgumentException(pageNumber + " numaralı sayfa bulunamadı....");
+        }
+
+        long totalItems = page.getTotalElements();
+
+        //List<PetDto> petList = page.getContent();
+        List<Pet> petList = page.getContent();
+
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("pets", petList);
+        return "pet/search";
+    }
 
 }

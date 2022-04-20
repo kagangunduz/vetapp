@@ -38,25 +38,25 @@
             <thead>
             <tr>
                 <th scope="col">İsim</th>
-                <th scope="col">Tür</th>
+                <th scope="col">Cins/Tür</th>
                 <th scope="col">Sahibi</th>
                 <th scope="col">Yaş Bilgisi</th>
                 <th scope="col">Doğum Tarihi</th>
-                <th scope="col">Kayıt Tarihi</th>
-                <th scope="col">Güncellenme Tarihi</th>
+                <th scope="col">Kayıt/Güncel. Tarihi</th>
                 <th scope="col">İşlem</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="pet : ${pets}">
                 <td class="text-capitalize">[[${pet.name}]]</span></td>
-                <td>[[${pet.genus.value}]]</td>
+                <td>[[${pet.genus.value}]]<span th:if="${pet.species}">/[[${pet.species}]]</span></td>
                 <td th:if="${pet.owner != null}">[[${pet.owner.fullName}]]</td>
                 <td th:unless="${pet.owner != null}"></td>
                 <td th:text="${@petServiceImpl.getAgeInfo(pet.id)}"></td>
                 <td>[[${#dates.format(pet.birthDate, 'dd/MMM/yyyy')}]]</td>
-                <td>[[${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}]]</td>
-                <td>[[${#dates.format(pet.updatedAt, 'dd/MMM/yyyy HH:mm')}]]</td>
+                <td>[[${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}]]<br>[[${#dates.format(pet.updatedAt,
+                    'dd/MMM/yyyy HH:mm')}]]
+                </td>
                 <td>
                     <div class="row g-2">
                         <div class="col-lg-4 d-grid">

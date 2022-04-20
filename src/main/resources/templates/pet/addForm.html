@@ -14,7 +14,7 @@
                 <form th:action="@{/pets/add}" th:object="${pet}" method="post">
                     <div th:if="${#fields.hasErrors()}" class="alert alert-danger" role="alert">
                         <ul>
-                            <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+                            <li th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
                         </ul>
                     </div>
                     <div class="mb-3">
@@ -27,18 +27,22 @@
                                th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
                     </div>
                     <div class="mb-3">
-                        <label for="genus" class="form-label">Cinsi</label>
+                        <label for="genus" class="form-label">Cins</label>
                         <select class="form-select" th:field="*{genus}" id="genus">
                             <option value="">Lütfen seçim yapın...</option>
                             <option th:each="g : ${genus}" th:value="${g.key}" th:text="${g.value}"></option>
                         </select>
                     </div>
                     <div class="mb-3">
+                        <label for="species" class="form-label">Tür</label>
+                        <input type="text" class="form-control" th:field="*{species}" id="species">
+                    </div>
+                    <div class="mb-3">
                         <label for="owner" class="form-label">Hayvan Sahibi</label>
-                        <select class="form-select" name="owner" id="owner">
+                        <select class="form-select" th:field="*{owner}" id="owner">
                             <option value="">Lütfen seçim yapın...</option>
-                            <option th:each="owner : ${owners}" th:value="${owner.id}" th:text="${owner.fullName}"
-                                    th:selected="${ownerId == owner.id}"></option>
+                            <option th:each="o : ${owners}" th:value="${o.id}" th:text="${o.fullName}"
+                                    th:selected="${ownerId == o.id}"></option>
                         </select>
                     </div>
                     <div class="mb-3">

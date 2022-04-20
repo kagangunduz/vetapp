@@ -21,16 +21,19 @@ public class OwnerController {
     private final OwnerServiceImpl ownerService;
 
     @GetMapping
-    public String getAllByPagination(Model model, @RequestParam(name = "page", defaultValue = "1", required = false) int pageNumber) {
+    public String getAllByPagination(Model model,
+                                     @RequestParam(name = "page", defaultValue = "1", required = false) int pageNumber) {
 
+        //Page<OwnerDto> page = ownerService.getAllPageable(pageNumber);
         Page<Owner> page = ownerService.getAllPageable(pageNumber);
-        int totalPages = page.getTotalPages();
 
+        int totalPages = page.getTotalPages();
         if (totalPages > 1 && pageNumber > totalPages) {
             throw new IllegalArgumentException(pageNumber + " numaralı sayfa bulunamadı....");
         }
 
         long totalItems = page.getTotalElements();
+        //List<OwnerDto> ownerList = page.getContent();
         List<Owner> ownerList = page.getContent();
 
         model.addAttribute("currentPage", pageNumber);
@@ -49,6 +52,7 @@ public class OwnerController {
         }
 
         keyword = keyword.toLowerCase();
+        //Page<OwnerDto> page = ownerService.findAllWithPartOfFullName(keyword, pageNumber);
         Page<Owner> page = ownerService.findAllWithPartOfFullName(keyword, pageNumber);
         int totalPages = page.getTotalPages();
 
@@ -58,6 +62,7 @@ public class OwnerController {
 
         long totalItems = page.getTotalElements();
 
+        //List<OwnerDto> ownerList = page.getContent();
         List<Owner> ownerList = page.getContent();
 
         model.addAttribute("currentPage", pageNumber);
@@ -71,18 +76,20 @@ public class OwnerController {
 
     @GetMapping("/add")
     public String showAddForm(Model model) {
+        //model.addAttribute("owner", new OwnerDto());
         model.addAttribute("owner", new Owner());
         return "owner/addForm";
     }
 
     @PostMapping("/add")
-    public String save(@Valid Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String save(@Valid @ModelAttribute(value = "owner") Owner owner, BindingResult result,
+                       RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return "owner/addForm";
         }
-        ownerService.save(owner);
+        Owner owner1 = ownerService.save(owner);
         redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı.");
-        return "redirect:/owners";
+        return "redirect:/owners/" + owner1.getId();
 
     }
 
@@ -103,8 +110,11 @@ public class OwnerController {
     }
 
     @PostMapping("/edit/{id}")
-    public String update(Model model, @PathVariable(name = "id") Long id, @Valid Owner owner,
-                         BindingResult result, RedirectAttributes redirectAttributes) {
+    public String update(Model model,
+                         @PathVariable(name = "id") Long id,
+                         @Valid @ModelAttribute(value = "owner") Owner owner,
+                         BindingResult result,
+                         RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return "owner/editForm";
         }
@@ -115,11 +125,11 @@ public class OwnerController {
 
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
-        Owner deletedOwner = ownerService.deleteById(id);
+        Owner owner = ownerService.deleteById(id);
         redirectAttributes.addFlashAttribute("message", "Kayıt Silindi => "
-                + deletedOwner.getFullName() + " | "
-                + deletedOwner.getTelephoneNumber() + " | "
-                + deletedOwner.getEmail());
+                + owner.getFullName() + " | "
+                + owner.getTelephoneNumber() + " | "
+                + owner.getEmail());
         return "redirect:/owners";
     }
 
