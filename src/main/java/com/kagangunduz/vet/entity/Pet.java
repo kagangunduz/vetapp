@@ -34,6 +34,9 @@ public class Pet extends BaseEntity {
     @NotNull(message = "Cins alanı boş olamaz.")
     private Genus genus;
 
+    @NotEmpty(message = "Tür alanı boş olamaz.")
+    private String species;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 

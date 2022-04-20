@@ -11,31 +11,31 @@
     </div>
 
     <div class="col-md-6 mx-auto">
-    <div class="card text-dark bg-light mt-2">
-        <div class="card-body">
-            <h5 class="card-title">[[${owner.fullName}]]</h5>
-            <hr>
-            <p class="card-text"><b>Telefon:</b> [[${owner.telephoneNumber}]]</p>
-            <p class="card-text"><b>Email:</b> [[${owner.email}]]</p>
-            <p class="card-text"><b>Adres:</b> [[${owner.address}]]</p>
-            <p class="card-text"><b>Kayıt Tarihi:</b> [[${#dates.format(owner.createdAt, 'dd/MMM/yyyy
-                HH:mm')}]]</p>
-            <p class="card-text"><b>Güncellenme Tarihi:</b> [[${#dates.format(owner.updatedAt, 'dd/MMM/yyyy
-                HH:mm')}]]</p>
-        </div>
-        <div class="card-footer text-muted">
-            <div class="row g-2">
-                <div class="col-md-6 d-grid">
-                    <a class="btn  btn-danger" th:href="@{/owners/delete/{id}(id=${owner.id})}">
-                        <i class="bi bi-trash3"></i>&nbsp;&nbsp;Sil</a>
-                </div>
-                <div class="col-md-6 d-grid">
-                    <a class="btn btn-primary" th:href="@{/owners/edit/{id}(id=${owner.id})}">
-                        <i class="bi bi-pencil"></i>&nbsp;&nbsp;Düzenle</a>
+        <div class="card text-dark bg-light mt-2">
+            <div class="card-body">
+                <h5 class="card-title">[[${owner.fullName}]]</h5>
+                <hr>
+                <p class="card-text"><b>Telefon:</b> [[${owner.telephoneNumber}]]</p>
+                <p class="card-text"><b>Email:</b> [[${owner.email}]]</p>
+                <p class="card-text"><b>Adres:</b> [[${owner.address}]]</p>
+                <p class="card-text"><b>Kayıt Tarihi:</b> [[${#dates.format(owner.createdAt, 'dd/MMM/yyyy
+                    HH:mm')}]]</p>
+                <p class="card-text"><b>Güncellenme Tarihi:</b> [[${#dates.format(owner.updatedAt, 'dd/MMM/yyyy
+                    HH:mm')}]]</p>
+            </div>
+            <div class="card-footer text-muted">
+                <div class="row g-2">
+                    <div class="col-md-6 d-grid">
+                        <a class="btn  btn-danger" th:href="@{/owners/delete/{id}(id=${owner.id})}">
+                            <i class="bi bi-trash3"></i>&nbsp;&nbsp;Sil</a>
+                    </div>
+                    <div class="col-md-6 d-grid">
+                        <a class="btn btn-primary" th:href="@{/owners/edit/{id}(id=${owner.id})}">
+                            <i class="bi bi-pencil"></i>&nbsp;&nbsp;Düzenle</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
     <h4 class="mt-5">Kayıtlı Hayvanlar</h4>
     <hr>
@@ -54,9 +54,9 @@
             <thead>
             <tr>
                 <th>İsim</th>
-                <th>Yaş</th>
-                <th>Tür</th>
-                <th>Oluşturulma Tarihi</th>
+                <th>Cins/Tür</th>
+                <th>Doğum Tarihi</th>
+                <th>Kayıt Tarihi</th>
                 <th>Güncellenme Tarihi</th>
                 <th>İşlem</th>
             </tr>
@@ -64,8 +64,8 @@
             <tbody>
             <tr th:each="pet : ${owner.pets}">
                 <td class="text-capitalize">[[${pet.name}]]</span></td>
+                <td>[[${pet.genus.value}]]<span th:if="${pet.species}">/[[${pet.species}]]</span></td>
                 <td>[[${pet.birthDate}]]</td>
-                <td>[[${pet.genus.value}]]</td>
                 <td>[[${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}]]</td>
                 <td>[[${#dates.format(pet.updatedAt, 'dd/MMM/yyyy HH:mm')}]]</td>
                 <td>
