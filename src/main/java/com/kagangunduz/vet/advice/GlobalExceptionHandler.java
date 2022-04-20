@@ -12,24 +12,28 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({OwnerNotFoundException.class, PetNotFoundException.class})
     public final String hanleExceptions(Model model, Exception exception) {
+        System.out.println(exception.getMessage());
         model.addAttribute("message", exception.getMessage());
         return "error";
     }
 
     @ExceptionHandler({NumberFormatException.class, IllegalArgumentException.class})
-    public final String handleMethodArgumentTypeMismatchException(Model model, Exception exception) {
+    public final String handleNumberFormatIllegalArgument(Model model, Exception exception) {
+        System.out.println(exception.getMessage());
         model.addAttribute("message", "Sorun oluştu.");
         return "error";
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public final String handleMethodArgumentTypeMismatchException(Model model) {
+    public final String handleMethodArgumentTypeMismatchException(Model model, Exception exception) {
+        System.out.println(exception.getMessage());
         model.addAttribute("message", "Sayfa bulunamadı.");
         return "error";
     }
 
     @ExceptionHandler(Exception.class)
-    public final String handleAllExceptions(Model model) {
+    public final String handleAllExceptions(Model model, Exception exception) {
+        System.out.println(exception.getMessage());
         model.addAttribute("message", "Sayfa bulunamadı.");
         return "error";
     }
