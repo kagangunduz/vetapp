@@ -24,7 +24,6 @@ public class OwnerController {
     public String getAllByPagination(Model model,
                                      @RequestParam(name = "page", defaultValue = "1", required = false) int pageNumber) {
 
-        //Page<OwnerDto> page = ownerService.getAllPageable(pageNumber);
         Page<Owner> page = ownerService.getAllPageable(pageNumber);
 
         int totalPages = page.getTotalPages();
@@ -33,7 +32,7 @@ public class OwnerController {
         }
 
         long totalItems = page.getTotalElements();
-        //List<OwnerDto> ownerList = page.getContent();
+
         List<Owner> ownerList = page.getContent();
 
         model.addAttribute("currentPage", pageNumber);
@@ -52,7 +51,6 @@ public class OwnerController {
         }
 
         keyword = keyword.toLowerCase();
-        //Page<OwnerDto> page = ownerService.findAllWithPartOfFullName(keyword, pageNumber);
         Page<Owner> page = ownerService.findAllWithPartOfFullName(keyword, pageNumber);
         int totalPages = page.getTotalPages();
 
@@ -62,7 +60,6 @@ public class OwnerController {
 
         long totalItems = page.getTotalElements();
 
-        //List<OwnerDto> ownerList = page.getContent();
         List<Owner> ownerList = page.getContent();
 
         model.addAttribute("currentPage", pageNumber);
@@ -76,7 +73,6 @@ public class OwnerController {
 
     @GetMapping("/add")
     public String showAddForm(Model model) {
-        //model.addAttribute("owner", new OwnerDto());
         model.addAttribute("owner", new Owner());
         return "owner/addForm";
     }

@@ -11,8 +11,4 @@ public interface OwnerRepository extends JpaRepository<Owner, Long> {
     @Query("select o from Owner o where lower(o.fullName) like concat('%', :keyword, '%')")
     Page<Owner> findAllWithPartOfFullName(String keyword, Pageable pageable);
 
-    /*Alternatif*/
-    /*List<Owner> findAllByFullNameContainsIgnoreCase(String fullName);*/
-
-
 }

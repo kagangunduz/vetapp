@@ -5,7 +5,6 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,9 +35,9 @@ public class Owner extends BaseEntity {
 
     private String address;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     @OrderBy("id DESC")
-    private List<Pet> pets = new ArrayList<>();
+    private List<Pet> pets;
+
 
 }

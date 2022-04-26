@@ -1,11 +1,32 @@
 <!DOCTYPE html>
-<html lang="tr" xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout(~{::title}, ~{::section})">
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>VetApp | [[${owner.fullName}]]</title>
+    <meta charset="UTF-8">
+    <title>Ana Sayfa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
 
-<section>
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">
+            <img src="/img/logo.png" alt="" width="30" height="30" class="d-inline-block align-text-top">
+            VetApp
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link" th:href="@{/}">Ana Sayfa</a>
+                <a class="nav-link" th:href="@{/owners}">Hayvan Sahipleri</a>
+                <a class="nav-link" th:href="@{/pets}">Hayvanlar</a>
+                <a class="nav-link" th:href="@{/genera}">Cinsler</a>
+                <a class="nav-link" th:href="@{/species}">Türler</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
     <div th:if="${message}" class="alert alert-success" role="alert">
         [[${message}]]
     </div>
@@ -54,7 +75,8 @@
             <thead>
             <tr>
                 <th>İsim</th>
-                <th>Cins/Tür</th>
+                <th>Cins</th>
+                <th>Tür</th>
                 <th>Doğum Tarihi</th>
                 <th>Kayıt Tarihi</th>
                 <th>Güncellenme Tarihi</th>
@@ -63,9 +85,12 @@
             </thead>
             <tbody>
             <tr th:each="pet : ${owner.pets}">
-                <td class="text-capitalize">[[${pet.name}]]</span></td>
-                <td>[[${pet.genus.value}]]<span th:if="${pet.species}">/[[${pet.species}]]</span></td>
-                <td>[[${pet.birthDate}]]</td>
+                <td>[[${pet.name}]]</span></td>
+                <td th:if="${pet.genus}">[[${pet.genus.name}]]</span></td>
+                <td th:unless="${pet.genus}"></span></td>
+                <td th:if="${pet.species}">[[${pet.species.name}]]</span></td>
+                <td th:unless="${pet.species}"></span></td>
+                <td>[[${#dates.format(pet.birthDate, 'dd/MMM/yyyy')}]]</td>
                 <td>[[${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}]]</td>
                 <td>[[${#dates.format(pet.updatedAt, 'dd/MMM/yyyy HH:mm')}]]</td>
                 <td>
@@ -79,7 +104,6 @@
                         <div class="col-lg-4 d-grid">
                             <a class="btn btn-outline-danger"
                                th:href="@{'/pets/delete/' + ${pet.id} + '?ownerId=' + ${owner.id}}">Sil</a>
-
                         </div>
                     </div>
                 </td>
@@ -87,7 +111,7 @@
             </tbody>
         </table>
     </div>
-</section>
+</div>
 
 </body>
 </html>

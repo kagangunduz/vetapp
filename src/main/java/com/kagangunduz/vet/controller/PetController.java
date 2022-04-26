@@ -1,8 +1,10 @@
 package com.kagangunduz.vet.controller;
 
 import com.kagangunduz.vet.entity.Pet;
+import com.kagangunduz.vet.service.impl.GenusServiceImpl;
 import com.kagangunduz.vet.service.impl.OwnerServiceImpl;
 import com.kagangunduz.vet.service.impl.PetServiceImpl;
+import com.kagangunduz.vet.service.impl.SpeciesServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -23,12 +25,13 @@ public class PetController {
 
     private final PetServiceImpl petService;
     private final OwnerServiceImpl ownerService;
+    private final GenusServiceImpl genusService;
+    private final SpeciesServiceImpl speciesService;
 
     @GetMapping("/add")
     public String showNewForm(Model model, @RequestParam(name = "ownerId", required = false) Long ownerId) {
-        /*model.addAttribute("pet", new PetDto());*/
         model.addAttribute("pet", new Pet());
-        model.addAttribute("genus", petService.getGenusAsHashMap());
+        model.addAttribute("genera", genusService.findAll());
         model.addAttribute("owners", ownerService.findAll());
         model.addAttribute("maxDate", LocalDate.now());
         if (ownerId != null) {
@@ -41,7 +44,10 @@ public class PetController {
     public String save(Model model, @ModelAttribute(value = "pet") @Valid Pet pet, BindingResult result,
                        RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("genus", petService.getGenusAsHashMap());
+            if (pet.getSpecies() != null) {
+                model.addAttribute("species", speciesService.getAllByGenusId(pet.getGenus().getId()));
+            }
+            model.addAttribute("genera", genusService.findAll());
             model.addAttribute("owners", ownerService.findAll());
             model.addAttribute("maxDate", LocalDate.now());
             return "pet/addForm";
@@ -49,7 +55,6 @@ public class PetController {
 
         petService.save(pet);
         redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı.");
-
         if (pet.getOwner() != null) {
             return "redirect:/owners/" + pet.getOwner().getId();
         }
@@ -67,9 +72,12 @@ public class PetController {
 
     @GetMapping("/edit/{id}")
     public String showEditForm(Model model, @PathVariable(name = "id") Long id) {
-        model.addAttribute("pet", petService.findById(id));
-        model.addAttribute("genus", petService.getGenusAsHashMap());
+        Pet pet = petService.findById(id);
+        model.addAttribute("pet", pet);
+        model.addAttribute("genera", genusService.findAll());
+        model.addAttribute("species", speciesService.getAllByGenusId(pet.getGenus().getId()));
         model.addAttribute("owners", ownerService.findAll());
+        model.addAttribute("maxDate", LocalDate.now());
         return "pet/editForm";
     }
 
@@ -78,8 +86,12 @@ public class PetController {
                          BindingResult result, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            model.addAttribute("genus", petService.getGenusAsHashMap());
+            if (pet.getGenus() != null) {
+                model.addAttribute("species", speciesService.getAllByGenusId(pet.getGenus().getId()));
+            }
+            model.addAttribute("genera", genusService.findAll());
             model.addAttribute("owners", ownerService.findAll());
+            model.addAttribute("maxDate", LocalDate.now());
             return "pet/editForm";
         }
         model.addAttribute("pet", petService.update(id, pet));
@@ -89,11 +101,9 @@ public class PetController {
 
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable(name = "id") Long id, @RequestParam(name = "ownerId", required = false) Long ownerId, RedirectAttributes redirectAttributes) {
-        //PetDto deletedPetDto = petService.deleteById(id);
         Pet pet = petService.deleteById(id);
         redirectAttributes.addFlashAttribute("message", "Kayıt Silindi => İsim: " +
-                pet.getName() + " | Cins: " +
-                pet.getGenus().getValue());
+                pet.getName() + " | Cins: ");
 
         if (ownerId != null) {
             return "redirect:/owners/" + ownerId;
@@ -104,11 +114,9 @@ public class PetController {
     @GetMapping
     public String getAllByPagination(Model model, @RequestParam(name = "page", defaultValue = "1", required = false) int pageNumber) {
 
-        //Page<PetDto> page = petService.getAllPageable(pageNumber);
         Page<Pet> page = petService.getAllPageable(pageNumber);
         int totalPages = page.getTotalPages();
         long totalItems = page.getTotalElements();
-        //List<PetDto> petList = page.getContent();
         List<Pet> petList = page.getContent();
 
         model.addAttribute("currentPage", pageNumber);
@@ -127,8 +135,6 @@ public class PetController {
         }
 
         keyword = keyword.toLowerCase();
-
-        //Page<PetDto> page = petService.findAllWithPartOfNameOrOwnerFullName(keyword, pageNumber);
         Page<Pet> page = petService.findAllWithPartOfNameOrOwnerFullName(keyword, pageNumber);
 
         int totalPages = page.getTotalPages();
@@ -137,8 +143,6 @@ public class PetController {
         }
 
         long totalItems = page.getTotalElements();
-
-        //List<PetDto> petList = page.getContent();
         List<Pet> petList = page.getContent();
 
         model.addAttribute("currentPage", pageNumber);
