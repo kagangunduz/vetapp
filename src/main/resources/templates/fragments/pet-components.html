@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="profile-card">
+    <div class="card text-dark bg-light" style="min-height: 450px;">
+        <div class="card-body">
+            <h5 class="card-title text-capitalize">[[${pet.name}]]</h5>
+            <hr>
+            <p class="card-text text-capitalize"><b>Cins:</b>
+                <span th:if="${pet.genus != null}">[[${pet.genus.name}]]</span>
+            </p>
+            <p class="card-text text-capitalize"><b>Tür:</b>
+                <span th:if="${pet.species != null}">[[${pet.species.name}]]</span>
+            </p>
+            <p class="card-text"><b>Yaş Bilgisi: </b> [[${ageInfo}]]</p>
+            <p class="card-text"><b>Doğum Tarihi:</b> [[${#dates.format(pet.birthDate, 'dd/MMM/yyyy')}]]</p>
+            <p class="card-text"><b>Güncellenme Tarihi:</b>
+                [[${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}]]</p>
+            <p class="card-text"><b>Güncellenme Tarihi:</b>
+                [[${#dates.format(pet.updatedAt, 'dd/MMM/yyyy HH:mm')}]]</p>
+            <p class="card-text"><b>Açıklama:</b> [[${pet.description}]]</p>
+        </div>
+        <div class="card-footer text-muted">
+            <div class="row g-2">
+                <div class="col-md-6 d-grid">
+                    <a class="btn btn-danger" th:href="@{/pets/delete/{id}(id=${pet.id})}">
+                        <i class="bi bi-trash3"></i>&nbsp;&nbsp;Sil</a>
+                </div>
+                <div class="col-md-6 d-grid">
+                    <a class="btn btn-warning" th:href="@{/pets/edit/{id}(id=${pet.id})}">
+                        <i class="bi bi-pencil"></i>&nbsp;&nbsp;Düzenle</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="owner-profile-card">
+    <div class="card text-dark bg-light" style="min-height: 450px;">
+        <div class="card-body">
+            <h5 class="card-title">[[${pet.owner.fullName}]]</h5>
+            <hr>
+            <p class="card-text"><b>Telefon:</b> [[${pet.owner.telephoneNumber}]]</p>
+            <p class="card-text"><b>Email:</b> [[${pet.owner.email}]]</p>
+            <p class="card-text"><b>Adres:</b> [[${pet.owner.address}]]</p>
+            <p class="card-text"><b>Kayıt Tarihi:</b> [[${#dates.format(pet.owner.createdAt, 'dd/MMM/yyyy
+                HH:mm')}]]</p>
+            <p class="card-text"><b>Güncellenme Tarihi:</b> [[${#dates.format(pet.owner.updatedAt, 'dd/MMM/yyyy
+                HH:mm')}]]</p>
+        </div>
+        <div class="card-footer text-muted">
+            <div class="row g-2">
+                <div class="col-lg-4 d-grid">
+                    <a class="btn  btn-danger" th:href="@{/owners/delete/{id}(id=${pet.owner.id})}">
+                        <i class="bi bi-trash3"></i>&nbsp;&nbsp;Sil</a>
+                </div>
+                <div class="col-lg-4 d-grid">
+                    <a class="btn btn-warning" th:href="@{/owners/edit/{id}(id=${pet.owner.id})}">
+                        <i class="bi bi-pencil"></i>&nbsp;&nbsp;Düzenle</a>
+                </div>
+                <div class="col-lg-4 d-grid">
+                    <a class="btn btn-primary" th:href="@{/owners/{id}(id=${pet.owner.id})}">
+                        <i class="bi bi-person-square"></i>&nbsp;&nbsp;Göster</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="owner-pet-table">
+    <table class="table table-light table-bordered table-hover mt-3">
+        <thead>
+        <tr>
+            <th>İsim</th>
+            <th>Cins</th>
+            <th>Tür</th>
+            <th>Doğum Tarihi</th>
+            <th>Kayıt/Güncel. Tarihi</th>
+            <th>İşlem</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pet : ${owner.pets}">
+            <td>[[${pet.name}]]</span></td>
+            <td th:if="${pet.genus}" class="text-capitalize">[[${pet.genus.name}]]</span></td>
+            <td th:unless="${pet.genus}"></span></td>
+            <td th:if="${pet.species}" class="text-capitalize">[[${pet.species.name}]]</span></td>
+            <td th:unless="${pet.species}"></span></td>
+            <td>[[${#dates.format(pet.birthDate, 'dd/MMM/yyyy')}]]</td>
+            <td>[[${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}]]<br>[[${#dates.format(pet.updatedAt,
+                'dd/MMM/yyyy HH:mm')}]]
+            </td>
+            <td>
+                <div class="row g-2">
+                    <div class="col-lg-4 d-grid">
+                        <a class="btn btn-outline-success" th:href="@{/pets/{id}(id=${pet.id})}">Göster</a>
+                    </div>
+                    <div class="col-lg-4 d-grid">
+                        <a class="btn btn-outline-warning" th:href="@{/pets/edit/{id}(id=${pet.id})}">Düzenle</a>
+                    </div>
+                    <div class="col-lg-4 d-grid">
+                        <a class="btn btn-outline-danger"
+                           th:href="@{'/pets/delete/' + ${pet.id} + '?ownerId=' + ${owner.id}}">Sil</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:fragment="pet-table">
+    <table class="table table-light table-bordered table-hover mt-3">
+        <thead>
+        <tr>
+            <th scope="col">İsim</th>
+            <th scope="col">Cins</th>
+            <th scope="col">Tür</th>
+            <th scope="col">Sahibi</th>
+            <th scope="col">Yaş Bilgisi</th>
+            <th scope="col">Doğum Tarihi</th>
+            <th scope="col">Kayıt/Güncel. Tarihi</th>
+            <th scope="col">İşlem</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pet : ${pets}">
+            <td class="text-capitalize">[[${pet.name}]]</span></td>
+            <td th:if="${pet.genus}">[[${pet.genus.name}]]</td>
+            <td th:unless="${pet.genus}"></td>
+            <td th:if="${pet.species}">[[${pet.species.name}]]</td>
+            <td th:unless="${pet.species}"></td>
+            <td th:if="${pet.owner != null}">[[${pet.owner.fullName}]]</td>
+            <td th:unless="${pet.owner != null}"></td>
+            <td th:text="${@petServiceImpl.getAgeInfo(pet.id)}"></td>
+            <td>[[${#dates.format(pet.birthDate, 'dd/MMM/yyyy')}]]</td>
+            <td>[[${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}]]<br>[[${#dates.format(pet.updatedAt,
+                'dd/MMM/yyyy HH:mm')}]]
+            </td>
+            <td>
+                <div class="row g-2">
+                    <div class="col-lg-4 d-grid">
+                        <a class="btn btn-outline-success" th:href="@{/pets/{id}(id=${pet.id})}">Göster</a>
+                    </div>
+                    <div class="col-lg-4 d-grid">
+                        <a class="btn btn-outline-warning" th:href="@{/pets/edit/{id}(id=${pet.id})}">Düzenle</a>
+                    </div>
+                    <div class="col-lg-4 d-grid">
+                        <a class="btn btn-outline-danger" th:href="@{/pets/delete/{id}(id=${pet.id})}">Sil</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:fragment="page-navigation">
+    <nav>
+        <ul class="pagination justify-content-end">
+            <li class="page-item" th:classappend="${currentPage == 1 } ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/pets(page=${currentPage - 1})}">Önceki Sayfa</a>
+            </li>
+            <li class="page-item" th:each="i: ${#numbers.sequence(1, totalPages)}"
+                th:classappend="${currentPage == i} ? 'active' : ''" aria-current="page">
+                <span th:if="${currentPage == i}">
+                    <span class="page-link">[[${i}]]</span>
+                </span>
+                <span th:unless="${currentPage == i}">
+                    <a class="page-link" th:href="@{/pets(page=${i})}">[[${i}]]</a>
+                </span>
+            </li>
+            <li class="page-item"
+                th:classappend="(${totalPages == 1 || totalPages == currentPage }) ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/pets(page=${currentPage + 1})}">Sonraki Sayfa</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div th:fragment="search-page-navigation">
+    <nav>
+        <ul class="pagination justify-content-end">
+            <li class="page-item" th:classappend="${currentPage == 1 } ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/pets/search(keyword=${keyword},page=${currentPage - 1})}">Önceki
+                    Sayfa</a>
+            </li>
+            <li class="page-item" th:each="i: ${#numbers.sequence(1, totalPages)}"
+                th:classappend="${currentPage == i} ? 'active' : ''" aria-current="page">
+                <span th:if="${currentPage == i}">
+                    <span class="page-link">[[${i}]]</span>
+                </span>
+                <span th:unless="${currentPage == i}">
+                    <a class="page-link" th:href="@{/pets/search(keyword=${keyword},page=${i})}">[[${i}]]</a>
+                </span>
+            </li>
+            <li class="page-item"
+                th:classappend="(${totalPages == 1 || totalPages == currentPage }) ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/pets/search(keyword=${keyword},page=${currentPage + 1})}">Sonraki
+                    Sayfa</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+</body>
+</html>
