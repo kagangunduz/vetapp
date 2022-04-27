@@ -30,10 +30,9 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public Pet findById(Long id) {
-        Pet pet = petRepository.findById(id).orElseThrow(
+        return petRepository.findById(id).orElseThrow(
                 () -> new PetNotFoundException("Kayıt bulunumadı. Id: " + id)
         );
-        return pet;
     }
 
     @Override

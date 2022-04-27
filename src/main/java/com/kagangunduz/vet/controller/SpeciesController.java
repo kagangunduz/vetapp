@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -82,12 +81,7 @@ public class SpeciesController {
     @PostMapping("/get-species")
     @ResponseBody
     public List<Species> getSpecies(@ModelAttribute("genusId") Long genusId) {
-        if (!genusId.equals(null)) {
-            List<Species> speciesList = speciesService.getAllByGenusId(genusId);
-            return speciesList;
-        }
-        return new ArrayList<>();
+        return speciesService.getAllByGenusId(genusId);
     }
-
 
 }

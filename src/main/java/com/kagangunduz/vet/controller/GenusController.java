@@ -2,7 +2,6 @@ package com.kagangunduz.vet.controller;
 
 import com.kagangunduz.vet.entity.Genus;
 import com.kagangunduz.vet.service.impl.GenusServiceImpl;
-import com.kagangunduz.vet.service.impl.SpeciesServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +18,6 @@ import java.util.List;
 public class GenusController {
 
     private final GenusServiceImpl genusService;
-    private final SpeciesServiceImpl speciesService;
 
     @GetMapping("/add")
     public String showAddForm(Model model) {

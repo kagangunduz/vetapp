@@ -3,7 +3,6 @@ package com.kagangunduz.vet.service;
 import com.kagangunduz.vet.entity.Pet;
 import org.springframework.data.domain.Page;
 
-
 public interface PetService {
 
     Pet save(Pet pet);

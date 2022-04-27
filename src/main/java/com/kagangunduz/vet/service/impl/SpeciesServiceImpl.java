@@ -25,10 +25,9 @@ public class SpeciesServiceImpl implements SpeciesService {
 
     @Override
     public Species findById(Long id) {
-        Species species = speciesRepository.findById(id).orElseThrow(
+        return speciesRepository.findById(id).orElseThrow(
                 () -> new SpeciesNotFoundException("Kayıt bulunumadı. Id: " + id)
         );
-        return species;
     }
 
     @Override

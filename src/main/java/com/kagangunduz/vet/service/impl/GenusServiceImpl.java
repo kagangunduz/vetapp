@@ -26,10 +26,9 @@ public class GenusServiceImpl implements GenusService {
 
     @Override
     public Genus findById(Long id) {
-        Genus genus = genusRepository.findById(id).orElseThrow(
+        return genusRepository.findById(id).orElseThrow(
                 () -> new GenusNotFoundException("Kayıt bulunumadı. Id: " + id)
         );
-        return genus;
     }
 
     @Override

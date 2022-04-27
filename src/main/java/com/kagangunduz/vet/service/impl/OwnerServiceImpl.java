@@ -28,10 +28,9 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     public Owner findById(Long id) {
-        Owner owner = ownerRepository.findById(id).orElseThrow(
+        return ownerRepository.findById(id).orElseThrow(
                 () -> new OwnerNotFoundException("Kayıt bulunumadı. Id: " + id)
         );
-        return owner;
     }
 
     @Override

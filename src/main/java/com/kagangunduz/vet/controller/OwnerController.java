@@ -44,7 +44,7 @@ public class OwnerController {
 
     @GetMapping("/search")
     public String findAllWithPartOfFullName(Model model,
-                                            @RequestParam(name = "keyword", required = true) String keyword,
+                                            @RequestParam(name = "keyword") String keyword,
                                             @RequestParam(name = "page", defaultValue = "1", required = false) int pageNumber) {
         if (keyword.equals("")) {
             return "redirect:/owners";
