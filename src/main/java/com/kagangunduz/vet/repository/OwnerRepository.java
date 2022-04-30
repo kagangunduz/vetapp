@@ -6,9 +6,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface OwnerRepository extends JpaRepository<Owner, Long> {
 
     @Query("select o from Owner o where lower(o.fullName) like concat('%', :keyword, '%')")
     Page<Owner> findAllWithPartOfFullName(String keyword, Pageable pageable);
+
+    List<Owner> getAllByEmail(String email);
 
 }

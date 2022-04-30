@@ -28,16 +28,21 @@ public class Owner extends BaseEntity {
     @NotEmpty(message = "Telefon alanı boş olamaz.")
     private String telephoneNumber;
 
-
+    @Column(unique = true)
     @Email(message = "Email adresi geçerli değil.")
     @NotEmpty(message = "Email alanı boş olamaz.")
     private String email;
 
     private String address;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @OrderBy("id DESC")
     private List<Pet> pets;
 
+
+    @PreRemove
+    private void preRemove() {
+        pets.forEach(pet -> pet.setOwner(null));
+    }
 
 }

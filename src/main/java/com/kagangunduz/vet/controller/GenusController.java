@@ -1,11 +1,13 @@
 package com.kagangunduz.vet.controller;
 
 import com.kagangunduz.vet.entity.Genus;
+import com.kagangunduz.vet.exception.RecordAlreadyExistException;
 import com.kagangunduz.vet.service.impl.GenusServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -32,9 +34,16 @@ public class GenusController {
             return "genus/addForm";
         }
 
-        genusService.save(genus);
-        redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı.");
-        return "redirect:/genera";
+        try {
+            genusService.save(genus);
+            redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı.");
+            return "redirect:/genera";
+        } catch (RecordAlreadyExistException exception) {
+            ObjectError error = new ObjectError("name", "Cins adı zaten kayıtlı.");
+            result.addError(error);
+            return "genus/addForm";
+        }
+
     }
 
     @GetMapping("/{id}")
@@ -59,14 +68,27 @@ public class GenusController {
         if (result.hasErrors()) {
             return "genus/editForm";
         }
-        model.addAttribute("genus", genusService.update(id, genus));
-        redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı");
-        return "redirect:/genera/" + id;
+
+        try {
+            model.addAttribute("genus", genusService.update(id, genus));
+            redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı");
+            return "redirect:/genera/" + id;
+        } catch (RecordAlreadyExistException exception) {
+            ObjectError error = new ObjectError("name", "Cins adı zaten kayıtlı.");
+            result.addError(error);
+            return "genus/editForm";
+        }
     }
 
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
-        Genus genus = genusService.deleteById(id);
+        Genus genus = genusService.findById(id);
+        System.out.println(genus.getSpecies());
+        if (genus.getSpecies().size() > 0) {
+            redirectAttributes.addFlashAttribute("message", "Öncelikle cinse kayıtlı türleri silmelisiniz.");
+            return "redirect:/genera/" + genus.getId();
+        }
+        genusService.deleteById(genus.getId());
         redirectAttributes.addFlashAttribute("message", "Kayıt Silindi => " + genus.getName());
         return "redirect:/genera";
     }

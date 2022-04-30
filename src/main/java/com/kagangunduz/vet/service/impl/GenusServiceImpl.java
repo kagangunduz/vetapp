@@ -2,6 +2,7 @@ package com.kagangunduz.vet.service.impl;
 
 import com.kagangunduz.vet.entity.Genus;
 import com.kagangunduz.vet.exception.GenusNotFoundException;
+import com.kagangunduz.vet.exception.RecordAlreadyExistException;
 import com.kagangunduz.vet.repository.GenusRepository;
 import com.kagangunduz.vet.service.GenusService;
 import lombok.AllArgsConstructor;
@@ -20,8 +21,13 @@ public class GenusServiceImpl implements GenusService {
 
     @Override
     public Genus save(Genus genus) {
-        genus.setName(genus.getName().toLowerCase());
-        return genusRepository.save(genus);
+        try {
+            genus.setName(genus.getName().toLowerCase());
+            return genusRepository.save(genus);
+        } catch (Exception exception) {
+            throw new RecordAlreadyExistException("Cins adı zaten kayıtlı.");
+        }
+
     }
 
     @Override
@@ -35,9 +41,17 @@ public class GenusServiceImpl implements GenusService {
     public Genus update(Long id, Genus genus) {
         Optional<Genus> optionalGenus = genusRepository.findById(id);
         if (optionalGenus.isPresent()) {
+            genus.setName(genus.getName().toLowerCase());
             Genus genusDb = optionalGenus.get();
-            genusDb.setName(genus.getName().toLowerCase());
-            return genusRepository.save(genus);
+            List<Genus> getAllByNameList = genusRepository.getAllByName(genus.getName());
+
+            if (getAllByNameList.size() > 0 && !genus.getName().equals(genusDb.getName())) {
+                throw new RecordAlreadyExistException("Cins adı zaten mevcut");
+            } else {
+                genusDb.setName(genus.getName());
+                return genusRepository.save(genusDb);
+            }
+
         } else {
             throw new EntityNotFoundException("Kayıt bulunamadı. Id: " + id);
         }

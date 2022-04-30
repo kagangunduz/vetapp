@@ -9,7 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 
@@ -36,13 +35,11 @@ public class Pet extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genus_id")
-    @NotNull(message = "Cins alanı boş olamaz.")
     @JsonBackReference
     private Genus genus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "species_id")
-    @NotNull(message = "Tür alanı boş olamaz.")
     @JsonBackReference
     private Species species;
 

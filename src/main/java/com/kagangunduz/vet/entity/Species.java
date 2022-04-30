@@ -9,7 +9,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,14 +30,16 @@ public class Species implements Serializable {
     @JsonBackReference
     private Genus genus;
 
-    @OneToMany(mappedBy = "species", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Pet> pets = new ArrayList<>();
+    @OneToMany(mappedBy = "species", fetch = FetchType.LAZY)
+    private List<Pet> pets;
+
+    @PreRemove
+    private void preRemove() {
+        pets.forEach(pet -> pet.setSpecies(null));
+    }
 
     @Override
     public String toString() {
-        return "Species{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return "Species{" + "id=" + id + ", name='" + name + '\'' + '}';
     }
 }

@@ -2,6 +2,7 @@ package com.kagangunduz.vet.service.impl;
 
 import com.kagangunduz.vet.entity.Owner;
 import com.kagangunduz.vet.exception.OwnerNotFoundException;
+import com.kagangunduz.vet.exception.RecordAlreadyExistException;
 import com.kagangunduz.vet.repository.OwnerRepository;
 import com.kagangunduz.vet.service.OwnerService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,12 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     public Owner save(Owner owner) {
-        return ownerRepository.save(owner);
+        try {
+            owner.setFullName(owner.getFullName().toLowerCase());
+            return ownerRepository.save(owner);
+        } catch (Exception exception) {
+            throw new RecordAlreadyExistException("Email adresi zaten kayıtlı.");
+        }
     }
 
     @Override
@@ -36,14 +42,21 @@ public class OwnerServiceImpl implements OwnerService {
     @Override
     public Owner update(Long id, Owner owner) {
         Optional<Owner> optionalOwner = ownerRepository.findById(id);
+
         if (optionalOwner.isPresent()) {
             Owner ownerDb = optionalOwner.get();
-            ownerDb.setFullName(owner.getFullName());
-            ownerDb.setTelephoneNumber(owner.getTelephoneNumber());
-            ownerDb.setEmail(owner.getEmail());
-            ownerDb.setAddress(owner.getAddress());
-            ownerDb.setPets(owner.getPets());
-            return ownerRepository.save(owner);
+            List<Owner> getAllByEmailList = ownerRepository.getAllByEmail(owner.getEmail());
+
+            if (getAllByEmailList.size() > 0 && !owner.getEmail().equals(ownerDb.getEmail())) {
+                throw new RecordAlreadyExistException("Cins adı zaten mevcut");
+            } else {
+                ownerDb.setFullName(owner.getFullName().toLowerCase());
+                ownerDb.setTelephoneNumber(owner.getTelephoneNumber());
+                ownerDb.setEmail(owner.getEmail());
+                ownerDb.setAddress(owner.getAddress());
+                ownerDb.setPets(owner.getPets());
+                return ownerRepository.save(owner);
+            }
         } else {
             throw new EntityNotFoundException("Kayıt bulunamadı. Id: " + id);
         }

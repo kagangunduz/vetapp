@@ -18,14 +18,23 @@ public class Genus implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotEmpty
+    @Column(name = "name", unique = true)
+    @NotEmpty(message = "Ad alanı boş olamaz")
     private String name;
 
-    @OneToMany(mappedBy = "genus", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "genus", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private List<Pet> pets;
 
-    @OneToMany(mappedBy = "genus", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "genus", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private List<Species> species;
+
+    @PreRemove
+    private void preRemove() {
+        pets.forEach((pet) -> {
+            pet.setGenus(null);
+            pet.setSpecies(null);
+        });
+    }
 
     @Override
     public String toString() {

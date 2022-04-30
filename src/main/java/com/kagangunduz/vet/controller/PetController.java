@@ -75,7 +75,9 @@ public class PetController {
         Pet pet = petService.findById(id);
         model.addAttribute("pet", pet);
         model.addAttribute("genera", genusService.findAll());
-        model.addAttribute("species", speciesService.getAllByGenusId(pet.getGenus().getId()));
+        if (pet.getGenus() != null) {
+            model.addAttribute("species", speciesService.getAllByGenusId(pet.getGenus().getId()));
+        }
         model.addAttribute("owners", ownerService.findAll());
         model.addAttribute("maxDate", LocalDate.now());
         return "pet/editForm";
