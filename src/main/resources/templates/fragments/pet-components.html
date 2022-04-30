@@ -39,7 +39,7 @@
 <div th:fragment="owner-profile-card">
     <div class="card text-dark bg-light" style="min-height: 450px;">
         <div class="card-body">
-            <h5 class="card-title">[[${pet.owner.fullName}]]</h5>
+            <h5 class="card-title text-capitalize">[[${pet.owner.fullName}]]</h5>
             <hr>
             <p class="card-text"><b>Telefon:</b> [[${pet.owner.telephoneNumber}]]</p>
             <p class="card-text"><b>Email:</b> [[${pet.owner.email}]]</p>
@@ -82,7 +82,7 @@
         </thead>
         <tbody>
         <tr th:each="pet : ${owner.pets}">
-            <td>[[${pet.name}]]</span></td>
+            <td class="text-capitalize">[[${pet.name}]]</span></td>
             <td th:if="${pet.genus}" class="text-capitalize">[[${pet.genus.name}]]</span></td>
             <td th:unless="${pet.genus}"></span></td>
             <td th:if="${pet.species}" class="text-capitalize">[[${pet.species.name}]]</span></td>

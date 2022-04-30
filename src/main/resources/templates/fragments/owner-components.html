@@ -5,7 +5,7 @@
 <div th:fragment="profile-card">
     <div class="card text-dark bg-light mt-2">
         <div class="card-body">
-            <h5 class="card-title">[[${owner.fullName}]]</h5>
+            <h5 class="card-title text-capitalize">[[${owner.fullName}]]</h5>
             <hr>
             <p class="card-text"><b>Telefon:</b> [[${owner.telephoneNumber}]]</p>
             <p class="card-text"><b>Email:</b> [[${owner.email}]]</p>
@@ -29,10 +29,6 @@
         </div>
     </div>
 </div>
-
-
-
-
 
 <div th:fragment="owner-table">
     <table class="table table-light table-bordered table-hover mt-3 table-responsive">

@@ -40,7 +40,7 @@
                     <div class="mb-3">
                         <label for="genus" class="form-label">Cins</label>
                         <select class="form-select text-capitalize" th:field="*{genus}" id="genus">
-                            <option th:selected="${pet.genus==null}" value="">Lütfen seçim yapın...</option>
+                            <option th:selected="${pet.genus==null}" value="">Lütfen seçim yapın</option>
                             <th:block th:each="genus : ${genera}">
                                 <option th:value="${genus.id}" th:text="${genus.name}"></option>
                             </th:block>
@@ -50,6 +50,7 @@
                     <div class="mb-3">
                         <label for="species" class="form-label">Tür</label>
                         <select class="form-select text-capitalize" th:field="*{species}" id="species">
+                            <option value="">Lütfen cins seçimi yapın</option>
                             <th:block th:each="s : ${species}">
                                 <option th:value="${s.id}" th:text="${s.name}"></option>
                             </th:block>
@@ -59,7 +60,7 @@
                     <div class="mb-3">
                         <label for="owner" class="form-label">Hayvan Sahibi</label>
                         <select class="form-select text-capitalize" th:field="*{owner}" id="owner">
-                            <option th:selected="${pet.owner==null}" value="">Lütfen seçim yapınız.</option>
+                            <option th:selected="${pet.owner==null}" value="">Lütfen seçim yapın</option>
                             <th:block th:each="owner : ${owners}">
                                 <option th:value="${owner.id}" th:text="${owner.fullName}"></option>
                             </th:block>
@@ -91,11 +92,17 @@
                         success: function (response) {
                             console.log(response);
                             let len = response.length;
+                            console.log("species length => ", len);
                             $("#species").empty();
-                            for (let i = 0; i < len; i++) {
-                                let id = response[i]['id'];
-                                let name = response[i]['name'];
-                                $("#species").append("<option value=" + id + ">" + name + "</option>");
+                            if (len > 0) {
+                                for (let i = 0; i < len; i++) {
+                                    let id = response[i]['id'];
+                                    let name = response[i]['name'];
+                                    $("#species").append("<option class='text-capitalize' value=" + id + ">" + name + "</option>");
+                                }
+                            } else {
+                                $("#species").empty();
+                                $("#species").append("<option value=''>Lütfen tür ekleyin</option>");
                             }
                         }
                     });
@@ -104,6 +111,32 @@
                     $("#species").append("<option value=''>Lütfen cins seçimi yapın</option>");
                 }
             });
+
+            if ($("#genus").val > 0) {
+                $.ajax({
+                    url: '/species/get-species',
+                    type: 'POST',
+                    data: {genusId: genusId},
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
+                        let len = response.length;
+                        console.log("species length => ", len);
+                        $("#species").empty();
+                        if (len > 0) {
+                            for (let i = 0; i < len; i++) {
+                                let id = response[i]['id'];
+                                let name = response[i]['name'];
+                                $("#species").append("<option class='text-capitalize' value=" + id + ">" + name + "</option>");
+                            }
+                        } else {
+                            $("#species").empty();
+                            $("#species").append("<option value=''>Lütfen tür ekleyin</option>");
+                        }
+                    }
+                });
+            }
+
         }
     )
 </script>

@@ -37,10 +37,12 @@
     <div th:replace="fragments/components :: message"></div>
 
     <div th:if="(not ${pets.isEmpty()})">
-        <div th:replace="fragments/pet-components :: pet-table"></div>
-    </div>
 
-    <div th:replace="fragments/pet-components :: page-navigation"></div>
+        <div th:replace="fragments/pet-components :: pet-table"></div>
+
+        <div th:replace="fragments/pet-components :: page-navigation"></div>
+
+    </div>
 
 </div>
 

@@ -19,7 +19,7 @@
                     <div th:replace="fragments/components :: form-error"></div>
                     <div class="mb-3">
                         <label for="name" class="form-label">İsim</label>
-                        <input type="text" class="form-control" th:field="*{name}" id="name">
+                        <input type="text" class="form-control text-capitalize" th:field="*{name}" id="name">
                     </div>
                     <div class="mb-3">
                         <label for="birthDate" class="form-label">Doğum Tarihi</label>
@@ -28,17 +28,17 @@
                     </div>
                     <div class="mb-3">
                         <label for="genus" class="form-label">Cins</label>
-                        <select class="form-select" th:field="*{genus}" id="genus">
-                            <option value="">Lütfen seçim yapın...</option>
+                        <select class="form-select text-capitalize" th:field="*{genus}" id="genus">
+                            <option value="">Lütfen seçim yapın</option>
                             <option class="text-capitalize" th:each="genus : ${genera}" th:value="${genus.id}"
-                                     th:text="${genus.name}"></option>
+                                    th:text="${genus.name}"></option>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label for="species" class="form-label">Tür</label>
                         <select class="form-select text-capitalize" th:field="*{species}" id="species">
-                            <option value="">Lütfen seçim yapınız</option>
+                            <option value="">Lütfen seçim yapın</option>
                             <th:block th:each="s : ${species}">
                                 <option th:value="${s.id}" th:text="${s.name}"></option>
                             </th:block>
@@ -48,7 +48,7 @@
                     <div class="mb-3">
                         <label for="owner" class="form-label">Hayvan Sahibi</label>
                         <select class="form-select text-capitalize" th:field="*{owner}" id="owner">
-                            <option value="">Lütfen seçim yapın...</option>
+                            <option value="">Lütfen seçim yapın</option>
                             <option th:each="o : ${owners}" th:value="${o.id}" th:text="${o.fullName}"
                                     th:selected="${ownerId == o.id}"></option>
                         </select>
@@ -80,11 +80,15 @@
                             console.log(response);
                             let len = response.length;
                             $("#species").empty();
-                            for (let i = 0; i < len; i++) {
-                                let id = response[i]['id'];
-                                let name = response[i]['name'];
-                                $("#species").append("<option class='text-capitalize' value=" + id + ">" + name +
-                                    "</option>");
+                            if (len > 0) {
+                                for (let i = 0; i < len; i++) {
+                                    let id = response[i]['id'];
+                                    let name = response[i]['name'];
+                                    $("#species").append("<option class='text-capitalize' value=" + id + ">" + name + "</option>");
+                                }
+                            } else {
+                                $("#species").empty();
+                                $("#species").append("<option value=''>Lütfen tür ekleyin</option>");
                             }
                         }
                     });
