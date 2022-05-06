@@ -19,7 +19,8 @@
                     <div th:replace="fragments/components :: form-error"></div>
                     <div class="mb-3">
                         <label for="name" class="form-label">İsim</label>
-                        <input type="text" class="form-control text-capitalize" th:field="*{name}" id="name">
+                        <input type="text" class="text-capitalize form-control" th:field="*{name}"
+                               id="name" autofocus>
                     </div>
                     <div class="mb-3">
                         <label for="birthDate" class="form-label">Doğum Tarihi</label>

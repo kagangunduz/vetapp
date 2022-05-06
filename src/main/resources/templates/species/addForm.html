@@ -19,14 +19,14 @@
                     <div th:replace="fragments/components :: form-error"></div>
                     <div class="mb-3">
                         <label for="name" class="form-label">Tür Adı</label>
-                        <input type="text" class="form-control text-capitalize" th:field="*{name}" id="name">
+                        <input type="text" class="form-control text-capitalize" th:field="*{name}" id="name" autofocus>
                     </div>
                     <div class="mb-3">
                         <label for="genus" class="form-label">Cins</label>
                         <select class="form-select text-capitalize" name="genus" id="genus">
                             <option value="">Lütfen seçim yapın...</option>
                             <option th:each="genus : ${genera}" th:value="${genus.id}"
-                                     th:text="${genus.name}"></option>
+                                    th:text="${genus.name}"></option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-success">Kaydet</button>

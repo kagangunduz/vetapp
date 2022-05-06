@@ -15,7 +15,7 @@
             </p>
             <p class="card-text"><b>Yaş Bilgisi: </b> [[${ageInfo}]]</p>
             <p class="card-text"><b>Doğum Tarihi:</b> [[${#dates.format(pet.birthDate, 'dd/MMM/yyyy')}]]</p>
-            <p class="card-text"><b>Güncellenme Tarihi:</b>
+            <p class="card-text"><b>Kayıt Tarihi:</b>
                 [[${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}]]</p>
             <p class="card-text"><b>Güncellenme Tarihi:</b>
                 [[${#dates.format(pet.updatedAt, 'dd/MMM/yyyy HH:mm')}]]</p>
@@ -131,7 +131,7 @@
             <td th:unless="${pet.genus}"></td>
             <td th:if="${pet.species}">[[${pet.species.name}]]</td>
             <td th:unless="${pet.species}"></td>
-            <td th:if="${pet.owner != null}">[[${pet.owner.fullName}]]</td>
+            <td th:if="${pet.owner != null}" class="text-capitalize">[[${pet.owner.fullName}]]</td>
             <td th:unless="${pet.owner != null}"></td>
             <td th:text="${@petServiceImpl.getAgeInfo(pet.id)}"></td>
             <td>[[${#dates.format(pet.birthDate, 'dd/MMM/yyyy')}]]</td>

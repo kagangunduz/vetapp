@@ -11,16 +11,18 @@
 
 <div class="container mt-5">
     <div class="col-md-6 mx-auto">
-        <div class="d-flex justify-content-between">
-            <div>
-                <h3>Bilgileri Düzenle</h3>
-            </div>
-            <div>
-                <a class="btn btn-primary" th:href="@{/pets/{id}(id=${pet.id})}">Hayvan Sayfasına Dön</a>
-            </div>
+        <div>
+            <h3>Bilgileri Düzenle</h3>
         </div>
         <hr>
-
+        <div class="d-flex justify-content-between mt-3 mb-3">
+            <div th:if="${pet.owner != null}">
+                <a class="btn btn-primary" th:href="@{/owners/{id}(id=${pet.owner.id})}">Hayvan Sahibi Profiline Dön</a>
+            </div>
+            <div>
+                <a class="btn btn-primary" th:href="@{/pets/{id}(id=${pet.id})}">Hayvan Profiline Dön</a>
+            </div>
+        </div>
         <div th:replace="fragments/components :: message"></div>
 
         <div class="card bg-light">
@@ -29,7 +31,7 @@
                     <div th:replace="fragments/components :: form-error"></div>
                     <div class="mb-3">
                         <label for="name" class="form-label">İsim</label>
-                        <input type="text" class="form-control" th:field="*{name}" id="name">
+                        <input type="text" class="form-control" th:field="*{name}" id="name" autofocus>
                     </div>
                     <div class="mb-3">
                         <label for="birthDate" class="form-label">Doğum Tarihi</label>

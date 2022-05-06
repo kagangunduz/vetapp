@@ -32,7 +32,20 @@
         </div>
     </div>
 
+    <h4 class="mt-5">Kayıtlı Türler</h4>
+    <hr>
+    <div class="d-flex justify-content-between">
+        <div>
+            <span class="badge bg-warning">Toplam Kayıt: [[${genus.species.size()}]]</span>
+        </div>
+        <div>
+            <a class="btn btn-primary" th:href="@{/species/add}">
+                <i class="bi bi-plus-lg"></i>&nbsp;&nbsp;Yeni Tür Ekle
+            </a>
+        </div>
+    </div>
     <div th:if="(not ${genus.species.isEmpty()})">
+
         <table class="table table-light table-bordered table-hover mt-3">
             <thead>
             <tr>
@@ -42,7 +55,7 @@
             </thead>
             <tbody>
             <tr th:each="s : ${genus.species}">
-                <td>[[${s.name}]]</td>
+                <td class="text-capitalize">[[${s.name}]]</td>
                 <td>
                     <div class="row g-2">
                         <div class="col-lg-6 d-grid">
@@ -50,7 +63,7 @@
                         </div>
                         <div class="col-lg-6 d-grid">
                             <a class="btn btn-outline-danger"
-                               th:href="@{'/species/delete/' + ${s.id}}">Sil</a>
+                               th:href="@{'/species/delete/' + ${s.id} + '?genusId=' + ${genus.id}}">Sil</a>
                         </div>
                     </div>
                 </td>
