@@ -41,7 +41,7 @@ public class OwnerController {
             redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı.");
             return "redirect:/owners/" + ownerDb.getId();
         } catch (RecordAlreadyExistException exception) {
-            ObjectError error = new ObjectError("email","Email adresi zaten kayıtlı.");
+            ObjectError error = new ObjectError("email",exception.getMessage());
             result.addError(error);
             return "owner/addForm";
         }

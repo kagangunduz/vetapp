@@ -83,9 +83,10 @@ public class GenusController {
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
         Genus genus = genusService.findById(id);
-        System.out.println(genus.getSpecies());
+
         if (genus.getSpecies().size() > 0) {
-            redirectAttributes.addFlashAttribute("message", "Öncelikle cinse kayıtlı türleri silmelisiniz.");
+            redirectAttributes.addFlashAttribute("message",
+                    "Öncelikle " + genus.getName() +" cinsine kayıtlı türleri silmelisiniz.");
             return "redirect:/genera/" + genus.getId();
         }
         genusService.deleteById(genus.getId());

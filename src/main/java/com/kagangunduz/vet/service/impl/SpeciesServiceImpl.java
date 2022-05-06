@@ -1,6 +1,7 @@
 package com.kagangunduz.vet.service.impl;
 
 import com.kagangunduz.vet.entity.Species;
+import com.kagangunduz.vet.exception.RecordAlreadyExistException;
 import com.kagangunduz.vet.exception.SpeciesNotFoundException;
 import com.kagangunduz.vet.repository.SpeciesRepository;
 import com.kagangunduz.vet.service.SpeciesService;
@@ -20,7 +21,11 @@ public class SpeciesServiceImpl implements SpeciesService {
 
     @Override
     public Species save(Species species) {
-        return speciesRepository.save(species);
+        try {
+            return speciesRepository.save(species);
+        } catch (Exception exception) {
+            throw new RecordAlreadyExistException("Bu isimde kayıt mevcut. Lütfen farklı bir isim girin.");
+        }
     }
 
     @Override
@@ -37,7 +42,12 @@ public class SpeciesServiceImpl implements SpeciesService {
             Species speciesDb = optionalGenus.get();
             speciesDb.setName(species.getName());
             speciesDb.setGenus(species.getGenus());
-            return speciesRepository.save(speciesDb);
+            try {
+                return speciesRepository.save(speciesDb);
+            } catch (Exception exception) {
+                throw new RecordAlreadyExistException("Bu isimde kayıt mevcut. Lütfen farklı bir isim girin" +
+                        ".");
+            }
         } else {
             throw new SpeciesNotFoundException("Kayıt bulunamadı. Id: " + id);
         }

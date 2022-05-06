@@ -2,6 +2,7 @@ package com.kagangunduz.vet.service.impl;
 
 import com.kagangunduz.vet.entity.Pet;
 import com.kagangunduz.vet.exception.PetNotFoundException;
+import com.kagangunduz.vet.exception.RecordAlreadyExistException;
 import com.kagangunduz.vet.repository.PetRepository;
 import com.kagangunduz.vet.service.PetService;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,11 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public Pet save(Pet pet) {
-        return petRepository.save(pet);
+        try {
+            return petRepository.save(pet);
+        } catch (Exception exception) {
+            throw new RecordAlreadyExistException("Bu isimde kayıt mevcut. Lütfen farklı bir isim girin.");
+        }
     }
 
     @Override
@@ -37,6 +42,7 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public Pet update(Long id, Pet pet) {
+        pet.setName(pet.getName().toLowerCase());
         Optional<Pet> optionalPet = petRepository.findById(id);
         if (optionalPet.isPresent()) {
             Pet petDb = optionalPet.get();
@@ -46,7 +52,11 @@ public class PetServiceImpl implements PetService {
             petDb.setSpecies(pet.getSpecies());
             petDb.setDescription(pet.getDescription());
             petDb.setOwner(pet.getOwner());
-            return petRepository.save(pet);
+            try {
+                return petRepository.save(pet);
+            } catch (Exception exception) {
+                throw new RecordAlreadyExistException("Bu isimde kayıt mevcut. Lütfen farklı bir isim girin.");
+            }
         } else {
             throw new PetNotFoundException("Kayıt bulunamadı. Id: " + id);
         }

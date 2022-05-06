@@ -1,6 +1,7 @@
 package com.kagangunduz.vet.controller;
 
 import com.kagangunduz.vet.entity.Pet;
+import com.kagangunduz.vet.exception.RecordAlreadyExistException;
 import com.kagangunduz.vet.service.impl.GenusServiceImpl;
 import com.kagangunduz.vet.service.impl.OwnerServiceImpl;
 import com.kagangunduz.vet.service.impl.PetServiceImpl;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -53,12 +55,18 @@ public class PetController {
             return "pet/addForm";
         }
 
-        petService.save(pet);
-        redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı.");
-        if (pet.getOwner() != null) {
-            return "redirect:/owners/" + pet.getOwner().getId();
+        try {
+            Pet petDb = petService.save(pet);
+            redirectAttributes.addFlashAttribute("message", "Kayıt Başarılı.");
+            return "redirect:/pets/" + petDb.getId();
+        } catch (RecordAlreadyExistException exception) {
+            ObjectError error = new ObjectError("name", exception.getMessage());
+            result.addError(error);
+            model.addAttribute("genera", genusService.findAll());
+            model.addAttribute("owners", ownerService.findAll());
+            model.addAttribute("maxDate", LocalDate.now());
+            return "pet/addForm";
         }
-        return "redirect:/pets";
     }
 
     @GetMapping("/{id}")
@@ -96,9 +104,20 @@ public class PetController {
             model.addAttribute("maxDate", LocalDate.now());
             return "pet/editForm";
         }
-        model.addAttribute("pet", petService.update(id, pet));
-        redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı.");
-        return "redirect:/pets/" + id;
+
+        try {
+            model.addAttribute("pet", petService.update(id, pet));
+            redirectAttributes.addFlashAttribute("message", "Güncelleme başarılı.");
+            return "redirect:/pets/" + id;
+        } catch (RecordAlreadyExistException exception) {
+            ObjectError objectError = new ObjectError("name", exception.getMessage());
+            result.addError(objectError);
+            model.addAttribute("genera", genusService.findAll());
+            model.addAttribute("owners", ownerService.findAll());
+            model.addAttribute("maxDate", LocalDate.now());
+            return "pet/editForm";
+        }
+
     }
 
     @GetMapping("/delete/{id}")

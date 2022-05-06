@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "genus_id"}))
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,6 +32,7 @@ public class Species implements Serializable {
     private Genus genus;
 
     @OneToMany(mappedBy = "species", fetch = FetchType.LAZY)
+    @OrderBy("id DESC")
     private List<Pet> pets;
 
     @PreRemove

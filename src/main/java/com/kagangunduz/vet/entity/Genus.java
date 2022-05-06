@@ -23,9 +23,11 @@ public class Genus implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "genus", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @OrderBy("id DESC")
     private List<Pet> pets;
 
     @OneToMany(mappedBy = "genus", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @OrderBy("id DESC")
     private List<Species> species;
 
     @PreRemove
