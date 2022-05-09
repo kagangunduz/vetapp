@@ -5,7 +5,8 @@
 ## Açıklama :page_facing_up:
 Spring Boot ve Thymeleaf ile geliştirdiğim web üzerinde çalışan basit bir veteriner klinik uygulaması.
 
-Uygulamada şu anda temel olarak hayvan sahibi, hayvan ve hayvan cinsi/türü yapıları mevcut. Bu yapılar üzerinde aşağıdaki işlemler yapılabilir.
+Uygulamada şu anda temel olarak hayvan sahibi, hayvan, hayvan cinsi ve hayvan türü yapıları mevcut. Bu yapılar üzerinde 
+aşağıdaki işlemler yapılabilir.
 
 - Ekleme
 - Düzenleme
@@ -41,7 +42,6 @@ Ayrıca veritabanı sistemi olarak PostgreSQL kurulumunu yapıyoruz. Daha sonra 
 
 Proje bağımlılıkları yüklendikten sonra proje içerisindeki **application.yml** üzerinden veritabanı ayarlarını yapıyoruz.
 
-Veritabanı ayarlarını yaptıktan sonra bir sorun yoksa uygulamayı çalıştırıp  kullanmaya başlayabiliriz. 
-:clap::clap::clap:
+Veritabanı ayarlarını yaptıktan sonra bir sorun yoksa uygulamayı çalıştırıp localhost:8080 üzerinden kullanmaya başlayabiliriz. :clap::clap::clap:
 
 
