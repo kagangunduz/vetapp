@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="fragments/components :: head(~{::title})">
+    <title>VetApp | Cins Listesi</title>
+</div>
+
+<body>
+
+<div th:replace="fragments/components :: navbar"></div>
+
+<div class="container mt-5">
+    <h2>Kayıtlı Cinsler</h2>
+    <hr>
+    <div class="d-flex justify-content-between">
+        <div>
+            <span class="badge bg-warning">Toplam Kayıt: [[${totalItems}]]</span>
+        </div>
+        <div>
+            <a class="btn btn-primary" th:href="@{/genera/add/}"><i class="bi bi-plus-lg"></i>&nbsp;&nbsp;Yeni Kayıt</a>
+        </div>
+    </div>
+
+    <div th:replace="fragments/components :: message"></div>
+
+    <div th:if="${totalItems != 0}">
+        <table class="table table-light table-bordered table-hover mt-3 table-responsive">
+            <thead>
+            <tr>
+                <th scope="col">Cins Adı</th>
+                <th scope="col">İşlem</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="genus : ${genera}">
+                <td class="text-capitalize">[[${genus.name}]]</td>
+                <td>
+                    <div class="row g-2">
+                        <div class="col-lg-4 d-grid">
+                            <a class="btn btn-outline-success" th:href="@{/genera/{id}(id=${genus.id})}">Göster</a>
+                        </div>
+                        <div class="col-lg-4 d-grid">
+                            <a class="btn btn-outline-warning"
+                               th:href="@{/genera/edit/{id}(id=${genus.id})}">Düzenle</a>
+                        </div>
+                        <div class="col-lg-4 d-grid">
+                            <a class="btn btn-outline-danger" th:href="@{/genera/delete/{id}(id=${genus.id})}">Sil</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html lang="tr" xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout(~{::title}, ~{::section})">
-<head>
-    <title>VetApp | Yeni Hayvan Ekle</title>
-</head>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="fragments/components :: head(~{::title})">
+    <title>VetApp | Hayvan Sahibi Ekle</title>
+</div>
+
 <body>
 
-<section>
+<div th:replace="fragments/components :: navbar"></div>
+
+<div class="container mt-5">
     <div class="col-md-6 mx-auto">
         <h4>Yeni Hayvan</h4>
         <hr>
         <div class="card bg-light">
             <div class="card-body">
                 <form th:action="@{/pets/add}" th:object="${pet}" method="post">
-                    <div th:if="${#fields.hasErrors()}" class="alert alert-danger" role="alert">
-                        <ul>
-                            <li th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
-                        </ul>
-                    </div>
+                    <div th:replace="fragments/components :: form-error"></div>
                     <div class="mb-3">
                         <label for="name" class="form-label">İsim</label>
-                        <input type="text" class="form-control" th:field="*{name}" id="name">
+                        <input type="text" class="text-capitalize form-control" th:field="*{name}"
+                               id="name" autofocus>
                     </div>
                     <div class="mb-3">
                         <label for="birthDate" class="form-label">Doğum Tarihi</label>
@@ -28,19 +29,27 @@
                     </div>
                     <div class="mb-3">
                         <label for="genus" class="form-label">Cins</label>
-                        <select class="form-select" th:field="*{genus}" id="genus">
-                            <option value="">Lütfen seçim yapın...</option>
-                            <option th:each="g : ${genus}" th:value="${g.key}" th:text="${g.value}"></option>
+                        <select class="form-select text-capitalize" th:field="*{genus}" id="genus">
+                            <option value="">Lütfen seçim yapın</option>
+                            <option class="text-capitalize" th:each="genus : ${genera}" th:value="${genus.id}"
+                                    th:text="${genus.name}"></option>
                         </select>
                     </div>
+
                     <div class="mb-3">
                         <label for="species" class="form-label">Tür</label>
-                        <input type="text" class="form-control" th:field="*{species}" id="species">
+                        <select class="form-select text-capitalize" th:field="*{species}" id="species">
+                            <option value="">Lütfen seçim yapın</option>
+                            <th:block th:each="s : ${species}">
+                                <option th:value="${s.id}" th:text="${s.name}"></option>
+                            </th:block>
+                        </select>
                     </div>
+
                     <div class="mb-3">
                         <label for="owner" class="form-label">Hayvan Sahibi</label>
-                        <select class="form-select" th:field="*{owner}" id="owner">
-                            <option value="">Lütfen seçim yapın...</option>
+                        <select class="form-select text-capitalize" th:field="*{owner}" id="owner">
+                            <option value="">Lütfen seçim yapın</option>
                             <option th:each="o : ${owners}" th:value="${o.id}" th:text="${o.fullName}"
                                     th:selected="${ownerId == o.id}"></option>
                         </select>
@@ -54,7 +63,44 @@
             </div>
         </div>
     </div>
-</section>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+            $("#genus").change(function () {
+                let genusId = this.value;
+                console.log(genusId)
+                if (genusId > 0) {
+                    $.ajax({
+                        url: '/species/get-species',
+                        type: 'POST',
+                        data: {genusId: genusId},
+                        dataType: 'json',
+                        success: function (response) {
+                            console.log(response);
+                            let len = response.length;
+                            $("#species").empty();
+                            if (len > 0) {
+                                for (let i = 0; i < len; i++) {
+                                    let id = response[i]['id'];
+                                    let name = response[i]['name'];
+                                    $("#species").append("<option class='text-capitalize' value=" + id + ">" + name + "</option>");
+                                }
+                            } else {
+                                $("#species").empty();
+                                $("#species").append("<option value=''>Lütfen tür ekleyin</option>");
+                            }
+                        }
+                    });
+                } else {
+                    $("#species").empty();
+                    $("#species").append("<option value=''>Lütfen cins seçimi yapın</option>");
+                }
+            });
+        }
+    )
+</script>
 
 </body>
 </html>

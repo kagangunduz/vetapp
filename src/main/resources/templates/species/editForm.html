@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="fragments/components :: head(~{::title})">
+    <title>VetApp | Tür Düzenle</title>
+</div>
+
+<body>
+
+<div th:replace="fragments/components :: navbar"></div>
+
+<div class="container mt-5">
+    <div class="col-md-6 mx-auto">
+        <div class="d-flex justify-content-between">
+            <div>
+                <h3>Bilgileri Düzenle</h3>
+            </div>
+        </div>
+        <hr>
+
+        <div th:replace="fragments/components :: message"></div>
+
+        <div class="card bg-light">
+            <div class="card-body">
+                <form th:action="@{/species/edit/{id}(id=${species.id})}" th:object="${species}" method="post">
+                    <div th:replace="fragments/components :: form-error"></div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Tür Adı</label>
+                        <input type="text" class="form-control text-capitalize" th:field="*{name}" id="name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="genus" class="form-label">Cins</label>
+                        <select class="form-select text-capitalize" th:field="*{genus}" id="genus">
+                            <option th:selected="${species.genus == null}" value="">Lütfen seçim yapınız.</option>
+                            <th:block th:each="genus : ${genera}">
+                                <option th:value="${genus.id}" th:text="${genus.name}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

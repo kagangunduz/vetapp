@@ -3,9 +3,10 @@
 # Veteriner Kliniği Uygulaması: VetApp :paw_prints::cat::dog:
 ---
 ## Açıklama :page_facing_up:
-Spring Boot ve Thymeleaf ile geliştirdiğim basit bir veteriner klinik uygulaması.
+Spring Boot ve Thymeleaf ile geliştirdiğim web üzerinde çalışan basit bir veteriner klinik uygulaması.
 
-Uygulamada şu anda temel olarak hayvan sahibi ve hayvan olmak üzere iki temel yapı mevcut. Bunlar üzerinde aşağıdaki işlemler yapılabilir.
+Uygulamada şu anda temel olarak hayvan sahibi, hayvan, hayvan cinsi ve hayvan türü yapıları mevcut. Bu yapılar üzerinde 
+aşağıdaki işlemler yapılabilir.
 
 - Ekleme
 - Düzenleme
@@ -15,12 +16,13 @@ Uygulamada şu anda temel olarak hayvan sahibi ve hayvan olmak üzere iki temel 
 ---
 ## Kullanılan Teknolojiler :computer:
 - Spring Boot
+- Maven
 - Thymeleaf
 - PostgreSQL
 - Bootstrap
 - Lombok
   
- > Java 11 kullanarak IntelliJ IDEA üzerinde geliştirdim. Projeyi oluşturmak için IntelliJ IDEA üzerinden Spring Inıtializr kullandım. veritabanı sistemi olarak PostgreSQL kullandım.
+ > Java 11 kullanarak IntelliJ IDEA üzerinde maven projesi olarak geliştirdim. Projeyi oluşturmak için IntelliJ IDEA üzerinden Spring Inıtializr kullandım. Veritabanı sistemi olarak PostgreSQL kullandım.
   
 ## Kurulum :floppy_disk:
 
@@ -40,6 +42,6 @@ Ayrıca veritabanı sistemi olarak PostgreSQL kurulumunu yapıyoruz. Daha sonra 
 
 Proje bağımlılıkları yüklendikten sonra proje içerisindeki **application.yml** üzerinden veritabanı ayarlarını yapıyoruz.
 
-Veritabanı ayarlarını yaptıktan sonra bir sorun yoksa uygulamayı çalıştırıp kullanmaya başlayabiliriz. :clap::clap::clap:
+Veritabanı ayarlarını yaptıktan sonra bir sorun yoksa uygulamayı çalıştırıp localhost:8080 üzerinden kullanmaya başlayabiliriz. :clap::clap::clap:
 
 

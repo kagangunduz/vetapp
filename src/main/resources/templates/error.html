@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html lang="tr" xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout(~{::title}, ~{::section})">
-<head>
-    <title>VetApp | Hata oluştu</title>
-</head>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="fragments/components :: head(~{::title})">
+    <title>VetApp | Sorun Oluştu</title>
+</div>
+
 <body>
 
-<section>
+<div th:replace="fragments/components :: navbar"></div>
 
+<div class="container mt-5">
     <div class="page-wrap d-flex flex-row align-items-center mt-5">
         <div class="container">
             <div class="row justify-content-center">
@@ -18,8 +21,7 @@
             </div>
         </div>
     </div>
-
-</section>
+</div>
 
 </body>
 </html>

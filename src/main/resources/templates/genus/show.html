@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="fragments/components :: head(~{::title})">
+    <title>VetApp | Cins Profil</title>
+</div>
+
+<body>
+
+<div th:replace="fragments/components :: navbar"></div>
+
+<div class="container mt-5">
+    <div th:replace="fragments/components :: message"></div>
+
+    <div class="col-md-6 mx-auto">
+        <div class="card text-dark bg-light mt-2">
+            <div class="card-body">
+                <h5 class="card-title text-capitalize">[[${genus.name}]]</h5>
+            </div>
+            <div class="card-footer text-muted">
+                <div class="row g-2">
+                    <div class="col-md-6 d-grid">
+                        <a class="btn  btn-danger" th:href="@{/genera/delete/{id}(id=${genus.id})}">
+                            <i class="bi bi-trash3"></i>&nbsp;&nbsp;Sil</a>
+                    </div>
+                    <div class="col-md-6 d-grid">
+                        <a class="btn btn-primary" th:href="@{/genera/edit/{id}(id=${genus.id})}">
+                            <i class="bi bi-pencil"></i>&nbsp;&nbsp;Düzenle</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="mt-5">Kayıtlı Türler</h4>
+    <hr>
+    <div class="d-flex justify-content-between">
+        <div>
+            <span class="badge bg-warning">Toplam Kayıt: [[${genus.species.size()}]]</span>
+        </div>
+        <div>
+            <a class="btn btn-primary" th:href="@{/species/add}">
+                <i class="bi bi-plus-lg"></i>&nbsp;&nbsp;Yeni Tür Ekle
+            </a>
+        </div>
+    </div>
+    <div th:if="(not ${genus.species.isEmpty()})">
+
+        <table class="table table-light table-bordered table-hover mt-3">
+            <thead>
+            <tr>
+                <th>Ad</th>
+                <th>İşlem</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="s : ${genus.species}">
+                <td class="text-capitalize">[[${s.name}]]</td>
+                <td>
+                    <div class="row g-2">
+                        <div class="col-lg-6 d-grid">
+                            <a class="btn btn-outline-warning" th:href="@{/species/edit/{id}(id=${s.id})}">Düzenle</a>
+                        </div>
+                        <div class="col-lg-6 d-grid">
+                            <a class="btn btn-outline-danger"
+                               th:href="@{'/species/delete/' + ${s.id} + '?genusId=' + ${genus.id}}">Sil</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

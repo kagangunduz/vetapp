@@ -1,20 +1,32 @@
 <!DOCTYPE html>
-<html lang="tr" xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout(~{::title}, ~{::section})">
-<head>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="fragments/components :: head(~{::title})">
     <title>VetApp | Ana Sayfa</title>
-</head>
+</div>
+
 <body>
 
-<section>
+<div th:replace="fragments/components :: navbar"></div>
 
-    <div class="row">
+<div class="container mt-5">
+    <div class="row mb-3">
         <div class="col-md-6">
             <div class="card bg-light">
                 <div class="card-body">
                     <h5 class="card-title">Hayvan Sahipleri</h5>
                     <hr>
                     <p class="card-text">Toplam Kayıt: [[${ownerCount}]]</p>
-                    <a th:href="@{/owners}" class="btn btn-primary">Kayıtları Göster</a>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <a th:href="@{/owners}" class="btn btn-primary"
+                               th:classappend="${ownerCount == 0} ? disabled : ''"
+                               aria-disabled="true">Kayıtları Göster</a>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary" th:href="@{/owners/add}">Yeni Kayıt</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -24,13 +36,61 @@
                     <h5 class="card-title">Hayvanlar</h5>
                     <hr>
                     <p class="card-text">Toplam Kayıt: [[${petCount}]]</p>
-                    <a th:href="@{/pets}" class="btn btn-primary">Kayıtları Göster</a>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <a th:href="@{/pets}" class="btn btn-primary"
+                               th:classappend="${petCount == 0} ? disabled : ''"
+                               aria-disabled="true">Kayıtları Göster</a>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary" th:href="@{/pets/add}">Yeni Kayıt</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-</section>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">Cinsler</h5>
+                    <hr>
+                    <p class="card-text">Toplam Kayıt: [[${genusCount}]]</p>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <a th:href="@{/genera}" class="btn btn-primary"
+                               th:classappend="${genusCount == 0} ? disabled : ''"
+                               aria-disabled="true">Kayıtları Göster</a>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary" th:href="@{/genera/add}">Yeni Kayıt</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">Türler</h5>
+                    <hr>
+                    <p class="card-text">Toplam Kayıt: [[${speciesCount}]]</p>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <a th:href="@{/species}" class="btn btn-primary"
+                               th:classappend="${speciesCount == 0} ? disabled : ''"
+                               aria-disabled="true">Kayıtları Göster</a>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary" th:href="@{/species/add}">Yeni Kayıt</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

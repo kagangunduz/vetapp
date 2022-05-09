@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="fragments/components :: head(~{::title})">
+    <title>VetApp | Cins Ekleme</title>
+</div>
+
+<body>
+
+<div th:replace="fragments/components :: navbar"></div>
+
+<div class="container mt-5">
+    <div class="col-md-6 mx-auto">
+        <h4>Yeni Hayvan Cinsi</h4>
+        <hr>
+        <div class="card bg-light">
+            <div class="card-body">
+                <form th:action="@{/genera/add}" th:object="${genus}" method="post">
+                    <div th:replace="fragments/components :: form-error"></div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Cins Adı</label>
+                        <input type="text" class="form-control text-capitalize" th:field="*{name}" id="name" autofocus>
+                    </div>
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

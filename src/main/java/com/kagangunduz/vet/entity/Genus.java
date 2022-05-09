@@ -1,21 +1,45 @@
 package com.kagangunduz.vet.entity;
 
-public enum Genus {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    CAT("Kedi"),
-    DOG("Köpek"),
-    COW("İnek"),
-    GOAT("Keçi"),
-    SHEEP("Koyun"),
-    HORSE("At");
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
+import java.util.List;
 
-    private final String value;
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Genus implements Serializable {
 
-    Genus(String value) {
-        this.value = value;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "name", unique = true)
+    @NotEmpty(message = "Ad alanı boş olamaz")
+    private String name;
+
+    @OneToMany(mappedBy = "genus", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @OrderBy("id DESC")
+    private List<Pet> pets;
+
+    @OneToMany(mappedBy = "genus", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @OrderBy("id DESC")
+    private List<Species> species;
+
+    @PreRemove
+    private void preRemove() {
+        pets.forEach((pet) -> {
+            pet.setGenus(null);
+            pet.setSpecies(null);
+        });
     }
 
-    public String getValue() {
-        return value;
+    @Override
+    public String toString() {
+        return "Genus{" + "id=" + id + ", name='" + name + '\'' + '}';
     }
 }

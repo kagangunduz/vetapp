@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="tr" xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout(~{::title}, ~{::section})">
-<head>
-    <title>VetApp | Hayvan Sahibi Arama: [[${param.keyword}]]</title>
-</head>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="fragments/components :: head(~{::title})">
+    <title>VetApp | Hayvan Sahibi Arama</title>
+</div>
+
 <body>
 
-<section>
+<div th:replace="fragments/components :: navbar"></div>
+
+<div class="container mt-5">
     <h2>Arama Ekranı</h2>
     <hr>
     <div class="d-flex justify-content-between">
@@ -34,65 +38,12 @@
     </div>
 
     <div th:unless="${totalItems == 0}">
-        <table class="table table-light table-bordered table-hover mt-3">
-            <thead>
-            <tr>
-                <th scope="col">Ad Soyad</th>
-                <th scope="col">Telefon</th>
-                <th scope="col">Email</th>
-                <th scope="col">Adres</th>
-                <th scope="col">Kayıt Tarihi</th>
-                <th scope="col">İşlem</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="owner : ${owners}">
-                <td class="text-capitalize">[[${owner.fullName}]]</span></td>
-                <td>[[${owner.telephoneNumber}]]</td>
-                <td>[[${owner.email}]]</td>
-                <td>[[${owner.address}]]</td>
-                <td>[[${#dates.format(owner.createdAt, 'dd/MMM/yyyy HH:mm')}]]</td>
-                <td>
-                    <div class="row g-2">
-                        <div class="col-lg-4 d-grid">
-                            <a class="btn btn-outline-success" th:href="@{/owners/{id}(id=${owner.id})}">Göster</a>
-                        </div>
-                        <div class="col-lg-4 d-grid">
-                            <a class="btn btn-outline-warning"
-                               th:href="@{/owners/edit/{id}(id=${owner.id})}">Düzenle</a>
-                        </div>
-                        <div class="col-lg-4 d-grid">
-                            <a class="btn btn-outline-danger" th:href="@{/owners/delete/{id}(id=${owner.id})}">Sil</a>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-end">
-                <li class="page-item" th:classappend="${currentPage == 1 } ? 'disabled' : ''">
-                    <a class="page-link" th:href="@{/owners/search(keyword=${keyword},page=${currentPage - 1})}">Önceki
-                        Sayfa</a>
-                </li>
-                <li class="page-item" th:each="i: ${#numbers.sequence(1, totalPages)}"
-                    th:classappend="${currentPage == i} ? 'active' : ''" aria-current="page">
-                <span th:if="${currentPage == i}">
-                    <span class="page-link">[[${i}]]</span>
-                </span>
-                    <span th:unless="${currentPage == i}">
-                    <a class="page-link" th:href="@{/owners/search(keyword=${keyword},page=${i})}">[[${i}]]</a>
-                </span>
-                </li>
-                <li class="page-item"
-                    th:classappend="(${totalPages == 1 || totalPages == currentPage }) ? 'disabled' : ''">
-                    <a class="page-link" th:href="@{/owners/search(keyword=${keyword},page=${currentPage + 1})}">Sonraki
-                        Sayfa</a>
-                </li>
-            </ul>
-        </nav>
+
+        <div th:replace="fragments/owner-components :: owner-table"></div>
+
+        <div th:replace="fragments/owner-components :: search-page-navigation"></div>
     </div>
-</section>
+</div>
 
 </body>
 </html>

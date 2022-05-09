@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="tr" xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout(~{::title}, ~{::section})">
-<head>
-    <title>VetApp | Hayvanlar</title>
-</head>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="fragments/components :: head(~{::title})">
+    <title>VetApp | Hayvan Arama</title>
+</div>
+
 <body>
 
-<section>
+<div th:replace="fragments/components :: navbar"></div>
+
+<div class="container mt-5">
     <h2>Arama Ekranı</h2>
     <hr>
     <div class="d-flex justify-content-between">
@@ -33,69 +37,15 @@
     <div th:if="${totalItems == 0}" class="mt-2">
         <h4>Arama sonucunda kayıt bulunamadı.</h4>
     </div>
-    <div th:unless="${totalItems == 0}">
-        <table class="table table-light table-bordered table-hover mt-3">
-            <thead>
-            <tr>
-                <th scope="col">İsim</th>
-                <th scope="col">Yaş</th>
-                <th scope="col">Cins/Tür</th>
-                <th scope="col">Sahibi</th>
-                <th scope="col">Kayıt Tarihi</th>
-                <th scope="col">Güncellenme Tarihi</th>
-                <th scope="col">İşlem</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="pet : ${pets}">
-                <td class="text-capitalize">[[${pet.name}]]</span></td>
-                <td>[[${pet.genus.value}]]<span th:if="${pet.species}">/[[${pet.species}]]</span></td>
-                <td>[[${pet.birthDate}]]</td>
-                <td th:if="${pet.owner != null}">[[${pet.owner.fullName}]]</td>
-                <td th:unless="${pet.owner != null}"></td>
-                <td>[[${#dates.format(pet.createdAt, 'dd/MMM/yyyy HH:mm')}]]</td>
-                <td>[[${#dates.format(pet.updatedAt, 'dd/MMM/yyyy HH:mm')}]]</td>
-                <td>
-                    <div class="row g-2">
-                        <div class="col-lg-4 d-grid">
-                            <a class="btn btn-outline-success" th:href="@{/pets/{id}(id=${pet.id})}">Göster</a>
-                        </div>
-                        <div class="col-lg-4 d-grid">
-                            <a class="btn btn-outline-warning" th:href="@{/pets/edit/{id}(id=${pet.id})}">Düzenle</a>
-                        </div>
-                        <div class="col-lg-4 d-grid">
-                            <a class="btn btn-outline-danger" th:href="@{/pets/delete/{id}(id=${pet.id})}">Sil</a>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
 
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-end">
-                <li class="page-item" th:classappend="${currentPage == 1 } ? 'disabled' : ''">
-                    <a class="page-link" th:href="@{/pets/search(keyword=${keyword},page=${currentPage - 1})}">Önceki
-                        Sayfa</a>
-                </li>
-                <li class="page-item" th:each="i: ${#numbers.sequence(1, totalPages)}"
-                    th:classappend="${currentPage == i} ? 'active' : ''" aria-current="page">
-                <span th:if="${currentPage == i}">
-                    <span class="page-link">[[${i}]]</span>
-                </span>
-                    <span th:unless="${currentPage == i}">
-                    <a class="page-link" th:href="@{/pets/search(keyword=${keyword},page=${i})}">[[${i}]]</a>
-                </span>
-                </li>
-                <li class="page-item"
-                    th:classappend="(${totalPages == 1 || totalPages == currentPage }) ? 'disabled' : ''">
-                    <a class="page-link" th:href="@{/pets/search(keyword=${keyword},page=${currentPage + 1})}">Sonraki
-                        Sayfa</a>
-                </li>
-            </ul>
-        </nav>
+    <div th:unless="${totalItems == 0}">
+
+        <div th:replace="fragments/pet-components :: pet-table"></div>
+
+        <div th:replace="fragments/pet-components :: search-page-navigation"></div>
+
     </div>
-</section>
+</div>
 
 </body>
 </html>

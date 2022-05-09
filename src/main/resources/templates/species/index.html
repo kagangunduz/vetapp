@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="fragments/components :: head(~{::title})">
+    <title>VetApp | Tür Listesi</title>
+</div>
+
+<body>
+
+<div th:replace="fragments/components :: navbar"></div>
+
+<div class="container mt-5">
+    <h2>Kayıtlı Türler</h2>
+    <hr>
+    <div class="d-flex justify-content-between">
+        <div>
+            <span class="badge bg-warning">Toplam Kayıt: [[${totalItems}]]</span>
+        </div>
+        <div>
+            <a class="btn btn-primary" th:href="@{/species/add/}"><i class="bi bi-plus-lg"></i>&nbsp;&nbsp;Yeni
+                Kayıt</a>
+        </div>
+    </div>
+
+    <div th:replace="fragments/components :: message"></div>
+
+    <div th:if="${totalItems != 0}">
+        <table class="table table-light table-bordered table-hover mt-3 table-responsive">
+            <thead>
+            <tr>
+                <th scope="col" class="text-capitalize">Tür Adı</th>
+                <th scope="col" class="text-capitalize">Cins Adı</th>
+                <th scope="col">İşlem</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="s : ${species}">
+                <td class="text-capitalize">[[${s.name}]]</td>
+                <td class="text-capitalize" th:if="${s.genus}">[[${s.genus.name}]]</td>
+                <td class="text-capitalize" th:unless="${s.genus}"></td>
+                <td>
+                    <div class="row g-2">
+                        <div class="col-lg-6 d-grid">
+                            <a class="btn btn-outline-warning"
+                               th:href="@{/species/edit/{id}(id=${s.id})}">Düzenle</a>
+                        </div>
+                        <div class="col-lg-6 d-grid">
+                            <a class="btn btn-outline-danger" th:href="@{/species/delete/{id}(id=${s.id})}">Sil</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

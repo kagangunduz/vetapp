@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="tr" xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout(~{::title}, ~{::section})">
-<head>
-    <title>VetApp |  | Bilgileri Düzenle</title>
-</head>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="fragments/components :: head(~{::title})">
+    <title>VetApp | Hayvan Sahibi Düzenleme</title>
+</div>
+
 <body>
 
-<section>
+<div th:replace="fragments/components :: navbar"></div>
+
+<div class="container mt-5">
     <div class="col-md-6 mx-auto">
         <div class="d-flex justify-content-between">
             <div>
@@ -17,23 +21,15 @@
         </div>
         <hr>
 
-
-        <div th:if="${message}" class="alert alert-success" role="alert">
-            [[${message}]]
-        </div>
+        <div th:replace="fragments/components :: message"></div>
 
         <div class="card bg-light">
             <div class="card-body">
                 <form th:action="@{/owners/edit/{id}(id=${owner.id})}" th:object="${owner}" method="post">
-                    <div th:if="${#fields.hasErrors()}" class="alert alert-danger" role="alert">
-                        <ul>
-                            <li th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
-                        </ul>
-                    </div>
-
+                    <div th:replace="fragments/components :: form-error"></div>
                     <div class="mb-3">
                         <label for="fullName" class="form-label">Ad Soyad</label>
-                        <input type="text" class="form-control" th:field="*{fullName}" id="fullName">
+                        <input type="text" class="form-control text-capitalize" th:field="*{fullName}" id="fullName">
                     </div>
                     <div class="mb-3">
                         <label for="telephoneNumber" class="form-label">Telefon</label>
@@ -52,7 +48,7 @@
             </div>
         </div>
     </div>
-</section>
+</div>
 
 </body>
 </html>

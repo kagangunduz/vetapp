@@ -5,7 +5,6 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,16 +28,21 @@ public class Owner extends BaseEntity {
     @NotEmpty(message = "Telefon alanı boş olamaz.")
     private String telephoneNumber;
 
-
+    @Column(unique = true)
     @Email(message = "Email adresi geçerli değil.")
     @NotEmpty(message = "Email alanı boş olamaz.")
     private String email;
 
     private String address;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id")
+    @OneToMany(mappedBy = "owner", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @OrderBy("id DESC")
-    private List<Pet> pets = new ArrayList<>();
+    private List<Pet> pets;
+
+
+    @PreRemove
+    private void preRemove() {
+        pets.forEach(pet -> pet.setOwner(null));
+    }
 
 }
