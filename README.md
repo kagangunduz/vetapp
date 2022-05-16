@@ -38,7 +38,7 @@ Daha sonra projeyi çalışmak istediğiniz IDE (Eclipse, NetBeans, IntelliJ IDE
 
 Ayrıca veritabanı sistemi olarak PostgreSQL kurulumunu yapıyoruz. Daha sonra projemizde kullanmak üzere bir veritabanı oluşturuyoruz.
 
->Farklı bir veritabanı kullanmak isterseniz (MySQL, MsSQL vb.) application.yml üzerinden gerekli ayarları yapmalısınız.
+>Farklı bir veritabanı kullanmak isterseniz (MySQL, MsSQL vb.) application.yml üzerinden gerekli ayarları yapmalı, veritabanı sistemine ait bağlantı sürücüsünü(JDBC driver) projeye eklemelisiniz. 
 
 Proje bağımlılıkları yüklendikten sonra proje içerisindeki **application.yml** üzerinden veritabanı ayarlarını yapıyoruz.
 
